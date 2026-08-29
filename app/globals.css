@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+/**
+ * IWIN brand tokens — dark + gold yellow from the reference site identity.
+ */
+:root {
+  --iwin-yellow: #f5c518;
+  --iwin-yellow-bright: #ffe066;
+  --iwin-yellow-deep: #d4a017;
+  --iwin-black: #050505;
+  --iwin-charcoal: #0e0e10;
+  --iwin-surface: #151518;
+  --iwin-surface-elevated: #1c1c21;
+  --iwin-border: rgba(245, 197, 24, 0.22);
+  --iwin-border-strong: rgba(245, 197, 24, 0.45);
+  --iwin-glow: rgba(245, 197, 24, 0.28);
+  --iwin-text: #f7f7f5;
+  --iwin-muted: #a8a8b0;
+
+  --background: var(--iwin-black);
+  --foreground: var(--iwin-text);
+  --surface-900: var(--iwin-surface);
+  --surface-950: var(--iwin-black);
+  --accent: var(--iwin-yellow);
+  --accent-soft: var(--iwin-yellow-bright);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface-900: var(--surface-900);
+  --color-surface-950: var(--surface-950);
+  --color-surface-elevated: var(--iwin-surface-elevated);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-iwin-yellow: var(--iwin-yellow);
+  --color-iwin-yellow-bright: var(--iwin-yellow-bright);
+  --color-iwin-yellow-deep: var(--iwin-yellow-deep);
+  --color-iwin-black: var(--iwin-black);
+  --color-iwin-charcoal: var(--iwin-charcoal);
+  --color-iwin-muted: var(--iwin-muted);
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(245, 197, 24, 0.08), transparent 55%),
+    radial-gradient(900px 500px at 90% 0%, rgba(245, 197, 24, 0.05), transparent 50%),
+    var(--iwin-black);
+  color: var(--iwin-text);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--iwin-yellow) 40%, transparent);
+  color: #111;
+}
+
+a {
+  text-underline-offset: 0.2em;
+}
+
+:focus-visible {
+  outline: none;
+}
+
+.font-display {
+  font-family: var(--font-display), var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+.card-surface {
+  border: 1px solid color-mix(in oklab, var(--iwin-yellow) 18%, transparent);
+  background: linear-gradient(180deg, rgba(28, 28, 33, 0.95), rgba(14, 14, 16, 0.92));
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+}
+
+.section-band {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}

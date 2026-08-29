@@ -1,0 +1,16 @@
+{
+  "name": "IWIN Malaysia Partner",
+  "short_name": "IWIN",
+  "description": "IWIN Malaysia Official Partner information website",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#f5c518",
+  "icons": [
+    {
+      "src": "/images/brand/iwin-icon-192.webp",
+      "sizes": "192x192",
+      "type": "image/webp"
+    }
+  ]
+}
