@@ -52,13 +52,30 @@ function gamesHubBlocks(locale: Locale, spec: PageSpec): RichBlock[] {
     {
       type: "steps",
       title: L.gamesBeforeTitle,
-      steps: [
-        d[4][1],
-        `${d[5][0]}: ${d[5][1]}`,
-        "Read promotion terms if a bonus applies — turnover, exclusions and expiry can affect withdrawals.",
-        "Confirm payment and account conditions that must be met before deposits or withdrawals.",
-        "Set a personal spending limit and stop point; do not increase stakes to recover prior losses.",
-      ],
+      steps:
+        locale === "ms"
+          ? [
+              d[4][1],
+              `${d[5][0]}: ${d[5][1]}`,
+              "Baca terma promosi jika bonus terpakai — pusing ganti, pengecualian dan tamat tempoh boleh menjejaskan pengeluaran.",
+              "Sahkan syarat bayaran dan akaun sebelum deposit atau pengeluaran.",
+              "Tetapkan had perbelanjaan peribadi dan titik berhenti; jangan tingkatkan pertaruhan untuk pulihkan kerugian.",
+            ]
+          : locale === "zh"
+            ? [
+                d[4][1],
+                `${d[5][0]}：${d[5][1]}`,
+                "若适用奖金，请阅读优惠条款——流水、排除项与到期日可能影响提款。",
+                "存款或提款前确认支付与账户条件。",
+                "设定个人消费上限与停止点；勿为提高赌注以追回损失。",
+              ]
+            : [
+                d[4][1],
+                `${d[5][0]}: ${d[5][1]}`,
+                "Read promotion terms if a bonus applies — turnover, exclusions and expiry can affect withdrawals.",
+                "Confirm payment and account conditions that must be met before deposits or withdrawals.",
+                "Set a personal spending limit and stop point; do not increase stakes to recover prior losses.",
+              ],
     },
     {
       type: "callout",
