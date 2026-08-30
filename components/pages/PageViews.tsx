@@ -2,13 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   CategoryCard,
-  ContentSections,
   FinalCtaBand,
-  PageChrome,
-  PageHeroBlock,
-  RelatedLinks,
 } from "@/components/content/PagePrimitives";
+import {
+  RichPageLayout,
+  richCrumbs,
+} from "@/components/content/RichPageLayout";
 import { Accordion } from "@/components/ui/Accordion";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -17,24 +18,13 @@ import { GAME_CATEGORIES, PROVIDER_CATALOG_NOTE, PROVIDERS } from "@/content/gam
 import { getCommon } from "@/content/i18n/common";
 import { flattenFaqs, getFaqGroups, getHomeFaqs } from "@/content/i18n/faq";
 import { getHomeContent } from "@/content/i18n/home";
-import { getPageContent, type PageId } from "@/content/i18n/pages";
+import { getRichPageContent, type PageId } from "@/content/i18n/rich";
 import { SITE_CONFIG, hasExternalUrl } from "@/lib/constants/site";
 import type { Locale, RouteKey } from "@/lib/i18n/config";
 import { routePath } from "@/lib/i18n/paths";
 import { faqPageJsonLd } from "@/lib/seo/json-ld";
 
-function crumbs(locale: Locale, items: { key: RouteKey; label: string }[]) {
-  const common = getCommon(locale);
-  return [
-    { name: common.breadcrumbHome, path: routePath("home", locale) },
-    ...items.map((item) => ({
-      name: item.label,
-      path: routePath(item.key, locale),
-    })),
-  ];
-}
-
-function StandardPage({
+function RichStandardPage({
   locale,
   pageId,
   trail,
@@ -43,29 +33,13 @@ function StandardPage({
   pageId: PageId;
   trail: { key: RouteKey; label: string }[];
 }) {
-  const content = getPageContent(locale, pageId);
-  const common = getCommon(locale);
+  const content = getRichPageContent(locale, pageId);
   return (
-    <>
-      <PageChrome locale={locale} crumbs={crumbs(locale, trail)}>
-        <PageHeroBlock
-          locale={locale}
-          content={content}
-          secondaryHref={routePath("guides", locale)}
-          secondaryLabel={common.exploreGuides}
-        />
-        <Container className="pb-16">
-          <ContentSections sections={content.sections} />
-          <RelatedLinks locale={locale} links={content.related} />
-          <p className="mt-10 text-xs text-zinc-500">{common.lastUpdated}</p>
-        </Container>
-      </PageChrome>
-      <FinalCtaBand
-        locale={locale}
-        title={content.h1}
-        description={content.intro}
-      />
-    </>
+    <RichPageLayout
+      locale={locale}
+      content={content}
+      crumbs={richCrumbs(locale, trail)}
+    />
   );
 }
 
@@ -137,7 +111,7 @@ export function HomePageView({ locale }: { locale: Locale }) {
               {common.learnMore}
             </Button>
             <Button href={routePath("about-iwin", locale)} variant="ghost">
-              {getPageContent(locale, "about-iwin").h1}
+              {getRichPageContent(locale, "about-iwin").h1}
             </Button>
           </div>
         </Container>
@@ -352,9 +326,9 @@ export function HomePageView({ locale }: { locale: Locale }) {
 }
 
 export function AboutPageView({ locale }: { locale: Locale }) {
-  const content = getPageContent(locale, "about-iwin");
+  const content = getRichPageContent(locale, "about-iwin");
   return (
-    <StandardPage
+    <RichStandardPage
       locale={locale}
       pageId="about-iwin"
       trail={[{ key: "about-iwin", label: content.h1 }]}
@@ -363,9 +337,9 @@ export function AboutPageView({ locale }: { locale: Locale }) {
 }
 
 export function OfficialPartnerPageView({ locale }: { locale: Locale }) {
-  const content = getPageContent(locale, "official-partner");
+  const content = getRichPageContent(locale, "official-partner");
   return (
-    <StandardPage
+    <RichStandardPage
       locale={locale}
       pageId="official-partner"
       trail={[{ key: "official-partner", label: content.h1 }]}
@@ -374,32 +348,39 @@ export function OfficialPartnerPageView({ locale }: { locale: Locale }) {
 }
 
 export function GamesHubPageView({ locale }: { locale: Locale }) {
-  const content = getPageContent(locale, "games");
-  const common = getCommon(locale);
+  const content = getRichPageContent(locale, "games");
+  const exploreLabel =
+    locale === "ms"
+      ? "Terokai kategori permainan"
+      : locale === "zh"
+        ? "浏览游戏类别"
+        : "Explore IWIN game categories";
+
   return (
-    <>
-      <PageChrome locale={locale} crumbs={crumbs(locale, [{ key: "games", label: content.h1 }])}>
-        <PageHeroBlock locale={locale} content={content} secondaryHref={routePath("game-providers", locale)} />
-        <Container className="pb-16">
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <RichPageLayout
+      locale={locale}
+      content={content}
+      crumbs={richCrumbs(locale, [{ key: "games", label: content.h1 }])}
+      beforeBlocks={
+        <section className="mb-12">
+          <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">
+            {exploreLabel}
+          </h2>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {GAME_CATEGORIES.map((cat, index) => (
               <CategoryCard
                 key={cat.id}
                 href={routePath(cat.routeKey, locale)}
                 title={cat.name}
-                description={content.sections[0]?.bullets?.[index] || content.intro}
+                description={content.blocks[1]?.type === "grid" ? content.blocks[1].items[index]?.description ?? "" : ""}
                 image={cat.image}
+                priority={index < 2}
               />
             ))}
           </div>
-          <div className="mt-12">
-            <ContentSections sections={content.sections} />
-          </div>
-          <RelatedLinks locale={locale} links={content.related} />
-        </Container>
-      </PageChrome>
-      <FinalCtaBand locale={locale} title={content.h1} description={common.exploreGuides} />
-    </>
+        </section>
+      }
+    />
   );
 }
 
@@ -412,65 +393,67 @@ function GameCategoryPage({
   pageId: Extract<PageId, "games-slots" | "games-live-casino" | "games-sports" | "games-4d">;
   parentLabel: string;
 }) {
-  const content = getPageContent(locale, pageId);
+  const content = getRichPageContent(locale, pageId);
   const category = GAME_CATEGORIES.find((c) => c.routeKey === pageId);
+
   return (
-    <>
-      <PageChrome
-        locale={locale}
-        crumbs={crumbs(locale, [
-          { key: "games", label: parentLabel },
-          { key: pageId, label: content.h1 },
-        ])}
-      >
-        <PageHeroBlock locale={locale} content={content} secondaryHref={routePath("guides", locale)} />
-        <Container className="pb-16">
-          {category ? (
-            <div className="relative mb-10 aspect-[16/9] max-w-3xl overflow-hidden rounded-2xl border border-white/10">
-              <Image
-                src={category.image}
-                alt={content.h1}
-                fill
-                sizes="(max-width:768px) 100vw, 768px"
-                className="object-cover"
-                priority
-              />
-            </div>
-          ) : null}
-          <ContentSections sections={content.sections} />
-          <RelatedLinks locale={locale} links={content.related} />
-        </Container>
-      </PageChrome>
-      <FinalCtaBand locale={locale} title={content.h1} description={content.intro} />
-    </>
+    <RichPageLayout
+      locale={locale}
+      content={content}
+      crumbs={richCrumbs(locale, [
+        { key: "games", label: parentLabel },
+        { key: pageId, label: content.h1 },
+      ])}
+      beforeBlocks={
+        category ? (
+          <div className="relative mb-10 aspect-[16/9] max-w-3xl overflow-hidden rounded-2xl border border-white/10">
+            <Image
+              src={category.image}
+              alt={content.h1}
+              fill
+              sizes="(max-width:768px) 100vw, 768px"
+              className="object-cover"
+              priority
+            />
+          </div>
+        ) : null
+      }
+    />
   );
 }
 
 export function SlotsPageView({ locale }: { locale: Locale }) {
-  return <GameCategoryPage locale={locale} pageId="games-slots" parentLabel="Games" />;
+  const gamesLabel = getRichPageContent(locale, "games").h1;
+  return <GameCategoryPage locale={locale} pageId="games-slots" parentLabel={gamesLabel} />;
 }
 export function LiveCasinoPageView({ locale }: { locale: Locale }) {
-  return <GameCategoryPage locale={locale} pageId="games-live-casino" parentLabel="Games" />;
+  const gamesLabel = getRichPageContent(locale, "games").h1;
+  return <GameCategoryPage locale={locale} pageId="games-live-casino" parentLabel={gamesLabel} />;
 }
 export function SportsPageView({ locale }: { locale: Locale }) {
-  return <GameCategoryPage locale={locale} pageId="games-sports" parentLabel="Games" />;
+  const gamesLabel = getRichPageContent(locale, "games").h1;
+  return <GameCategoryPage locale={locale} pageId="games-sports" parentLabel={gamesLabel} />;
 }
 export function Lottery4dPageView({ locale }: { locale: Locale }) {
-  return <GameCategoryPage locale={locale} pageId="games-4d" parentLabel="Games" />;
+  const gamesLabel = getRichPageContent(locale, "games").h1;
+  return <GameCategoryPage locale={locale} pageId="games-4d" parentLabel={gamesLabel} />;
 }
 
 export function ProvidersPageView({ locale }: { locale: Locale }) {
-  const content = getPageContent(locale, "game-providers");
+  const content = getRichPageContent(locale, "game-providers");
+  const providerTitle =
+    locale === "ms" ? "Penyedia dirujuk" : locale === "zh" ? "相关提供商" : "Referenced providers";
+
   return (
-    <>
-      <PageChrome
-        locale={locale}
-        crumbs={crumbs(locale, [{ key: "game-providers", label: content.h1 }])}
-      >
-        <PageHeroBlock locale={locale} content={content} secondaryHref={routePath("games", locale)} />
-        <Container className="pb-16">
-          <p className="mb-8 text-sm text-zinc-400">{PROVIDER_CATALOG_NOTE}</p>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <RichPageLayout
+      locale={locale}
+      content={content}
+      crumbs={richCrumbs(locale, [{ key: "game-providers", label: content.h1 }])}
+      afterBlocks={
+        <section className="mt-12">
+          <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">{providerTitle}</h2>
+          <p className="mt-3 max-w-3xl text-sm text-zinc-400">{PROVIDER_CATALOG_NOTE}</p>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {PROVIDERS.map((provider) => (
               <article key={provider.name} className="card-surface rounded-2xl p-5">
                 <div className="mb-4 flex h-20 items-center justify-center rounded-xl bg-black/40">
@@ -482,19 +465,14 @@ export function ProvidersPageView({ locale }: { locale: Locale }) {
                     className="h-16 w-16 object-contain"
                   />
                 </div>
-                <h2 className="text-lg font-semibold text-white">{provider.name}</h2>
+                <h3 className="text-lg font-semibold text-white">{provider.name}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-zinc-400">{provider.note}</p>
               </article>
             ))}
           </div>
-          <div className="mt-12">
-            <ContentSections sections={content.sections} />
-          </div>
-          <RelatedLinks locale={locale} links={content.related} />
-        </Container>
-      </PageChrome>
-      <FinalCtaBand locale={locale} title={content.h1} description={content.intro} />
-    </>
+        </section>
+      }
+    />
   );
 }
 
@@ -515,19 +493,21 @@ function GuidePage({
     | "guides-account-security"
   >;
 }) {
-  const content = getPageContent(locale, pageId);
+  const content = getRichPageContent(locale, pageId);
+  const guidesLabel =
+    locale === "ms" ? "Panduan" : locale === "zh" ? "指南" : "Guides";
   const trail =
     pageId === "guides"
       ? [{ key: "guides" as const, label: content.h1 }]
       : [
-          { key: "guides" as const, label: "Guides" },
+          { key: "guides" as const, label: guidesLabel },
           { key: pageId, label: content.h1 },
         ];
-  return <StandardPage locale={locale} pageId={pageId} trail={trail} />;
+  return <RichStandardPage locale={locale} pageId={pageId} trail={trail} />;
 }
 
 export function GuidesHubPageView({ locale }: { locale: Locale }) {
-  const content = getPageContent(locale, "guides");
+  const content = getRichPageContent(locale, "guides");
   const guideKeys: RouteKey[] = [
     "guides-how-to-register",
     "guides-how-to-login",
@@ -537,33 +517,35 @@ export function GuidesHubPageView({ locale }: { locale: Locale }) {
     "guides-mobile",
     "guides-account-security",
   ];
+  const hubCardsTitle =
+    locale === "ms" ? "Panduan mengikut topik" : locale === "zh" ? "按主题浏览指南" : "Guides by topic";
+
   return (
-    <>
-      <PageChrome locale={locale} crumbs={crumbs(locale, [{ key: "guides", label: content.h1 }])}>
-        <PageHeroBlock locale={locale} content={content} />
-        <Container className="pb-16">
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <RichPageLayout
+      locale={locale}
+      content={content}
+      crumbs={richCrumbs(locale, [{ key: "guides", label: content.h1 }])}
+      beforeBlocks={
+        <section className="mb-12">
+          <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">{hubCardsTitle}</h2>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {guideKeys.map((key) => {
-              const page = getPageContent(locale, key as PageId);
+              const page = getRichPageContent(locale, key as PageId);
               return (
                 <Link
                   key={key}
                   href={routePath(key, locale)}
                   className="card-surface rounded-2xl p-6 transition hover:border-iwin-yellow/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
                 >
-                  <h2 className="font-display text-lg font-semibold text-white">{page.h1}</h2>
-                  <p className="mt-3 line-clamp-3 text-sm text-zinc-300">{page.intro}</p>
+                  <h3 className="font-display text-lg font-semibold text-white">{page.h1}</h3>
+                  <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-zinc-300">{page.intro[0]}</p>
                 </Link>
               );
             })}
           </div>
-          <div className="mt-12">
-            <ContentSections sections={content.sections} />
-          </div>
-        </Container>
-      </PageChrome>
-      <FinalCtaBand locale={locale} title={content.h1} description={content.intro} />
-    </>
+        </section>
+      }
+    />
   );
 }
 
@@ -590,35 +572,37 @@ export function AccountSecurityGuidePageView({ locale }: { locale: Locale }) {
 }
 
 export function PromotionsHubPageView({ locale }: { locale: Locale }) {
-  const content = getPageContent(locale, "promotions");
+  const content = getRichPageContent(locale, "promotions");
   const keys: PageId[] = ["promotions-free-credit", "promotions-welcome", "promotions-bonus-guide"];
+  const promoCardsTitle =
+    locale === "ms" ? "Topik promosi" : locale === "zh" ? "优惠专题" : "Promotion topics";
+
   return (
-    <>
-      <PageChrome locale={locale} crumbs={crumbs(locale, [{ key: "promotions", label: content.h1 }])}>
-        <PageHeroBlock locale={locale} content={content} />
-        <Container className="pb-16">
-          <div className="grid gap-4 md:grid-cols-3">
+    <RichPageLayout
+      locale={locale}
+      content={content}
+      crumbs={richCrumbs(locale, [{ key: "promotions", label: content.h1 }])}
+      beforeBlocks={
+        <section className="mb-12">
+          <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">{promoCardsTitle}</h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
             {keys.map((key) => {
-              const page = getPageContent(locale, key);
+              const page = getRichPageContent(locale, key);
               return (
                 <Link
                   key={key}
                   href={routePath(key, locale)}
-                  className="card-surface rounded-2xl p-6 transition hover:border-iwin-yellow/40"
+                  className="card-surface rounded-2xl p-6 transition hover:border-iwin-yellow/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
                 >
-                  <h2 className="font-display text-lg font-semibold text-white">{page.h1}</h2>
-                  <p className="mt-3 text-sm text-zinc-300">{page.intro}</p>
+                  <h3 className="font-display text-lg font-semibold text-white">{page.h1}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-zinc-300">{page.intro[0]}</p>
                 </Link>
               );
             })}
           </div>
-          <div className="mt-12">
-            <ContentSections sections={content.sections} />
-          </div>
-        </Container>
-      </PageChrome>
-      <FinalCtaBand locale={locale} title={content.h1} description={content.intro} />
-    </>
+        </section>
+      }
+    />
   );
 }
 
@@ -629,13 +613,15 @@ function PromoPage({
   locale: Locale;
   pageId: Extract<PageId, "promotions-free-credit" | "promotions-welcome" | "promotions-bonus-guide">;
 }) {
-  const content = getPageContent(locale, pageId);
+  const content = getRichPageContent(locale, pageId);
+  const promoLabel =
+    locale === "ms" ? "Promosi" : locale === "zh" ? "优惠" : "Promotions";
   return (
-    <StandardPage
+    <RichStandardPage
       locale={locale}
       pageId={pageId}
       trail={[
-        { key: "promotions", label: "Promotions" },
+        { key: "promotions", label: promoLabel },
         { key: pageId, label: content.h1 },
       ]}
     />
@@ -653,75 +639,71 @@ export function BonusGuidePageView({ locale }: { locale: Locale }) {
 }
 
 export function AgentPageView({ locale }: { locale: Locale }) {
-  const content = getPageContent(locale, "agent");
+  const content = getRichPageContent(locale, "agent");
   return (
-    <StandardPage locale={locale} pageId="agent" trail={[{ key: "agent", label: content.h1 }]} />
+    <RichStandardPage locale={locale} pageId="agent" trail={[{ key: "agent", label: content.h1 }]} />
   );
 }
 export function PartnerProgramPageView({ locale }: { locale: Locale }) {
-  const content = getPageContent(locale, "partner-program");
+  const content = getRichPageContent(locale, "partner-program");
+  const agentLabel = locale === "ms" ? "Ejen" : locale === "zh" ? "代理" : "Agent";
   return (
-    <StandardPage
+    <RichStandardPage
       locale={locale}
       pageId="partner-program"
       trail={[
-        { key: "agent", label: "Agent" },
+        { key: "agent", label: agentLabel },
         { key: "partner-program", label: content.h1 },
       ]}
     />
   );
 }
 export function AffiliateGuidePageView({ locale }: { locale: Locale }) {
-  const content = getPageContent(locale, "affiliate-guide");
+  const content = getRichPageContent(locale, "affiliate-guide");
+  const agentLabel = locale === "ms" ? "Ejen" : locale === "zh" ? "代理" : "Agent";
   return (
-    <StandardPage
+    <RichStandardPage
       locale={locale}
       pageId="affiliate-guide"
       trail={[
-        { key: "agent", label: "Agent" },
+        { key: "agent", label: agentLabel },
         { key: "affiliate-guide", label: content.h1 },
       ]}
     />
   );
 }
 export function ReferralGuidePageView({ locale }: { locale: Locale }) {
-  const content = getPageContent(locale, "referral-guide");
+  const content = getRichPageContent(locale, "referral-guide");
+  const agentLabel = locale === "ms" ? "Ejen" : locale === "zh" ? "代理" : "Agent";
   return (
-    <StandardPage
+    <RichStandardPage
       locale={locale}
       pageId="referral-guide"
       trail={[
-        { key: "agent", label: "Agent" },
+        { key: "agent", label: agentLabel },
         { key: "referral-guide", label: content.h1 },
       ]}
     />
   );
 }
 export function PartnerFaqPageView({ locale }: { locale: Locale }) {
-  const content = getPageContent(locale, "partner-faq");
-  const groups = getFaqGroups(locale).filter((g) => g.id === "partner-agent");
-  const faqs = flattenFaqs(groups);
+  const content = getRichPageContent(locale, "partner-faq");
+  const agentLabel = locale === "ms" ? "Ejen" : locale === "zh" ? "代理" : "Agent";
+  const partnerGroups = getFaqGroups(locale).filter((g) => g.id === "partner-agent");
+  const partnerFaqs = flattenFaqs(partnerGroups);
+
   return (
-    <>
-      <JsonLd data={faqPageJsonLd(faqs)} />
-      <PageChrome
-        locale={locale}
-        crumbs={crumbs(locale, [
-          { key: "agent", label: "Agent" },
-          { key: "partner-faq", label: content.h1 },
-        ])}
-      >
-        <PageHeroBlock locale={locale} content={content} />
-        <Container className="pb-16">
-          <ContentSections sections={content.sections} />
-          <div className="mt-10">
-            <Accordion items={faqs} />
-          </div>
-          <RelatedLinks locale={locale} links={content.related} />
-        </Container>
-      </PageChrome>
-      <FinalCtaBand locale={locale} title={content.h1} description={content.intro} />
-    </>
+    <RichPageLayout
+      locale={locale}
+      content={{
+        ...content,
+        faqs: [...(content.faqs ?? []), ...partnerFaqs],
+      }}
+      crumbs={richCrumbs(locale, [
+        { key: "agent", label: agentLabel },
+        { key: "partner-faq", label: content.h1 },
+      ])}
+    />
   );
 }
 
@@ -732,60 +714,92 @@ export function FaqsPageView({ locale }: { locale: Locale }) {
   const titles = {
     en: {
       h1: "IWIN Malaysia Frequently Asked Questions",
-      intro: "Practical answers about accounts, payments, games, promotions, partners and security.",
+      intro:
+        "Practical answers about accounts, payments, games, promotions, partners and security — organised by topic so you can find relevant guidance quickly.",
+      eyebrow: "Help centre",
     },
     ms: {
       h1: "Soalan Lazim IWIN Malaysia",
-      intro: "Jawapan praktikal tentang akaun, bayaran, permainan, promosi, rakan dan keselamatan.",
+      intro:
+        "Jawapan praktikal tentang akaun, bayaran, permainan, promosi, rakan dan keselamatan — disusun mengikut topik untuk carian pantas.",
+      eyebrow: "Pusat bantuan",
     },
     zh: {
       h1: "IWIN Malaysia 常见问题",
-      intro: "关于账户、支付、游戏、优惠、合作伙伴与安全的实用解答。",
+      intro: "关于账户、支付、游戏、优惠、合作伙伴与安全的实用解答——按主题分类，便于快速查找。",
+      eyebrow: "帮助中心",
     },
   }[locale];
 
   return (
     <>
       <JsonLd data={faqPageJsonLd(faqs)} />
-      <PageChrome locale={locale} crumbs={crumbs(locale, [{ key: "faqs", label: titles.h1 }])}>
-        <Container className="py-10 sm:py-14">
-          <SectionHeading title={titles.h1} description={titles.intro} as="h1" />
-        </Container>
-        <Container className="pb-16">
-          <div className="space-y-10">
-            {groups.map((group) => (
-              <section key={group.id}>
-                <h2 className="mb-4 font-display text-2xl font-semibold text-white">
-                  {group.title}
-                </h2>
-                <Accordion items={group.items} />
-              </section>
-            ))}
-          </div>
-          <RelatedLinks
-            locale={locale}
-            links={[
-              { key: "guides", label: common.exploreGuides },
-              { key: "contact", label: "Contact" },
-              { key: "responsible-gaming", label: "Responsible Gaming" },
+      <div className="border-b border-white/5 bg-iwin-charcoal/30">
+        <Container className="py-6 sm:py-8">
+          <Breadcrumbs
+            items={[
+              { label: common.breadcrumbHome, href: routePath("home", locale) },
+              { label: titles.h1 },
             ]}
           />
         </Container>
-      </PageChrome>
+      </div>
+      <section className="border-b border-white/5 bg-gradient-to-br from-iwin-charcoal/80 to-black">
+        <Container className="py-10 sm:py-12">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-iwin-yellow">{titles.eyebrow}</p>
+          <h1 className="font-display mt-3 max-w-3xl text-3xl font-semibold text-white sm:text-4xl">{titles.h1}</h1>
+          <p className="mt-4 max-w-3xl text-base leading-relaxed text-zinc-300">{titles.intro}</p>
+        </Container>
+      </section>
+      <Container className="py-12 sm:py-14">
+        <div className="space-y-12">
+          {groups.map((group) => (
+            <section key={group.id} className="scroll-mt-28">
+              <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">{group.title}</h2>
+              <p className="mt-2 max-w-3xl text-sm text-zinc-400">
+                {group.items.length}{" "}
+                {locale === "ms" ? "soalan" : locale === "zh" ? "个问题" : "questions"}
+              </p>
+              <div className="mt-5">
+                <Accordion items={group.items} />
+              </div>
+            </section>
+          ))}
+        </div>
+        <section className="mt-14 border-t border-white/10 pt-10">
+          <h2 className="font-display text-xl font-semibold text-white">{common.relatedLinks}</h2>
+          <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              { key: "guides" as const, label: common.exploreGuides },
+              { key: "contact" as const, label: getRichPageContent(locale, "contact").h1 },
+              { key: "responsible-gaming" as const, label: getRichPageContent(locale, "responsible-gaming").h1 },
+            ].map((link) => (
+              <li key={link.key}>
+                <Link
+                  href={routePath(link.key, locale)}
+                  className="block rounded-xl border border-white/10 bg-surface-900/50 px-4 py-3 text-sm text-zinc-200 transition hover:border-iwin-yellow/40 hover:text-white"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </Container>
     </>
   );
 }
 
 export function ContactPageView({ locale }: { locale: Locale }) {
-  const content = getPageContent(locale, "contact");
+  const content = getRichPageContent(locale, "contact");
   return (
-    <StandardPage locale={locale} pageId="contact" trail={[{ key: "contact", label: content.h1 }]} />
+    <RichStandardPage locale={locale} pageId="contact" trail={[{ key: "contact", label: content.h1 }]} />
   );
 }
 export function ResponsibleGamingPageView({ locale }: { locale: Locale }) {
-  const content = getPageContent(locale, "responsible-gaming");
+  const content = getRichPageContent(locale, "responsible-gaming");
   return (
-    <StandardPage
+    <RichStandardPage
       locale={locale}
       pageId="responsible-gaming"
       trail={[{ key: "responsible-gaming", label: content.h1 }]}
@@ -793,15 +807,15 @@ export function ResponsibleGamingPageView({ locale }: { locale: Locale }) {
   );
 }
 export function TermsPageView({ locale }: { locale: Locale }) {
-  const content = getPageContent(locale, "terms");
+  const content = getRichPageContent(locale, "terms");
   return (
-    <StandardPage locale={locale} pageId="terms" trail={[{ key: "terms", label: content.h1 }]} />
+    <RichStandardPage locale={locale} pageId="terms" trail={[{ key: "terms", label: content.h1 }]} />
   );
 }
 export function PrivacyPageView({ locale }: { locale: Locale }) {
-  const content = getPageContent(locale, "privacy-policy");
+  const content = getRichPageContent(locale, "privacy-policy");
   return (
-    <StandardPage
+    <RichStandardPage
       locale={locale}
       pageId="privacy-policy"
       trail={[{ key: "privacy-policy", label: content.h1 }]}
@@ -809,9 +823,9 @@ export function PrivacyPageView({ locale }: { locale: Locale }) {
   );
 }
 export function DisclaimerPageView({ locale }: { locale: Locale }) {
-  const content = getPageContent(locale, "disclaimer");
+  const content = getRichPageContent(locale, "disclaimer");
   return (
-    <StandardPage
+    <RichStandardPage
       locale={locale}
       pageId="disclaimer"
       trail={[{ key: "disclaimer", label: content.h1 }]}

@@ -1,0 +1,39 @@
+import type { PageId } from "./types";
+
+/** Maps each page to an existing asset under public/images. */
+const HERO_IMAGES: Partial<Record<PageId, string>> = {
+  "about-iwin": "/images/hero/banner-2.png",
+  "official-partner": "/images/hero/banner-3.png",
+  games: "/images/games/slots.webp",
+  "games-slots": "/images/games/slots.webp",
+  "games-live-casino": "/images/games/live-casino.webp",
+  "games-sports": "/images/games/sports.webp",
+  "games-4d": "/images/games/4d.webp",
+  "game-providers": "/images/hero/banner-3.png",
+  guides: "/images/hero/banner-2.png",
+  "guides-how-to-register": "/images/hero/banner-1.png",
+  "guides-how-to-login": "/images/hero/banner-2.png",
+  "guides-how-to-deposit": "/images/hero/banner-3.png",
+  "guides-how-to-withdraw": "/images/hero/banner-1.png",
+  "guides-payment-methods": "/images/hero/banner-2.png",
+  "guides-mobile": "/images/hero/banner-3.png",
+  "guides-account-security": "/images/hero/banner-1.png",
+  promotions: "/images/games/promo.webp",
+  "promotions-free-credit": "/images/games/promo.webp",
+  "promotions-welcome": "/images/games/promo.webp",
+  "promotions-bonus-guide": "/images/games/promo.webp",
+  agent: "/images/games/agent.webp",
+  "partner-program": "/images/games/agent.webp",
+  "affiliate-guide": "/images/games/agent.webp",
+  "referral-guide": "/images/games/agent.webp",
+  "partner-faq": "/images/games/agent.webp",
+  contact: "/images/hero/banner-3.png",
+  "responsible-gaming": "/images/hero/banner-2.png",
+  terms: "/images/hero/banner-1.png",
+  "privacy-policy": "/images/hero/banner-2.png",
+  disclaimer: "/images/hero/banner-3.png",
+};
+
+export function resolveHeroImage(pageId: PageId, fallback?: string): string | undefined {
+  return HERO_IMAGES[pageId] ?? fallback;
+}

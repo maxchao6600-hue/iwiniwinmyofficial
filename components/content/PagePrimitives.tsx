@@ -31,7 +31,7 @@ export function PageChrome({
   locale,
   crumbs,
   children,
-  showDisclosure = true,
+  showDisclosure = false,
 }: {
   locale: Locale;
   crumbs: { name: string; path: string }[];
