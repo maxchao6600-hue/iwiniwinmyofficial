@@ -56,7 +56,7 @@ export function CompactPageHero({
 }) {
   const isExternal = primaryUrl.startsWith("http");
   return (
-    <section className="relative overflow-hidden border-b border-white/5">
+    <section className="relative min-h-[280px] overflow-hidden border-b border-white/5 sm:min-h-[320px]">
       {content.heroImage ? (
         <div className="absolute inset-0">
           <Image
@@ -65,29 +65,28 @@ export function CompactPageHero({
             fill
             priority
             sizes="100vw"
-            className="object-cover object-[center_25%] opacity-35"
+            className="object-cover object-[center_28%] opacity-50"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/92 to-black/75" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/45" />
+          <div className="absolute inset-0 hero-glow" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-black/45" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50" />
         </div>
       ) : (
         <div className="absolute inset-0 bg-gradient-to-br from-iwin-charcoal via-black to-black" />
       )}
-      <Container className="relative py-7 sm:py-8 lg:py-10">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-iwin-yellow">
-          {content.eyebrow}
-        </p>
-        <h1 className="font-display mt-3 max-w-3xl text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+      <Container className="relative py-10 sm:py-12 lg:py-14">
+        <p className="eyebrow">{content.eyebrow}</p>
+        <h1 className="font-display mt-4 max-w-3xl text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl">
           {content.h1}
         </h1>
-        <div className="mt-4 max-w-3xl space-y-3">
+        <div className="mt-5 max-w-2xl space-y-3">
           {content.intro.map((p) => (
-            <p key={p.slice(0, 48)} className="text-base leading-relaxed text-zinc-300">
+            <p key={p.slice(0, 48)} className="text-base leading-relaxed text-zinc-300 sm:text-lg">
               {p}
             </p>
           ))}
         </div>
-        <div className="mt-6 flex flex-wrap gap-3">
+        <div className="mt-8 flex flex-wrap gap-3">
           <Button href={primaryUrl} size="lg" external={isExternal}>
             {primaryLabel}
           </Button>
@@ -113,26 +112,28 @@ export function ContextualFinalCta({
   const secondary = secondaryHref(locale, cta);
 
   return (
-    <section className="section-band bg-[linear-gradient(180deg,rgba(245,197,24,0.08),transparent)]">
-      <Container className="py-8 sm:py-10">
-        <div className="mx-auto max-w-2xl text-center">
-          <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">
-            {cta.footerTitle}
-          </h2>
-          <p className="mt-3 text-zinc-300">{cta.footerDescription}</p>
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Button href={primary} size="lg" external={primary.startsWith("http")}>
-              {cta.primaryLabel}
-            </Button>
-            {secondary && cta.secondaryLabel ? (
-              <Button href={secondary} variant="secondary" size="lg">
-                {cta.secondaryLabel}
+    <section className="section-band">
+      <Container className="py-10 sm:py-12">
+        <div className="final-cta-panel px-6 py-10 sm:px-10 sm:py-12">
+          <div className="relative mx-auto max-w-2xl text-center">
+            <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">
+              {cta.footerTitle}
+            </h2>
+            <p className="mt-3 text-zinc-300">{cta.footerDescription}</p>
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
+              <Button href={primary} size="lg" external={primary.startsWith("http")}>
+                {cta.primaryLabel}
               </Button>
+              {secondary && cta.secondaryLabel ? (
+                <Button href={secondary} variant="secondary" size="lg">
+                  {cta.secondaryLabel}
+                </Button>
+              ) : null}
+            </div>
+            {cta.showExternalNotice ? (
+              <ExternalLinkNotice locale={locale} className="mx-auto mt-4 max-w-xl" />
             ) : null}
           </div>
-          {cta.showExternalNotice ? (
-            <ExternalLinkNotice locale={locale} className="mx-auto mt-4 max-w-xl" />
-          ) : null}
         </div>
       </Container>
     </section>

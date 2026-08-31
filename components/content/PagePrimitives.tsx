@@ -220,27 +220,23 @@ export function CategoryCard({
   return (
     <Link
       href={href}
-      className="group card-surface overflow-hidden rounded-2xl transition hover:border-iwin-yellow/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iwin-yellow/50"
+      className="group relative min-h-[240px] overflow-hidden rounded-2xl border border-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iwin-yellow/50 sm:min-h-[280px]"
     >
-      <div className="relative aspect-[5/3] overflow-hidden sm:aspect-[16/10]">
-        <Image
-          src={image}
-          alt={alt ?? title}
-          fill
-          sizes="(max-width:768px) 100vw, (max-width:1024px) 50vw, 25vw"
-          className="object-cover transition duration-500 group-hover:scale-[1.03]"
-          style={{ objectPosition }}
-          priority={priority}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent" />
-        <div className="absolute bottom-0 left-0 p-4 sm:p-5">
-          <h3 className="font-display text-lg font-semibold text-white sm:text-xl">{title}</h3>
-        </div>
-      </div>
-      <div className="p-4 sm:p-5">
-        <p className="text-sm leading-relaxed text-zinc-300">{description}</p>
+      <Image
+        src={image}
+        alt={alt ?? title}
+        fill
+        sizes="(max-width:768px) 100vw, (max-width:1024px) 50vw, 25vw"
+        className="object-cover transition duration-700 group-hover:scale-[1.04]"
+        style={{ objectPosition }}
+        priority={priority}
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-black/10" />
+      <div className="absolute inset-x-0 bottom-0 p-5">
+        <h3 className="font-display text-xl font-semibold text-white sm:text-2xl">{title}</h3>
+        <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-zinc-300">{description}</p>
         {actionLabel ? (
-          <p className="mt-3 text-xs font-semibold uppercase tracking-[0.14em] text-iwin-yellow group-hover:text-iwin-yellow-bright">
+          <p className="mt-3 text-xs font-semibold uppercase tracking-[0.14em] text-iwin-yellow">
             {actionLabel} →
           </p>
         ) : null}

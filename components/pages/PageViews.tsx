@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  CategoryCard,
   FinalCtaBand,
 } from "@/components/content/PagePrimitives";
 import {
@@ -26,16 +25,20 @@ import { GUIDE_META } from "@/content/i18n/rich/related";
 import { VISUAL_IMAGES } from "@/lib/visual/images";
 import {
   AgentSplitPanel,
+  BrandEditorialPanel,
   ClusterNavCard,
-  EcosystemDiagram,
-  GuideStepCard,
-  PartnerFlowDiagram,
+  ContactVisualPanel,
+  EcosystemComposition,
+  GuideNavCard,
+  JourneyComposition,
+  MasonryCategoryGrid,
+  PartnerFlowComposition,
   PremiumDataTable,
   ProcessFlow,
   PromoFactCards,
-  PromoVisualPanel,
+  PromoHeroComposition,
   ProviderLogoGrid,
-  ResponsibleGamingGrid,
+  ResponsibleEditorial,
   SplitCategorySection,
 } from "@/components/visual/VisualPanels";
 import { SITE_CONFIG, getActiveContactChannels, hasExternalUrl } from "@/lib/constants/site";
@@ -69,7 +72,17 @@ export function HomePageView({ locale }: { locale: Locale }) {
   const faqs = getHomeFaqs(locale);
   const homePath = routePath("home", locale);
   const primaryHref = home.hero.primaryCta.href || routePath("guides-how-to-register", locale);
-  const clusterMarkers = ["G", "P", "Gu", "A", "F", "Ab"];
+  const masonryItems = home.categories.items.map((item) => {
+    const category = GAME_CATEGORIES.find((cat) => cat.routeKey === item.routeKey);
+    return {
+      href: item.href,
+      title: item.title,
+      description: item.description,
+      image: category?.image ?? item.image ?? VISUAL_IMAGES.category.slots,
+      alt: category?.alt[locale] ?? item.title,
+      objectPosition: category?.objectPosition,
+    };
+  });
 
   return (
     <>
@@ -85,7 +98,7 @@ export function HomePageView({ locale }: { locale: Locale }) {
           locale,
         })}
       />
-      <section className="relative overflow-hidden border-b border-white/5">
+      <section className="relative min-h-[70vh] overflow-hidden border-b border-white/5 sm:min-h-[75vh]">
         <div className="absolute inset-0">
           <Image
             src={VISUAL_IMAGES.hero.home}
@@ -93,20 +106,18 @@ export function HomePageView({ locale }: { locale: Locale }) {
             fill
             priority
             sizes="100vw"
-            className="object-cover object-[center_22%] opacity-50"
+            className="object-cover object-[center_22%] opacity-55"
           />
           <div className="absolute inset-0 hero-glow" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/94 via-black/78 to-black/50" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/15 to-black/55" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/78 to-black/40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-black/55" />
         </div>
-        <Container className="relative py-12 sm:py-14 lg:py-16">
-          <div className="mb-6 flex items-center gap-3">
-            <span className="relative block h-10 w-10 shrink-0 overflow-hidden rounded-lg border border-iwin-yellow/30 bg-black/50">
-              <Image src={VISUAL_IMAGES.brand.mark} alt="" width={40} height={40} className="object-contain p-1" priority />
-            </span>
-            <p className="eyebrow mb-0">{home.hero.eyebrow}</p>
+        <Container className="relative flex min-h-[70vh] flex-col justify-end py-14 sm:min-h-[75vh] sm:py-16 lg:py-20">
+          <div className="relative mb-5 h-10 w-[148px]">
+            <Image src={VISUAL_IMAGES.brand.logo} alt="" fill sizes="148px" className="object-contain object-left" priority />
           </div>
-          <h1 className="font-display max-w-3xl text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl">
+          <p className="eyebrow">{home.hero.eyebrow}</p>
+          <h1 className="font-display mt-4 max-w-3xl text-3xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
             {home.hero.h1}
           </h1>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-zinc-300 sm:text-lg">
@@ -127,21 +138,28 @@ export function HomePageView({ locale }: { locale: Locale }) {
         </Container>
       </section>
 
-      <section className="section-band-alt">
-        <Container className="py-10 sm:py-12">
-          <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
+      <section className="section-media">
+        <Container className="py-12 sm:py-14">
+          <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
             <div>
               <SectionHeading
                 eyebrow={home.aboutIwin.eyebrow}
                 title={home.aboutIwin.title}
                 description={home.aboutIwin.paragraphs[0]}
               />
-              <div className="mt-6 space-y-4 text-sm leading-relaxed text-zinc-300">
+              <div className="mt-6 space-y-4 text-sm leading-relaxed text-zinc-300 sm:text-base">
                 {home.aboutIwin.paragraphs.slice(1).map((paragraph) => (
                   <p key={paragraph}>{paragraph}</p>
                 ))}
               </div>
-              <div className="mt-6 flex flex-wrap gap-3">
+              <ul className="mt-6 space-y-3">
+                {home.aboutIwin.points.map((point) => (
+                  <li key={point} className="border-l-2 border-iwin-yellow/40 pl-4 text-sm text-zinc-300">
+                    {point}
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-8 flex flex-wrap gap-3">
                 <Button href={routePath("about-iwin", locale)} variant="secondary">
                   {getRichPageContent(locale, "about-iwin").h1}
                 </Button>
@@ -150,27 +168,18 @@ export function HomePageView({ locale }: { locale: Locale }) {
                 </Button>
               </div>
             </div>
-            <EcosystemDiagram locale={locale} />
+            <EcosystemComposition locale={locale} />
           </div>
-          <ul className="mt-8 grid gap-3 sm:grid-cols-2">
-            {home.aboutIwin.points.map((point) => (
-              <li key={point} className="visual-panel flex gap-3 rounded-xl p-4 text-sm text-zinc-300">
-                <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-iwin-yellow/15 text-xs font-bold text-iwin-yellow">
-                  ✓
-                </span>
-                {point}
-              </li>
-            ))}
-          </ul>
         </Container>
       </section>
 
       <section className="section-band">
-        <Container className="py-10 sm:py-12">
-          <div className="grid items-start gap-8 lg:grid-cols-2">
-            <SectionHeading title={home.partnerBand.title} description={home.partnerBand.body} />
-            <PartnerFlowDiagram locale={locale} />
-          </div>
+        <Container className="py-12 sm:py-14">
+          <BrandEditorialPanel
+            locale={locale}
+            title={home.partnerBand.title}
+            body={home.partnerBand.body}
+          />
           <div className="mt-8 flex flex-wrap gap-3">
             <Button href={routePath("official-partner", locale)} variant="secondary">
               {common.partnerBoundaries}
@@ -182,17 +191,17 @@ export function HomePageView({ locale }: { locale: Locale }) {
         </Container>
       </section>
 
-      <section className="section-band-alt">
-        <Container className="py-10 sm:py-12">
+      <section className="section-media">
+        <Container className="py-12 sm:py-14">
           <SectionHeading eyebrow={home.clusterLinks.eyebrow} title={home.clusterLinks.title} />
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {home.clusterLinks.items.map((item, index) => (
+            {home.clusterLinks.items.map((item) => (
               <ClusterNavCard
                 key={item.routeKey}
                 href={item.href}
                 label={item.label}
                 description={item.description}
-                marker={clusterMarkers[index] ?? String(index + 1)}
+                routeKey={item.routeKey}
               />
             ))}
           </div>
@@ -200,51 +209,52 @@ export function HomePageView({ locale }: { locale: Locale }) {
       </section>
 
       <section className="section-band">
-        <Container className="py-10 sm:py-12">
+        <Container className="py-12 sm:py-14">
           <SectionHeading
             eyebrow={home.categories.eyebrow}
             title={home.categories.title}
             description={home.categories.intro}
           />
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {home.categories.items.map((item, index) => {
-              const category = GAME_CATEGORIES.find((cat) => cat.routeKey === item.routeKey);
-              return (
-              <CategoryCard
-                key={item.routeKey}
-                href={item.href}
-                title={item.title}
-                description={item.description}
-                image={category?.image ?? item.image ?? "/images/games/slots.webp"}
-                alt={category?.alt[locale] ?? item.title}
-                objectPosition={category?.objectPosition}
-                priority={index < 2}
-                actionLabel={visual.exploreCategory}
-              />
-            )})}
+          <div className="mt-8">
+            <MasonryCategoryGrid
+              locale={locale}
+              items={masonryItems}
+              actionLabel={visual.exploreCategory}
+            />
           </div>
         </Container>
       </section>
 
-      <section className="section-band-alt">
-        <Container className="py-10 sm:py-12">
-          <SectionHeading eyebrow={home.whyIwin.eyebrow} title={home.whyIwin.title} />
-          <div className="mt-8 grid gap-4 md:grid-cols-2">
-            {home.whyIwin.features.map((feature, index) => (
-              <article key={feature.title} className="visual-panel rounded-2xl p-6">
-                <span className="font-display text-3xl font-bold text-iwin-yellow/40">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <h3 className="font-display mt-3 text-xl font-semibold text-white">{feature.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-zinc-300">{feature.description}</p>
-              </article>
-            ))}
+      <section className="section-media">
+        <Container className="py-12 sm:py-14">
+          <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-12">
+            <div className="relative min-h-[300px] overflow-hidden rounded-2xl border border-white/10 lg:min-h-[420px]">
+              <Image
+                src={VISUAL_IMAGES.hero.banner2}
+                alt=""
+                fill
+                sizes="(max-width:1024px) 100vw, 50vw"
+                className="object-cover object-center opacity-60"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
+                <SectionHeading eyebrow={home.whyIwin.eyebrow} title={home.whyIwin.title} />
+              </div>
+            </div>
+            <div className="grid gap-5">
+              {home.whyIwin.features.map((feature) => (
+                <article key={feature.title} className="border-l-2 border-iwin-yellow/40 pl-5">
+                  <h3 className="font-display text-xl font-semibold text-white">{feature.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-zinc-300">{feature.description}</p>
+                </article>
+              ))}
+            </div>
           </div>
         </Container>
       </section>
 
       <section className="section-band">
-        <Container className="py-10 sm:py-12">
+        <Container className="py-12 sm:py-14">
           <SectionHeading
             eyebrow={home.providers.eyebrow}
             title={home.providers.title}
@@ -261,19 +271,17 @@ export function HomePageView({ locale }: { locale: Locale }) {
         </Container>
       </section>
 
-      <section className="section-band-alt">
-        <Container className="py-10 sm:py-12">
-          <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-10">
-            <PromoVisualPanel locale={locale} />
+      <section className="section-media">
+        <Container className="py-12 sm:py-14">
+          <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-12">
+            <PromoHeroComposition locale={locale} />
             <div>
               <SectionHeading
                 eyebrow={home.promotions.eyebrow}
                 title={home.promotions.title}
                 description={home.promotions.description}
               />
-              <div className="mt-6">
-                <PromoFactCards locale={locale} items={home.promotions.conditions} />
-              </div>
+              <PromoFactCards locale={locale} items={home.promotions.conditions} />
               <div className="mt-8 flex flex-wrap gap-3">
                 <Button href={home.promotions.cta.href || routePath("promotions-free-credit", locale)}>
                   {home.promotions.cta.label}
@@ -288,22 +296,23 @@ export function HomePageView({ locale }: { locale: Locale }) {
       </section>
 
       <section className="section-band">
-        <Container className="py-10 sm:py-12">
+        <Container className="py-12 sm:py-14">
           <SectionHeading
             eyebrow={home.guides.eyebrow}
             title={home.guides.title}
             description={home.guides.description}
           />
+          <div className="mt-8">
+            <JourneyComposition locale={locale} />
+          </div>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {home.guides.items.map((item, index) => (
-              <GuideStepCard
+              <GuideNavCard
                 key={item.routeKey}
                 href={item.href}
                 number={String(index + 1).padStart(2, "0")}
                 title={item.title}
                 description={item.description}
-                featured={index < 2}
-                featuredLabel={index < 2 ? visual.guideFeatured : undefined}
               />
             ))}
           </div>
@@ -315,12 +324,10 @@ export function HomePageView({ locale }: { locale: Locale }) {
         </Container>
       </section>
 
-      <section className="section-band-alt">
-        <Container className="py-10 sm:py-12">
+      <section className="section-media">
+        <Container className="py-12 sm:py-14">
           <AgentSplitPanel
             locale={locale}
-            imageSrc={VISUAL_IMAGES.agent}
-            imageAlt={home.agent.title}
             eyebrow={home.agent.eyebrow}
             title={home.agent.title}
             description={home.agent.description}
@@ -342,39 +349,7 @@ export function HomePageView({ locale }: { locale: Locale }) {
       </section>
 
       <section className="section-band">
-        <Container className="py-10 sm:py-12">
-          <SectionHeading
-            eyebrow={home.getStarted.eyebrow}
-            title={home.getStarted.title}
-            description={home.getStarted.description}
-          />
-          <ol className="mt-8 grid gap-4 md:grid-cols-2">
-            {home.getStarted.steps.map((step, index) => (
-              <li key={step.title} className="flex gap-4 rounded-2xl border border-white/10 bg-surface-900/60 p-5">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-iwin-yellow text-sm font-bold text-black">
-                  {index + 1}
-                </span>
-                <div>
-                  <h3 className="font-display text-lg font-semibold text-white">{step.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-zinc-300">{step.description}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Button href={routePath("guides-how-to-register", locale)}>{home.guides.items[0].title}</Button>
-            <Button href={routePath("games", locale)} variant="secondary">
-              {home.hero.secondaryCta.label}
-            </Button>
-            <Button href={routePath("responsible-gaming", locale)} variant="ghost">
-              {home.responsibleBand.cta.label}
-            </Button>
-          </div>
-        </Container>
-      </section>
-
-      <section className="section-band">
-        <Container className="py-10 sm:py-12">
+        <Container className="py-12 sm:py-14">
           <SectionHeading eyebrow={home.faq.eyebrow} title={home.faq.title} />
           <div className="mt-8">
             <GroupedAccordion
@@ -393,15 +368,12 @@ export function HomePageView({ locale }: { locale: Locale }) {
         </Container>
       </section>
 
-      <section className="section-band-alt">
-        <Container className="py-10 sm:py-12">
-          <SectionHeading
-            title={home.responsibleBand.title}
-            description={home.responsibleBand.description}
-          />
-          <div className="mt-8">
-            <ResponsibleGamingGrid locale={locale} />
-          </div>
+      <section className="section-media">
+        <Container className="py-12 sm:py-14">
+          <p className="mb-4 max-w-3xl text-base leading-relaxed text-zinc-400">
+            {home.responsibleBand.description}
+          </p>
+          <ResponsibleEditorial locale={locale} />
           <div className="mt-6">
             <Button
               href={home.responsibleBand.cta.href || routePath("responsible-gaming", locale)}
@@ -435,7 +407,7 @@ export function AboutPageView({ locale }: { locale: Locale }) {
       crumbs={richCrumbs(locale, [{ key: "about-iwin", label: content.h1 }])}
       afterBlocks={
         <section className="mt-12">
-          <PartnerFlowDiagram locale={locale} />
+          <PartnerFlowComposition locale={locale} />
         </section>
       }
     />
@@ -451,8 +423,8 @@ export function OfficialPartnerPageView({ locale }: { locale: Locale }) {
       crumbs={richCrumbs(locale, [{ key: "official-partner", label: content.h1 }])}
       afterBlocks={
         <section className="mt-12 grid gap-8 lg:grid-cols-2">
-          <PartnerFlowDiagram locale={locale} />
-          <EcosystemDiagram locale={locale} />
+          <PartnerFlowComposition locale={locale} />
+          <EcosystemComposition locale={locale} />
         </section>
       }
     />
@@ -498,19 +470,19 @@ export function GamesHubPageView({ locale }: { locale: Locale }) {
                 </a>
               ))}
             </nav>
-            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {GAME_CATEGORIES.map((cat, index) => (
-                <CategoryCard
-                  key={cat.id}
-                  href={routePath(cat.routeKey, locale)}
-                  title={getGameCategoryName(cat.id, locale)}
-                  description={hub.sections[index]?.intro ?? ""}
-                  image={cat.image}
-                  alt={cat.alt[locale]}
-                  objectPosition={cat.objectPosition}
-                  priority={index < 2}
-                />
-              ))}
+            <div className="mt-6">
+              <MasonryCategoryGrid
+                locale={locale}
+                items={GAME_CATEGORIES.map((cat, index) => ({
+                  href: routePath(cat.routeKey, locale),
+                  title: getGameCategoryName(cat.id, locale),
+                  description: hub.sections[index]?.intro ?? "",
+                  image: cat.image,
+                  alt: cat.alt[locale],
+                  objectPosition: cat.objectPosition,
+                }))}
+                actionLabel={getVisual(locale).exploreCategory}
+              />
             </div>
           </section>
         </>
@@ -747,20 +719,21 @@ export function GuidesHubPageView({ locale }: { locale: Locale }) {
       beforeBlocks={
         <>
           <section className="mb-10">
+            <JourneyComposition locale={locale} />
+          </section>
+          <section className="mb-10">
             <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">{featuredTitle}</h2>
             <div className="mt-6 grid gap-4 md:grid-cols-3">
               {featuredKeys.map((key, index) => {
                 const page = getRichPageContent(locale, key);
                 const meta = GUIDE_META[key];
                 return (
-                  <GuideStepCard
+                  <GuideNavCard
                     key={key}
                     href={routePath(key, locale)}
                     number={String(index + 1).padStart(2, "0")}
                     title={page.h1}
                     description={meta.purpose[locale]}
-                    featured
-                    featuredLabel={getVisual(locale).guideFeatured}
                   />
                 );
               })}
@@ -825,7 +798,7 @@ export function PromotionsHubPageView({ locale }: { locale: Locale }) {
       beforeBlocks={
         <>
           <section className="mb-10 grid items-start gap-8 lg:grid-cols-2">
-            <PromoVisualPanel locale={locale} />
+            <PromoHeroComposition locale={locale} />
             <div className="visual-panel rounded-2xl p-6">
               <p className="text-sm leading-relaxed text-zinc-300">{content.intro[0]}</p>
             </div>
@@ -875,7 +848,7 @@ function PromoPage({
       beforeBlocks={
         pageId === "promotions-free-credit" ? (
           <section className="mb-10 grid items-start gap-8 lg:grid-cols-2">
-            <PromoVisualPanel locale={locale} />
+            <PromoHeroComposition locale={locale} />
             <div className="visual-panel rounded-2xl p-6">
               <p className="text-sm leading-relaxed text-zinc-300">{content.intro[0]}</p>
             </div>
@@ -904,13 +877,21 @@ export function AgentPageView({ locale }: { locale: Locale }) {
       locale={locale}
       content={content}
       crumbs={richCrumbs(locale, [{ key: "agent", label: content.h1 }])}
-      afterBlocks={
-        <section className="mt-12">
-          <h2 className="font-display text-xl font-semibold text-white sm:text-2xl">
-            {locale === "ms" ? "Aliran rujukan" : locale === "zh" ? "推荐流程" : "Referral flow"}
-          </h2>
-          <div className="mt-5">
-            <ProcessFlow steps={visual.agentProcess} />
+      beforeBlocks={
+        <section className="mb-10">
+          <div className="relative min-h-[280px] overflow-hidden rounded-2xl border border-white/10 sm:min-h-[360px]">
+            <Image
+              src={VISUAL_IMAGES.agent}
+              alt={content.h1}
+              fill
+              sizes="100vw"
+              className="object-cover object-center"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 p-5 sm:p-8">
+              <ProcessFlow steps={visual.agentProcess} className="border-iwin-yellow/20 bg-black/55 backdrop-blur-sm" />
+            </div>
           </div>
         </section>
       }
@@ -1113,28 +1094,30 @@ export function ContactPageView({ locale }: { locale: Locale }) {
       content={content}
       crumbs={richCrumbs(locale, [{ key: "contact", label: content.h1 }])}
       afterBlocks={
-        <section className="mt-12">
-          <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">{channelTitle}</h2>
-          {channels.length ? (
-            <ul className="mt-6 grid gap-4 sm:grid-cols-2">
-              {channels.map((channel) => (
-                <li key={channel.id}>
-                  <a
-                    href={channel.href}
-                    target={channel.href.startsWith("http") ? "_blank" : undefined}
-                    rel={channel.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                    className="card-surface block rounded-2xl p-5 transition hover:border-iwin-yellow/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
-                  >
-                    <h3 className="font-display text-lg font-semibold text-white">{channel.label}</h3>
-                    <p className="mt-2 text-sm text-zinc-300">{channel.description}</p>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="mt-4 max-w-3xl text-sm leading-relaxed text-zinc-300">{noneLabel}</p>
-          )}
-        </section>
+        <>
+          <section className="mt-10">
+            <ContactVisualPanel title={channelTitle} description={noneLabel} />
+          </section>
+          <section className="mt-12">
+            {channels.length ? (
+              <ul className="grid gap-4 sm:grid-cols-2">
+                {channels.map((channel) => (
+                  <li key={channel.id}>
+                    <a
+                      href={channel.href}
+                      target={channel.href.startsWith("http") ? "_blank" : undefined}
+                      rel={channel.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                      className="relative block overflow-hidden rounded-2xl border border-white/10 p-5 transition hover:border-iwin-yellow/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iwin-yellow/50"
+                    >
+                      <h3 className="font-display text-lg font-semibold text-white">{channel.label}</h3>
+                      <p className="mt-2 text-sm text-zinc-300">{channel.description}</p>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </section>
+        </>
       }
     />
   );
@@ -1142,10 +1125,15 @@ export function ContactPageView({ locale }: { locale: Locale }) {
 export function ResponsibleGamingPageView({ locale }: { locale: Locale }) {
   const content = getRichPageContent(locale, "responsible-gaming");
   return (
-    <RichStandardPage
+    <RichPageLayout
       locale={locale}
-      pageId="responsible-gaming"
-      trail={[{ key: "responsible-gaming", label: content.h1 }]}
+      content={content}
+      crumbs={richCrumbs(locale, [{ key: "responsible-gaming", label: content.h1 }])}
+      afterBlocks={
+        <section className="mt-12">
+          <ResponsibleEditorial locale={locale} />
+        </section>
+      }
     />
   );
 }

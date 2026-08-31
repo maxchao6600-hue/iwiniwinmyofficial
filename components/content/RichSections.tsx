@@ -29,9 +29,9 @@ function BulletsBlock({ block }: { block: Extract<RichBlock, { type: "bullets" }
   return (
     <section className="scroll-mt-28">
       <BlockHeading title={block.title} />
-      <ul className="mt-4 max-w-3xl list-disc space-y-2 pl-5 text-zinc-300">
+      <ul className="mt-5 max-w-3xl space-y-3">
         {block.items.map((item) => (
-          <li key={item.slice(0, 48)} className="leading-relaxed">
+          <li key={item.slice(0, 48)} className="border-l-2 border-iwin-yellow/35 pl-4 leading-relaxed text-zinc-300">
             {item}
           </li>
         ))}
@@ -44,16 +44,17 @@ function StepsBlock({ block }: { block: Extract<RichBlock, { type: "steps" }> })
   return (
     <section className="scroll-mt-28">
       <BlockHeading title={block.title} />
-      <ol className="mt-6 grid gap-4 sm:grid-cols-2">
+      <ol className="mt-8 grid gap-5 sm:grid-cols-2">
         {block.steps.map((step, index) => (
           <li
             key={step.slice(0, 48)}
-            className="visual-panel flex gap-4 rounded-2xl p-5 text-zinc-200"
+            className="relative min-h-[140px] overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(145deg,rgba(28,28,33,0.9),rgba(8,8,10,0.95))] p-6"
           >
-            <span className="font-display text-3xl font-bold leading-none text-iwin-yellow/80">
+            <div className="pointer-events-none absolute -right-4 -top-4 h-24 w-24 rounded-full bg-iwin-yellow/8 blur-2xl" />
+            <p className="font-display text-4xl font-bold text-iwin-yellow/30">
               {String(index + 1).padStart(2, "0")}
-            </span>
-            <span className="pt-1 text-sm leading-relaxed sm:text-base">{step}</span>
+            </p>
+            <p className="relative mt-3 text-sm leading-relaxed text-zinc-200 sm:text-base">{step}</p>
           </li>
         ))}
       </ol>
