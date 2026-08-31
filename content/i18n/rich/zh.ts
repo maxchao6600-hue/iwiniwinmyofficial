@@ -58,7 +58,7 @@ export const zhSpecs = {
   },
   games: {
     eyebrow: "游戏类别概览",
-    h1: "IWIN 游戏类别",
+    h1: "IWIN 游戏与游戏类别",
     intro: [
       "IWIN 生态系统可能涉及老虎机、真人娱乐场桌台、体育市场及 4D 数字游戏，各类规则、节奏与信息要求不同。",
       "本中心帮助读者比较这些格式，但不暗示任何游戏能可靠盈利，也不表示所有游戏始终可用。",
@@ -73,7 +73,7 @@ export const zhSpecs = {
       ["可用性", "目录可能因账户、设备、维护窗口或司法辖区而异，实时大厅才是当前来源。"],
       ["提供商背景", "918Kiss、LionKing、Lucky365、JILI、JDB、Pragmatic Play 及 ASKME 可能在生态中被引用，但不意味着永久上架。"],
     ],
-    related: ["games-slots", "games-live-casino", "games-sports"],
+    related: ["games-slots", "game-providers", "faqs"],
     cta: {
       primaryLabel: "浏览 IWIN 游戏",
       secondaryLabel: "阅读负责任博彩",
@@ -226,7 +226,7 @@ export const zhSpecs = {
   },
   guides: {
     eyebrow: "账户帮助中心",
-    h1: "IWIN 账户、支付与安全访问指南",
+    h1: "IWIN 指南：注册、支付与安全",
     intro: [
       "本指南将常见 IWIN 操作整理为可在访问外部平台前后完成的检查项。",
       "界面与要求可能变化，请在操作时对照已登录账户中显示的说明。",

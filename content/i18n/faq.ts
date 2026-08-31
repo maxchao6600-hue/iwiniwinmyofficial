@@ -10,9 +10,14 @@ export type FaqGroup = {
 const groups: Record<Locale, FaqGroup[]> = {
   en: [
     { id: "general", title: "General", items: [
+      { question: "What is IWIN?", answer: "In this website’s context, IWIN refers to a gaming ecosystem that may include slots, live casino, sports, 4D, account tools, promotions and partner programmes on an external platform. This site explains those topics for Malaysian users researching IWIN Malaysia." },
       { question: "What is this website?", answer: "IWIN Malaysia is an official partner information website. It explains games, guides, promotions and partner topics, and may link to an external platform. It does not operate game accounts or hold player funds." },
-      { question: "Is this the IWIN operator?", answer: "No. Registration, balances, game rounds, deposits and withdrawals are handled on the external destination. This site publishes information and disclosed links." },
+      { question: "Is this the official IWIN website?", answer: "This is an IWIN Malaysia Official Partner information website — not the gambling operator. Registration, balances, game rounds, deposits and withdrawals are handled on the external destination." },
+      { question: "What does IWIN Malaysia Official Partner mean?", answer: "It describes this site’s information and referral role within the IWIN Malaysia context. The site publishes guides and disclosed external links; it does not run the platform, issue licences or approve transactions." },
       { question: "Which languages are available?", answer: "English, Bahasa Malaysia and Simplified Chinese. Use the language switcher in the header or footer. Each locale has matching URLs for hreflang." },
+      { question: "Does this website operate the games?", answer: "No. Game rounds, lobbies and outcomes are handled on the external platform after login. This site provides educational category and provider information only." },
+      { question: "Does this website hold player funds?", answer: "No. Deposits, balances and withdrawals belong to the external platform. This partner information website does not receive, store or process player money." },
+      { question: "Where should I verify current terms?", answer: "On the authenticated external platform for account rules, promotions, payments and support. Use this website first for orientation, then confirm live terms before acting." },
     ] },
     { id: "account", title: "Account", items: [
       { question: "What information should match my account?", answer: "Use your own current mobile number and accurate personal and bank details. Where the platform requires name matching, the registered account and payment-account name should be consistent." },
@@ -65,9 +70,14 @@ const groups: Record<Locale, FaqGroup[]> = {
   ],
   ms: [
     { id: "general", title: "Umum", items: [
+      { question: "Apakah IWIN?", answer: "Dalam konteks laman ini, IWIN merujuk ekosistem permainan yang mungkin merangkumi slot, kasino langsung, sukan, 4D, alat akaun, promosi dan program rakan di platform luar. Laman ini menerangkan topik tersebut untuk pengguna Malaysia yang meneliti IWIN Malaysia." },
       { question: "Apakah laman web ini?", answer: "IWIN Malaysia ialah laman maklumat rakan rasmi. Ia menerangkan permainan, panduan, promosi dan topik rakan, serta mungkin memaut ke platform luar. Ia tidak mengendalikan akaun permainan atau memegang dana pemain." },
-      { question: "Adakah ini pengendali IWIN?", answer: "Tidak. Pendaftaran, baki, pusingan permainan, deposit dan pengeluaran diurus di destinasi luar. Laman ini menerbitkan maklumat dan pautan dengan pendedahan." },
+      { question: "Adakah ini laman rasmi IWIN?", answer: "Ini laman maklumat Rakan Rasmi IWIN Malaysia — bukan pengendali perjudian. Pendaftaran, baki, pusingan permainan, deposit dan pengeluaran diurus di destinasi luar." },
+      { question: "Apakah maksud Rakan Rasmi IWIN Malaysia?", answer: "Ia menerangkan peranan maklumat dan rujukan laman ini dalam konteks IWIN Malaysia. Laman menerbitkan panduan dan pautan luar yang didedahkan; ia tidak mengendalikan platform, mengeluarkan lesen atau meluluskan transaksi." },
       { question: "Bahasa apakah yang tersedia?", answer: "English, Bahasa Malaysia dan Cina Ringkas. Gunakan penukar bahasa di pengepala atau pengaki." },
+      { question: "Adakah laman ini mengendalikan permainan?", answer: "Tidak. Pusingan permainan, lobi dan keputusan diurus di platform luar selepas log masuk. Laman ini hanya menyediakan maklumat pendidikan kategori dan penyedia." },
+      { question: "Adakah laman ini memegang dana pemain?", answer: "Tidak. Deposit, baki dan pengeluaran milik platform luar. Laman maklumat rakan ini tidak menerima, menyimpan atau memproses wang pemain." },
+      { question: "Di manakah saya perlu mengesahkan terma semasa?", answer: "Di platform luar yang disahkan untuk peraturan akaun, promosi, bayaran dan sokongan. Gunakan laman ini untuk orientasi, kemudian sahkan terma langsung sebelum bertindak." },
     ] },
     { id: "account", title: "Akaun", items: [
       { question: "Maklumat apa yang perlu sepadan dengan akaun saya?", answer: "Gunakan nombor mudah alih sendiri yang aktif serta butiran peribadi dan bank yang tepat. Jika padanan nama diperlukan, nama akaun berdaftar dan akaun pembayaran hendaklah konsisten." },
@@ -120,9 +130,14 @@ const groups: Record<Locale, FaqGroup[]> = {
   ],
   zh: [
     { id: "general", title: "综合", items: [
+      { question: "什么是 IWIN？", answer: "在本网站语境中，IWIN 指可能包含老虎机、真人娱乐场、体育、4D、账户工具、优惠及合作计划的外部游戏生态。本站为研究 IWIN Malaysia 的用户解释这些主题。" },
       { question: "这是什么网站？", answer: "IWIN Malaysia 是官方合作伙伴信息网站，介绍游戏、指南、优惠与合作话题，并可能链接至外部平台。本站不运营游戏账户，也不持有玩家资金。" },
-      { question: "本站是 IWIN 运营商吗？", answer: "不是。注册、余额、游戏局、存款与提款由外部平台处理。本站发布信息及已披露的链接。" },
+      { question: "这是 IWIN 官方网站吗？", answer: "这是 IWIN Malaysia 官方合作伙伴信息网站，并非博彩运营商。注册、余额、游戏局、存款与提款由外部平台处理。" },
+      { question: "IWIN Malaysia 官方合作伙伴是什么意思？", answer: "它说明本站在 IWIN Malaysia 语境中的信息与引荐角色。本站发布指南及已披露的外部链接，不运营平台、不签发牌照，也不批准交易。" },
       { question: "支持哪些语言？", answer: "英语、马来语与简体中文。请使用页眉或页脚的语言切换。每个语言版本都有对应网址。" },
+      { question: "本网站是否运营游戏？", answer: "否。游戏局、大厅与结果由登录后的外部平台处理。本站仅提供类别与提供商的教育性信息。" },
+      { question: "本网站是否持有玩家资金？", answer: "否。存款、余额与提款属于外部平台。本合作伙伴信息网站不接收、保管或处理玩家资金。" },
+      { question: "应在哪里核实当前条款？", answer: "在已认证的外部平台核实账户规则、优惠、支付与支持事项。可先使用本站了解概况，再采取行动前确认实时条款。" },
     ] },
     { id: "account", title: "账户", items: [
       { question: "哪些资料应与账户一致？", answer: "请使用本人当前手机号，并填写准确的个人及银行资料。若平台要求姓名一致，注册账户与支付账户姓名应保持相同。" },
@@ -185,8 +200,17 @@ export function flattenFaqs(input: FaqGroup[] | Locale): FaqItem[] {
 }
 
 export function getHomeFaqs(locale: Locale): FaqItem[] {
-  const wanted = ["registration", "promotions", "deposit", "partner-agent", "security"];
+  const wanted = [
+    "general",
+    "registration",
+    "login",
+    "deposit",
+    "withdrawal",
+    "promotions",
+    "partner-agent",
+    "security",
+  ] as const;
   return groups[locale]
-    .filter((group) => wanted.includes(group.id))
-    .map((group) => group.items[0]);
+    .filter((group) => (wanted as readonly string[]).includes(group.id))
+    .flatMap((group) => group.items.slice(0, group.id === "general" ? 2 : 1));
 }

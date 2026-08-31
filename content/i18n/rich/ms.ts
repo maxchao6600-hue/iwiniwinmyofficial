@@ -58,7 +58,7 @@ export const msSpecs = {
   },
   games: {
     eyebrow: "Gambaran kategori permainan",
-    h1: "Kategori Permainan IWIN",
+    h1: "Permainan IWIN & Kategori Permainan",
     intro: [
       "Ekosistem IWIN mungkin merujuk slot, meja kasino langsung, pasaran sukan dan permainan nombor 4D, masing-masing dengan peraturan, rentak dan keperluan maklumat yang berbeza.",
       "Hab ini membantu pembaca membandingkan format tersebut tanpa mencadangkan bahawa mana-mana permainan boleh menghasilkan keuntungan dengan boleh dipercayai atau bahawa setiap tajuk sentiasa tersedia.",
@@ -73,7 +73,7 @@ export const msSpecs = {
       ["Ketersediaan", "Katalog boleh berbeza mengikut akaun, peranti, tetingkap penyelenggaraan atau bidang kuasa, jadi lobi langsung adalah sumber semasa."],
       ["Konteks penyedia", "918Kiss, LionKing, Lucky365, JILI, JDB, Pragmatic Play dan ASKME mungkin dirujuk dalam ekosistem tanpa implikasi penempatan katalog kekal."],
     ],
-    related: ["games-slots", "games-live-casino", "games-sports"],
+    related: ["games-slots", "game-providers", "faqs"],
     cta: {
       primaryLabel: "Terokai Permainan IWIN",
       secondaryLabel: "Baca permainan bertanggungjawab",
@@ -226,7 +226,7 @@ export const msSpecs = {
   },
   guides: {
     eyebrow: "Pusat bantuan akaun",
-    h1: "Panduan IWIN untuk akaun, pembayaran dan akses lebih selamat",
+    h1: "Panduan IWIN: Pendaftaran, Bayaran & Keselamatan",
     intro: [
       "Panduan ini mengatur tugas IWIN biasa menjadi semakan yang boleh diselesaikan sebelum dan semasa lawatan ke platform luar.",
       "Skrin dan keperluan boleh berubah, jadi bandingkan setiap panduan dengan arahan dipaparkan dalam akaun disahkan pada masa tindakan.",

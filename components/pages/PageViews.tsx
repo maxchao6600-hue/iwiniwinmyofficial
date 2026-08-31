@@ -47,9 +47,6 @@ function RichStandardPage({
 export function HomePageView({ locale }: { locale: Locale }) {
   const home = getHomeContent(locale);
   const common = getCommon(locale);
-  const register = hasExternalUrl(SITE_CONFIG.registerUrl)
-    ? SITE_CONFIG.registerUrl
-    : routePath("guides-how-to-register", locale);
   const faqs = getHomeFaqs(locale);
 
   return (
@@ -79,14 +76,50 @@ export function HomePageView({ locale }: { locale: Locale }) {
             {home.hero.description}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Button href={register} size="lg" external={register.startsWith("http")}>
-              {common.visitPlatform}
+            <Button
+              href={home.hero.primaryCta.href || routePath("guides-how-to-register", locale)}
+              size="lg"
+            >
+              {home.hero.primaryCta.label}
             </Button>
-            <Button href={routePath("guides", locale)} variant="secondary" size="lg">
+            <Button href={routePath("games", locale)} variant="secondary" size="lg">
               {home.hero.secondaryCta.label}
             </Button>
           </div>
           <p className="mt-4 max-w-2xl text-xs leading-relaxed text-zinc-400">{home.hero.note}</p>
+        </Container>
+      </section>
+
+      <section className="section-band">
+        <Container className="py-10 sm:py-12">
+          <SectionHeading
+            eyebrow={home.aboutIwin.eyebrow}
+            title={home.aboutIwin.title}
+            description={home.aboutIwin.paragraphs[0]}
+          />
+          <div className="mt-8 grid gap-8 lg:grid-cols-2">
+            <div className="space-y-4 text-sm leading-relaxed text-zinc-300">
+              {home.aboutIwin.paragraphs.slice(1).map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </div>
+            <ul className="space-y-3">
+              {home.aboutIwin.points.map((point) => (
+                <li key={point} className="flex gap-3 rounded-xl border border-white/10 bg-surface-900/60 p-4 text-sm text-zinc-300">
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-iwin-yellow" />
+                  {point}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Button href={routePath("about-iwin", locale)} variant="secondary">
+              {getRichPageContent(locale, "about-iwin").h1}
+            </Button>
+            <Button href={routePath("official-partner", locale)} variant="ghost">
+              {getRichPageContent(locale, "official-partner").h1}
+            </Button>
+          </div>
         </Container>
       </section>
 
@@ -97,9 +130,27 @@ export function HomePageView({ locale }: { locale: Locale }) {
             <Button href={routePath("official-partner", locale)} variant="secondary">
               {common.learnMore}
             </Button>
-            <Button href={routePath("about-iwin", locale)} variant="ghost">
-              {getRichPageContent(locale, "about-iwin").h1}
+            <Button href={routePath("disclaimer", locale)} variant="ghost">
+              {getRichPageContent(locale, "disclaimer").h1}
             </Button>
+          </div>
+        </Container>
+      </section>
+
+      <section className="section-band">
+        <Container className="py-10 sm:py-12">
+          <SectionHeading eyebrow={home.clusterLinks.eyebrow} title={home.clusterLinks.title} />
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {home.clusterLinks.items.map((item) => (
+              <Link
+                key={item.routeKey}
+                href={item.href}
+                className="card-surface rounded-2xl p-6 transition hover:border-iwin-yellow/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+              >
+                <h3 className="font-display text-lg font-semibold text-white">{item.label}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-zinc-300">{item.description}</p>
+              </Link>
+            ))}
           </div>
         </Container>
       </section>
@@ -172,35 +223,30 @@ export function HomePageView({ locale }: { locale: Locale }) {
       </section>
 
       <section className="section-band">
-        <Container className="grid gap-8 py-10 sm:py-12 lg:grid-cols-2 lg:items-center">
-          <div>
-            <SectionHeading
-              eyebrow={home.promotions.eyebrow}
-              title={home.promotions.title}
-              description={home.promotions.description}
-            />
-            <ul className="mt-6 space-y-2">
-              {home.promotions.conditions.map((item) => (
-                <li key={item} className="flex gap-2 text-sm text-zinc-300">
-                  <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-iwin-yellow" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <div className="mt-6">
-              <Button href={home.promotions.cta.href || routePath("promotions-free-credit", locale)}>
-                {home.promotions.cta.label}
-              </Button>
-            </div>
-          </div>
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-white/10">
-            <Image
-              src="/images/games/promo.webp"
-              alt="IWIN promotions visual"
-              fill
-              sizes="(max-width:1024px) 100vw, 480px"
-              className="object-cover"
-            />
+        <Container className="py-10 sm:py-12">
+          <SectionHeading
+            eyebrow={home.promotions.eyebrow}
+            title={home.promotions.title}
+            description={home.promotions.description}
+          />
+          <ul className="mt-8 grid gap-3 sm:grid-cols-2">
+            {home.promotions.conditions.map((item) => (
+              <li key={item} className="flex gap-3 rounded-xl border border-white/10 bg-surface-900/60 p-4 text-sm text-zinc-300">
+                <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-iwin-yellow" />
+                {item}
+              </li>
+            ))}
+          </ul>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Button href={home.promotions.cta.href || routePath("promotions-free-credit", locale)}>
+              {home.promotions.cta.label}
+            </Button>
+            <Button href={routePath("promotions-bonus-guide", locale)} variant="secondary">
+              {getRichPageContent(locale, "promotions-bonus-guide").h1}
+            </Button>
+            <Button href={routePath("promotions", locale)} variant="ghost">
+              {getRichPageContent(locale, "promotions").h1}
+            </Button>
           </div>
         </Container>
       </section>
@@ -212,7 +258,7 @@ export function HomePageView({ locale }: { locale: Locale }) {
             title={home.guides.title}
             description={home.guides.description}
           />
-          <div className="mt-8 grid gap-4 md:grid-cols-3">
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {home.guides.items.map((item) => (
               <Link
                 key={item.routeKey}
@@ -233,39 +279,34 @@ export function HomePageView({ locale }: { locale: Locale }) {
       </section>
 
       <section className="section-band">
-        <Container className="grid gap-8 py-10 sm:py-12 lg:grid-cols-2 lg:items-center">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-white/10">
-            <Image
-              src="/images/games/agent.webp"
-              alt="IWIN agent programme visual"
-              fill
-              sizes="(max-width:1024px) 100vw, 480px"
-              className="object-cover"
-            />
-          </div>
-          <div>
-            <SectionHeading
-              eyebrow={home.agent.eyebrow}
-              title={home.agent.title}
-              description={home.agent.description}
-            />
-            <ul className="mt-6 space-y-2">
-              {home.agent.points.map((point) => (
-                <li key={point} className="text-sm text-zinc-300">
-                  • {point}
-                </li>
-              ))}
-            </ul>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Button href={home.agent.cta.href || routePath("agent", locale)}>
-                {home.agent.cta.label}
+        <Container className="py-10 sm:py-12">
+          <SectionHeading
+            eyebrow={home.agent.eyebrow}
+            title={home.agent.title}
+            description={home.agent.description}
+          />
+          <ul className="mt-8 grid gap-3 sm:grid-cols-2">
+            {home.agent.points.map((point) => (
+              <li key={point} className="rounded-xl border border-white/10 bg-surface-900/60 p-4 text-sm text-zinc-300">
+                {point}
+              </li>
+            ))}
+          </ul>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Button href={home.agent.cta.href || routePath("agent", locale)}>
+              {home.agent.cta.label}
+            </Button>
+            <Button href={routePath("referral-guide", locale)} variant="secondary">
+              {getRichPageContent(locale, "referral-guide").h1}
+            </Button>
+            <Button href={routePath("partner-faq", locale)} variant="ghost">
+              {getRichPageContent(locale, "partner-faq").h1}
+            </Button>
+            {hasExternalUrl(SITE_CONFIG.agentUrl) ? (
+              <Button href={SITE_CONFIG.agentUrl} variant="ghost" external>
+                {common.visitPlatform}
               </Button>
-              {hasExternalUrl(SITE_CONFIG.agentUrl) ? (
-                <Button href={SITE_CONFIG.agentUrl} variant="secondary" external>
-                  {common.visitPlatform}
-                </Button>
-              ) : null}
-            </div>
+            ) : null}
           </div>
         </Container>
       </section>

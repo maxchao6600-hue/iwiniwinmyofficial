@@ -1,20 +1,20 @@
 /**
  * Central site configuration.
- * External CTAs verified from iwinmalaysia88.com destination links.
+ * External CTAs verified from reference partner destinations.
  */
 export const SITE_CONFIG = {
-  siteName: "IWIN Malaysia Partner",
-  siteUrl: "https://iwinmalaysia88.com",
+  siteName: "IWIN Malaysia Official Partner",
+  siteUrl: "https://iwinmyofficial.com",
   brandName: "IWIN Malaysia",
   partnerLabel: "IWIN Malaysia Official Partner",
   brandLogo: "/images/brand/iwin-logo.png",
-  brandLogoAlt: "IWIN",
+  brandLogoAlt: "IWIN Malaysia Official Partner",
   brandMark: "/images/brand/iwin-icon-192.webp",
   ogImage: "/images/og/default.png",
 
   /** External platform destinations verified from the reference site */
   registerUrl: "https://myiwin88.live/?referral=rcaa89538#register",
-  loginUrl: "https://myiwin88.live/?referral=rcaa89538#register",
+  loginUrl: "https://myiwin88.live/?referral=rcaa89538#login",
   agentUrl: "https://myiwin88.club/r/rcaa89538",
   supportUrl: "https://myiwin88.club/r/rcaa89538",
 
@@ -28,7 +28,7 @@ export const SITE_CONFIG = {
   partnership: {
     designation: "IWIN Malaysia Official Partner",
     verified: true,
-    officialUrl: "https://iwinmalaysia88.com",
+    officialUrl: "https://iwinmyofficial.com",
     partnerId: "",
     verificationNotes:
       "This website provides IWIN Malaysia information, guides and partner resources. Registration and login open an external IWIN platform destination.",

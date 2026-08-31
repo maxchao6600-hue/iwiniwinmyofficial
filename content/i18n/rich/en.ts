@@ -58,7 +58,7 @@ export const enSpecs = {
   },
   games: {
     eyebrow: "IWIN Malaysia games",
-    h1: "IWIN Game Categories",
+    h1: "IWIN Games & Game Categories",
     intro: [
       "The IWIN ecosystem may reference slots, live casino tables, sports markets and 4D number games, each with different rules, pace and information requirements.",
       "This hub helps readers compare those formats without suggesting that any game can reliably produce a profit or that every title is always available.",
@@ -73,7 +73,7 @@ export const enSpecs = {
       ["Availability", "Catalogues can vary by account, device, maintenance window or jurisdiction, so the live lobby is the current source."],
       ["Provider context", "918Kiss, LionKing, Lucky365, JILI, JDB, Pragmatic Play and ASKME may be referenced in the ecosystem without implying permanent catalogue placement."],
     ],
-    related: ["games-slots", "games-live-casino", "games-sports"],
+    related: ["games-slots", "game-providers", "faqs"],
     cta: {
       primaryLabel: "Explore IWIN Games",
       secondaryLabel: "Read responsible gaming",
@@ -226,7 +226,7 @@ export const enSpecs = {
   },
   guides: {
     eyebrow: "Account help centre",
-    h1: "IWIN guides for accounts, payments and safer access",
+    h1: "IWIN Guides: Registration, Payments & Security",
     intro: [
       "These guides organise common IWIN tasks into checks that can be completed before and during a visit to the external platform.",
       "Screens and requirements can change, so compare each guide with the instructions shown in the authenticated account at the time of action.",
