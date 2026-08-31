@@ -202,12 +202,16 @@ export function CategoryCard({
   title,
   description,
   image,
+  alt,
+  objectPosition = "center",
   priority = false,
 }: {
   href: string;
   title: string;
   description: string;
   image: string;
+  alt?: string;
+  objectPosition?: string;
   priority?: boolean;
 }) {
   return (
@@ -218,10 +222,11 @@ export function CategoryCard({
       <div className="relative aspect-[16/10] overflow-hidden">
         <Image
           src={image}
-          alt={title}
+          alt={alt ?? title}
           fill
           sizes="(max-width:768px) 100vw, (max-width:1024px) 50vw, 25vw"
           className="object-cover transition duration-500 group-hover:scale-[1.04]"
+          style={{ objectPosition }}
           priority={priority}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />

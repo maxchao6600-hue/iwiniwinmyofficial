@@ -1,3 +1,7 @@
+import {
+  getGameCategoryImage,
+  type GameCategory,
+} from "@/content/games/catalog";
 import type { PageId } from "./types";
 
 /** Maps each page to an existing asset under public/images. */
@@ -5,10 +9,10 @@ const HERO_IMAGES: Partial<Record<PageId, string>> = {
   "about-iwin": "/images/hero/banner-2.png",
   "official-partner": "/images/hero/banner-3.png",
   games: "/images/hero/banner-1.png",
-  "games-slots": "/images/games/slots.webp",
-  "games-live-casino": "/images/games/live-casino.webp",
-  "games-sports": "/images/games/sports.webp",
-  "games-4d": "/images/games/4d.webp",
+  "games-slots": getGameCategoryImage("games-slots"),
+  "games-live-casino": getGameCategoryImage("games-live-casino"),
+  "games-sports": getGameCategoryImage("games-sports"),
+  "games-4d": getGameCategoryImage("games-4d"),
   "game-providers": "/images/hero/banner-2.png",
   guides: "/images/hero/banner-2.png",
   "guides-how-to-register": "/images/hero/banner-1.png",
@@ -36,4 +40,8 @@ const HERO_IMAGES: Partial<Record<PageId, string>> = {
 
 export function resolveHeroImage(pageId: PageId, fallback?: string): string | undefined {
   return HERO_IMAGES[pageId] ?? fallback;
+}
+
+export function resolveCategoryHeroImage(routeKey: GameCategory["routeKey"]): string {
+  return getGameCategoryImage(routeKey);
 }

@@ -1,5 +1,6 @@
 import type { Locale, RouteKey } from "@/lib/i18n/config";
 import { routePath } from "@/lib/i18n/paths";
+import { GAME_CATEGORIES } from "@/content/games/catalog";
 import { getHomeFaqs, type FaqItem } from "./faq";
 
 type Cta = { label: string; routeKey?: RouteKey; href?: string };
@@ -470,12 +471,6 @@ export function getHomeContent(locale: Locale): HomeContent {
     href: routeKey ? routePath(routeKey, locale) : undefined,
   });
   const categoryKeys = ["games-slots", "games-live-casino", "games-sports", "games-4d"] as const;
-  const categoryImages = [
-    "/images/games/slots.webp",
-    "/images/games/live-casino.webp",
-    "/images/games/sports.webp",
-    "/images/games/4d.webp",
-  ];
   const guideKeys = [
     "guides-how-to-register",
     "guides-how-to-login",
@@ -521,7 +516,7 @@ export function getHomeContent(locale: Locale): HomeContent {
         description: c.categories[i + 3][1],
         routeKey: key,
         href: routePath(key, locale),
-        image: categoryImages[i],
+        image: GAME_CATEGORIES[i]?.image,
       })),
     },
     whyIwin: {

@@ -163,16 +163,20 @@ export function HomePageView({ locale }: { locale: Locale }) {
             description={home.categories.intro}
           />
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {home.categories.items.map((item, index) => (
+            {home.categories.items.map((item, index) => {
+              const category = GAME_CATEGORIES.find((cat) => cat.routeKey === item.routeKey);
+              return (
               <CategoryCard
                 key={item.routeKey}
                 href={item.href}
                 title={item.title}
                 description={item.description}
-                image={item.image || GAME_CATEGORIES[index]?.image || "/images/games/slots.webp"}
+                image={category?.image ?? item.image ?? "/images/games/slots.webp"}
+                alt={category?.alt[locale] ?? item.title}
+                objectPosition={category?.objectPosition}
                 priority={index < 2}
               />
-            ))}
+            )})}
           </div>
         </Container>
       </section>
@@ -457,6 +461,8 @@ export function GamesHubPageView({ locale }: { locale: Locale }) {
                 title={cat.name}
                 description={cardCopy[index]}
                 image={cat.image}
+                alt={cat.alt[locale]}
+                objectPosition={cat.objectPosition}
                 priority={index < 2}
               />
             ))}

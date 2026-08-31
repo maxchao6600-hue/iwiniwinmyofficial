@@ -1,3 +1,5 @@
+import type { Locale } from "@/lib/i18n/config";
+
 export type GameCategoryId = "slots" | "live-casino" | "sports" | "4d";
 
 export type GameCategory = {
@@ -5,6 +7,8 @@ export type GameCategory = {
   name: string;
   routeKey: "games-slots" | "games-live-casino" | "games-sports" | "games-4d";
   image: string;
+  alt: Record<Locale, string>;
+  objectPosition?: string;
 };
 
 export type ProviderReference = {
@@ -14,12 +18,71 @@ export type ProviderReference = {
   note: string;
 };
 
+/** Single source of truth for IWIN game category card imagery. */
 export const GAME_CATEGORIES: readonly GameCategory[] = [
-  { id: "slots", name: "Slots", routeKey: "games-slots", image: "/images/games/slots.webp" },
-  { id: "live-casino", name: "Live Casino", routeKey: "games-live-casino", image: "/images/games/live-casino.webp" },
-  { id: "sports", name: "Sports", routeKey: "games-sports", image: "/images/games/sports.webp" },
-  { id: "4d", name: "4D", routeKey: "games-4d", image: "/images/games/4d.webp" },
+  {
+    id: "slots",
+    name: "Slots",
+    routeKey: "games-slots",
+    image: "/images/games/slots.webp",
+    alt: {
+      en: "IWIN Slots",
+      ms: "Slot IWIN",
+      zh: "IWIN 老虎机",
+    },
+  },
+  {
+    id: "live-casino",
+    name: "Live Casino",
+    routeKey: "games-live-casino",
+    image: "/images/games/live-casino.png",
+    alt: {
+      en: "IWIN Live Casino",
+      ms: "Kasino Langsung IWIN",
+      zh: "IWIN 真人娱乐场",
+    },
+    objectPosition: "center top",
+  },
+  {
+    id: "sports",
+    name: "Sports",
+    routeKey: "games-sports",
+    image: "/images/games/sports.webp",
+    alt: {
+      en: "IWIN Sports",
+      ms: "Sukan IWIN",
+      zh: "IWIN 体育",
+    },
+    objectPosition: "center 35%",
+  },
+  {
+    id: "4d",
+    name: "4D",
+    routeKey: "games-4d",
+    image: "/images/games/4d.png",
+    alt: {
+      en: "IWIN 4D",
+      ms: "4D IWIN",
+      zh: "IWIN 4D",
+    },
+    objectPosition: "left center",
+  },
 ] as const;
+
+export function getGameCategoryImage(routeKey: GameCategory["routeKey"]): string {
+  return GAME_CATEGORIES.find((cat) => cat.routeKey === routeKey)?.image ?? "/images/games/slots.webp";
+}
+
+export function getGameCategoryAlt(
+  routeKey: GameCategory["routeKey"],
+  locale: Locale,
+): string {
+  return GAME_CATEGORIES.find((cat) => cat.routeKey === routeKey)?.alt[locale] ?? "IWIN game category";
+}
+
+export function getGameCategoryByRouteKey(routeKey: GameCategory["routeKey"]): GameCategory | undefined {
+  return GAME_CATEGORIES.find((cat) => cat.routeKey === routeKey);
+}
 
 export const PROVIDERS: readonly ProviderReference[] = [
   {
