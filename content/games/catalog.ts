@@ -84,6 +84,17 @@ export function getGameCategoryByRouteKey(routeKey: GameCategory["routeKey"]): G
   return GAME_CATEGORIES.find((cat) => cat.routeKey === routeKey);
 }
 
+const CATEGORY_NAMES: Record<GameCategoryId, Record<Locale, string>> = {
+  slots: { en: "Slots", ms: "Slot", zh: "老虎机" },
+  "live-casino": { en: "Live Casino", ms: "Kasino Langsung", zh: "真人娱乐场" },
+  sports: { en: "Sports", ms: "Sukan", zh: "体育" },
+  "4d": { en: "4D", ms: "4D", zh: "4D" },
+};
+
+export function getGameCategoryName(id: GameCategoryId, locale: Locale): string {
+  return CATEGORY_NAMES[id][locale];
+}
+
 export const PROVIDERS: readonly ProviderReference[] = [
   {
     name: "918Kiss",

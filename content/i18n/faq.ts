@@ -18,10 +18,14 @@ const groups: Record<Locale, FaqGroup[]> = {
       { question: "Does this website operate the games?", answer: "No. Game rounds, lobbies and outcomes are handled on the external platform after login. This site provides educational category and provider information only." },
       { question: "Does this website hold player funds?", answer: "No. Deposits, balances and withdrawals belong to the external platform. This partner information website does not receive, store or process player money." },
       { question: "Where should I verify current terms?", answer: "On the authenticated external platform for account rules, promotions, payments and support. Use this website first for orientation, then confirm live terms before acting." },
+      { question: "What are game categories?", answer: "The referenced categories are slots, live casino, sports and 4D. Each has different rules, pace and checks. Category guides on this site explain the format; individual titles depend on the live lobby after login." },
+      { question: "How do promotion conditions work?", answer: "Promotions may include eligibility rules, turnover requirements, time limits and game restrictions. Source information on this site describes verified examples such as the RM10 free-credit conditions — always confirm the live promotion page before registering or claiming." },
+      { question: "What should I check before using an external platform?", answer: "Verify the destination URL, read current terms, understand payment and withdrawal rules, check promotion conditions and set personal spending limits. This information website does not replace the platform's own disclosures." },
     ] },
     { id: "account", title: "Account", items: [
       { question: "What information should match my account?", answer: "Use your own current mobile number and accurate personal and bank details. Where the platform requires name matching, the registered account and payment-account name should be consistent." },
       { question: "What format should I use for an IWIN account ID?", answer: "Follow the letters, numbers, length and character rules displayed on the registration form. Avoid spaces or symbols unless the form accepts them, and save the exact ID because it is used at login." },
+      { question: "How does account verification work?", answer: "The external platform may require identity, mobile or bank-name checks before certain deposits or withdrawals. Requirements vary by account history and promotion use — only the live platform can confirm what applies to you." },
     ] },
     { id: "registration", title: "Registration", items: [
       { question: "How do I register through the official partner site?", answer: "Use the registration link, confirm that you are leaving this information website, then complete the external platform form with accurate details. Registration remains subject to that platform's eligibility checks and terms." },
@@ -57,10 +61,12 @@ const groups: Record<Locale, FaqGroup[]> = {
     { id: "partner-agent", title: "Partner / Agent", items: [
       { question: "Is joining as an agent free?", answer: "Platform information describes agent registration as free. Confirm current eligibility, verification and operating terms in the agent dashboard before proceeding." },
       { question: "How are referral commissions calculated?", answer: "Platform information indicates referral commissions may apply based on referred-player turnover; confirm rates in the agent dashboard. Income is not promised, and results depend on valid activity and current rules." },
+      { question: "How does referral work?", answer: "Referral concepts typically involve sharing a partner link so a new player registers through your reference. Tracking, eligibility and commission rules are defined on the external agent platform — not on this information website." },
       { question: "Does this site promise passive or guaranteed income?", answer: "No. Partner pages describe tracking and responsibilities without easy-money, guaranteed-income or passive-income claims." },
     ] },
     { id: "security", title: "Security", items: [
       { question: "How can I protect my account?", answer: "Use a unique password, keep OTPs private, verify external URLs, sign out on shared devices and reject requests to install unknown remote-access software." },
+      { question: "What should I do if a link looks suspicious?", answer: "Do not enter credentials or payment details. Compare the URL with a bookmark or verified source, avoid shortened links from unknown senders and use the platform's official recovery or support channels only." },
       { question: "Does this site claim a licence or guaranteed payout?", answer: "No. This information website does not make claims of government approval, licensing, guaranteed payouts or bank-grade security. Review the external platform's own disclosures and your local legal position." },
     ] },
     { id: "mobile", title: "Mobile", items: [
@@ -78,10 +84,14 @@ const groups: Record<Locale, FaqGroup[]> = {
       { question: "Adakah laman ini mengendalikan permainan?", answer: "Tidak. Pusingan permainan, lobi dan keputusan diurus di platform luar selepas log masuk. Laman ini hanya menyediakan maklumat pendidikan kategori dan penyedia." },
       { question: "Adakah laman ini memegang dana pemain?", answer: "Tidak. Deposit, baki dan pengeluaran milik platform luar. Laman maklumat rakan ini tidak menerima, menyimpan atau memproses wang pemain." },
       { question: "Di manakah saya perlu mengesahkan terma semasa?", answer: "Di platform luar yang disahkan untuk peraturan akaun, promosi, bayaran dan sokongan. Gunakan laman ini untuk orientasi, kemudian sahkan terma langsung sebelum bertindak." },
+      { question: "Apakah kategori permainan?", answer: "Kategori yang dirujuk ialah slot, kasino langsung, sukan dan 4D. Setiap satu mempunyai peraturan, tempo dan semakan berbeza. Panduan kategori di laman ini menerangkan format; tajuk individu bergantung pada lobi langsung selepas log masuk." },
+      { question: "Bagaimanakah syarat promosi berfungsi?", answer: "Promosi mungkin termasuk peraturan kelayakan, keperluan pusing ganti, had masa dan sekatan permainan. Maklumat sumber di laman ini menerangkan contoh disahkan seperti syarat kredit percuma RM10 — sentiasa sahkan halaman promosi langsung sebelum mendaftar atau menuntut." },
+      { question: "Apa perlu disemak sebelum menggunakan platform luar?", answer: "Sahkan URL destinasi, baca terma semasa, fahami peraturan deposit dan pengeluaran, semak syarat promosi dan tetapkan had perbelanjaan peribadi. Laman maklumat ini tidak menggantikan pendedahan platform sendiri." },
     ] },
     { id: "account", title: "Akaun", items: [
       { question: "Maklumat apa yang perlu sepadan dengan akaun saya?", answer: "Gunakan nombor mudah alih sendiri yang aktif serta butiran peribadi dan bank yang tepat. Jika padanan nama diperlukan, nama akaun berdaftar dan akaun pembayaran hendaklah konsisten." },
       { question: "Apakah format ID akaun IWIN?", answer: "Ikuti peraturan huruf, nombor, panjang dan aksara pada borang pendaftaran. Elakkan ruang atau simbol melainkan diterima, dan simpan ID tepat untuk log masuk." },
+      { question: "Bagaimanakah pengesahan akaun berfungsi?", answer: "Platform luar mungkin memerlukan semakan identiti, mudah alih atau padanan nama bank sebelum deposit atau pengeluaran tertentu. Keperluan berbeza mengikut sejarah akaun dan penggunaan promosi — hanya platform langsung boleh mengesahkan apa yang terpakai." },
     ] },
     { id: "registration", title: "Pendaftaran", items: [
       { question: "Bagaimanakah saya mendaftar melalui laman rakan rasmi?", answer: "Gunakan pautan pendaftaran, fahami bahawa anda akan meninggalkan laman maklumat ini, kemudian lengkapkan borang platform luar dengan maklumat tepat. Kelayakan dan terma platform berkenaan terpakai." },
@@ -117,10 +127,12 @@ const groups: Record<Locale, FaqGroup[]> = {
     { id: "partner-agent", title: "Rakan / Ejen", items: [
       { question: "Adakah penyertaan ejen percuma?", answer: "Maklumat platform menerangkan pendaftaran ejen sebagai percuma. Sahkan kelayakan, pengesahan dan terma operasi semasa dalam papan pemuka ejen." },
       { question: "Bagaimanakah komisen rujukan dikira?", answer: "Maklumat platform menunjukkan komisen rujukan mungkin terpakai berdasarkan pusing ganti pemain dirujuk; sahkan kadar dalam papan pemuka ejen. Pendapatan tidak dijanjikan." },
+      { question: "Bagaimanakah rujukan berfungsi?", answer: "Konsep rujukan biasanya melibatkan perkongsian pautan rakan supaya pemain baharu mendaftar melalui rujukan anda. Penjejakan, kelayakan dan peraturan komisen ditetapkan di platform ejen luar — bukan di laman maklumat ini." },
       { question: "Adakah laman ini menjanjikan pendapatan pasif atau terjamin?", answer: "Tidak. Halaman rakan menerangkan penjejakan dan tanggungjawab tanpa dakwaan wang mudah, pendapatan terjamin atau pendapatan pasif." },
     ] },
     { id: "security", title: "Keselamatan", items: [
       { question: "Bagaimanakah saya melindungi akaun?", answer: "Gunakan kata laluan unik, rahsiakan OTP, semak URL luar, log keluar daripada peranti kongsi dan tolak pemasangan perisian akses jauh yang tidak dikenali." },
+      { question: "Apakah yang perlu dilakukan jika pautan kelihatan mencurigakan?", answer: "Jangan masukkan kelayakan atau butiran bayaran. Bandingkan URL dengan penanda halaman atau sumber disahkan, elakkan pautan pendek daripada pengirim tidak dikenali dan gunakan saluran pemulihan atau sokongan rasmi platform sahaja." },
       { question: "Adakah laman ini mendakwa lesen atau bayaran terjamin?", answer: "Tidak. Laman maklumat ini tidak mendakwa kelulusan kerajaan, lesen, bayaran terjamin atau keselamatan bertaraf bank. Semak pendedahan platform luar dan kedudukan undang-undang tempatan anda." },
     ] },
     { id: "mobile", title: "Mudah Alih", items: [
@@ -138,10 +150,14 @@ const groups: Record<Locale, FaqGroup[]> = {
       { question: "本网站是否运营游戏？", answer: "否。游戏局、大厅与结果由登录后的外部平台处理。本站仅提供类别与提供商的教育性信息。" },
       { question: "本网站是否持有玩家资金？", answer: "否。存款、余额与提款属于外部平台。本合作伙伴信息网站不接收、保管或处理玩家资金。" },
       { question: "应在哪里核实当前条款？", answer: "在已认证的外部平台核实账户规则、优惠、支付与支持事项。可先使用本站了解概况，再采取行动前确认实时条款。" },
+      { question: "游戏类别有哪些？", answer: "本站参考的类别包括老虎机、真人娱乐场、体育与 4D。各类别规则、节奏与核对要点不同。本站类别指南解释形式；具体游戏仍以登录后实时大厅为准。" },
+      { question: "优惠条件如何运作？", answer: "优惠可能包含资格规则、流水要求、时限与游戏限制。本站说明已核实来源（如 RM10 免费彩金条件）——注册或领取前务必核对实时优惠页。" },
+      { question: "使用外部平台前应检查什么？", answer: "核实目标网址、阅读当前条款、了解存提款规则、核对优惠条件并设定个人支出限额。本信息网站不能替代平台自身披露。" },
     ] },
     { id: "account", title: "账户", items: [
       { question: "哪些资料应与账户一致？", answer: "请使用本人当前手机号，并填写准确的个人及银行资料。若平台要求姓名一致，注册账户与支付账户姓名应保持相同。" },
       { question: "IWIN 账户 ID 应使用什么格式？", answer: "请遵循注册表格显示的字母、数字、长度及字符规则。除非表格允许，否则不要使用空格或符号，并妥善保存准确 ID 供登录使用。" },
+      { question: "账户验证如何运作？", answer: "外部平台可能在特定存款或提款前要求身份、手机号或银行姓名核对。要求因账户历史与优惠使用而异——只有实时平台能确认适用于您的规则。" },
     ] },
     { id: "registration", title: "注册", items: [
       { question: "如何通过官方合作伙伴网站注册？", answer: "点击注册链接，确认您将离开本信息网站，再于外部平台填写准确资料。注册须遵守该平台的资格审核与条款。" },
@@ -177,10 +193,12 @@ const groups: Record<Locale, FaqGroup[]> = {
     { id: "partner-agent", title: "合作伙伴／代理", items: [
       { question: "加入代理是否免费？", answer: "平台资料称代理注册免费。开始前，请在代理后台确认当前资格、验证及运营条款。" },
       { question: "推荐佣金如何计算？", answer: "平台资料显示，推荐佣金可能按被推荐玩家流水计算；实际费率请在代理后台确认。本站不承诺收入。" },
+      { question: "推荐机制如何运作？", answer: "推荐通常指分享合作伙伴链接，让新玩家通过您的引荐注册。追踪、资格与佣金规则由外部代理平台定义——不在本信息网站处理。" },
       { question: "本站是否承诺被动或保证收入？", answer: "否。合作页面说明追踪与责任，不使用轻松赚钱、保证收入或被动收入等承诺。" },
     ] },
     { id: "security", title: "安全", items: [
       { question: "如何保护账户？", answer: "使用独立密码、保密 OTP、核实外部网址、在共用设备退出，并拒绝安装不明远程访问软件。" },
+      { question: "链接看起来可疑该怎么办？", answer: "切勿输入凭据或支付资料。将网址与书签或已核实来源比对，避免点击陌生人发来的短链接，并仅使用平台官方找回或支持渠道。" },
       { question: "本站是否声称持有牌照或保证提款？", answer: "否。本信息网站不声称获得政府批准、持有牌照、保证提款或具备银行级安全。请查看外部平台披露，并了解您所在地法律。" },
     ] },
     { id: "mobile", title: "移动设备", items: [

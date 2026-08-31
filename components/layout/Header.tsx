@@ -13,6 +13,18 @@ import { LOCALE_HTML_LANG } from "@/lib/i18n/config";
 import { getLocaleFromPath, routePath } from "@/lib/i18n/paths";
 import { cn } from "@/lib/utils/cn";
 
+function normalizePath(path: string): string {
+  if (path.length > 1 && path.endsWith("/")) return path.slice(0, -1);
+  return path;
+}
+
+function isNavActive(pathname: string, href: string, isHome = false): boolean {
+  const current = normalizePath(pathname);
+  const target = normalizePath(href);
+  if (isHome) return current === target;
+  return current === target || current.startsWith(`${target}/`);
+}
+
 export function Header() {
   const pathname = usePathname() || "/";
   const locale = getLocaleFromPath(pathname);
@@ -20,6 +32,7 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const menuId = useId();
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const homeHref = routePath("home", locale);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -31,6 +44,10 @@ export function Header() {
   useEffect(() => {
     document.documentElement.lang = LOCALE_HTML_LANG[locale];
   }, [locale]);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     if (!open) return;
@@ -49,38 +66,58 @@ export function Header() {
     ? SITE_CONFIG.loginUrl
     : routePath("guides-how-to-login", locale);
 
+  const navLinkClass = (href: string, isHome = false) =>
+    cn(
+      "rounded-lg px-2.5 py-2 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iwin-yellow/50",
+      isNavActive(pathname, href, isHome)
+        ? "bg-iwin-yellow/12 text-white ring-1 ring-iwin-yellow/35"
+        : "text-iwin-muted hover:bg-iwin-yellow/10 hover:text-white",
+    );
+
+  const mobileNavLinkClass = (href: string, isHome = false) =>
+    cn(
+      "rounded-lg px-3 py-3 text-base font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iwin-yellow/50",
+      isNavActive(pathname, href, isHome)
+        ? "bg-iwin-yellow/12 text-white"
+        : "text-zinc-200 hover:bg-white/5",
+    );
+
   return (
     <header className="sticky top-0 z-50 border-b border-[color:var(--iwin-border)]/70 bg-[color:var(--iwin-charcoal)]/90 backdrop-blur-md">
-      <Container className="flex h-16 items-center justify-between gap-4 lg:h-[4.25rem]">
+      <Container className="flex h-16 items-center justify-between gap-3 lg:h-[4.25rem]">
         <Link
-          href={routePath("home", locale)}
+          href={homeHref}
           className="group flex min-w-0 items-center gap-2.5 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iwin-yellow/60"
         >
-          <span className="relative block h-8 w-[140px] shrink-0 sm:h-9 sm:w-[160px]">
+          <span className="relative block h-8 w-[132px] shrink-0 sm:h-9 sm:w-[152px]">
             <Image
               src={SITE_CONFIG.brandLogo}
               alt={SITE_CONFIG.brandLogoAlt}
               fill
-              sizes="160px"
+              sizes="152px"
               className="object-contain object-left"
               priority
             />
           </span>
         </Link>
 
-        <nav aria-label={ui.primaryNav} className="hidden items-center gap-0.5 xl:flex">
-          {ui.navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="rounded-lg px-2.5 py-2 text-sm font-medium text-iwin-muted transition hover:bg-iwin-yellow/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iwin-yellow/50"
-            >
-              {link.label}
-            </Link>
-          ))}
+        <nav aria-label={ui.primaryNav} className="hidden items-center gap-0.5 lg:flex">
+          {ui.navLinks.map((link) => {
+            const isHome = link.href === homeHref;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={navLinkClass(link.href, isHome)}
+                aria-current={isNavActive(pathname, link.href, isHome) ? "page" : undefined}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
         </nav>
 
-        <div className="hidden items-center gap-2.5 lg:flex">
+        <div className="hidden items-center gap-2 lg:flex">
           <LanguageSwitcher />
           <Button href={loginHref} variant="secondary" size="md" external={loginHref.startsWith("http")}>
             {ui.login}
@@ -95,7 +132,7 @@ export function Header() {
           <button
             ref={closeButtonRef}
             type="button"
-            className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iwin-yellow/50"
             aria-expanded={open}
             aria-controls={menuId}
             aria-label={open ? ui.closeMenu : ui.openMenu}
@@ -125,28 +162,41 @@ export function Header() {
         </div>
       </Container>
 
+      {open ? (
+        <button
+          type="button"
+          className="fixed inset-0 top-16 z-40 bg-black/65 lg:hidden"
+          aria-label={ui.closeMenu}
+          onClick={() => setOpen(false)}
+        />
+      ) : null}
+
       <div
         id={menuId}
         className={cn(
-          "border-t border-white/10 bg-surface-950 lg:hidden",
+          "relative z-50 border-t border-white/10 bg-surface-950 lg:hidden",
           open ? "block" : "hidden",
         )}
         role="dialog"
         aria-modal="true"
         aria-label={ui.primaryNav}
       >
-        <Container className="flex flex-col gap-2 py-4">
-          {ui.navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="rounded-lg px-3 py-3 text-base font-medium text-zinc-200 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
-              onClick={() => setOpen(false)}
-            >
-              {link.label}
-            </Link>
-          ))}
-          <div className="mt-2 grid grid-cols-2 gap-2">
+        <Container className="flex flex-col gap-1 py-4">
+          {ui.navLinks.map((link) => {
+            const isHome = link.href === homeHref;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={mobileNavLinkClass(link.href, isHome)}
+                aria-current={isNavActive(pathname, link.href, isHome) ? "page" : undefined}
+                onClick={() => setOpen(false)}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+          <div className="mt-3 grid grid-cols-2 gap-2 border-t border-white/10 pt-4">
             <Button href={loginHref} variant="secondary" external={loginHref.startsWith("http")}>
               {ui.login}
             </Button>

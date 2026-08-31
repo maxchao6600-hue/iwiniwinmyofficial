@@ -4,6 +4,7 @@ import { Archivo, Plus_Jakarta_Sans } from "next/font/google";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { getCommon } from "@/content/i18n/common";
 import { SITE_CONFIG } from "@/lib/constants/site";
 import { LOCALE_HTML_LANG } from "@/lib/i18n/config";
 import { getLocaleFromPath } from "@/lib/i18n/paths";
@@ -58,6 +59,7 @@ export default async function RootLayout({
   const pathname = headerList.get("x-pathname") || "/";
   const locale = getLocaleFromPath(pathname);
   const lang = LOCALE_HTML_LANG[locale];
+  const common = getCommon(locale);
 
   return (
     <html
@@ -72,7 +74,7 @@ export default async function RootLayout({
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-accent focus:px-4 focus:py-2 focus:text-black"
         >
-          Skip to content
+          {common.skipToContent}
         </a>
         <Header />
         <main id="main-content" className="flex-1">

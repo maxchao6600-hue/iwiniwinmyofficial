@@ -1,4 +1,4 @@
-import { getRouteSeo } from "../seo";
+import { getRelatedLinkLabel } from "./related-labels";
 import type { Locale, RouteKey } from "@/lib/i18n/config";
 import type { PageId, RichBlock, RichPageContent, RichPageCta } from "./types";
 import { resolveHeroImage } from "./hero-images";
@@ -386,7 +386,7 @@ function uniqueRelated(locale: Locale, pageId: PageId, spec: PageSpec): RichPage
     seen.add(key);
     items.push({
       key: key as RouteKey,
-      label: getRouteSeo(locale, key as RouteKey).title,
+      label: getRelatedLinkLabel(locale, key as RouteKey),
     });
   }
   return items;

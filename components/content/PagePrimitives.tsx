@@ -6,6 +6,7 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { getCommon } from "@/content/i18n/common";
+import { getVisual } from "@/content/i18n/visual";
 import { SITE_CONFIG, hasExternalUrl } from "@/lib/constants/site";
 import type { Locale, RouteKey } from "@/lib/i18n/config";
 import { routePath } from "@/lib/i18n/paths";
@@ -205,6 +206,7 @@ export function CategoryCard({
   alt,
   objectPosition = "center",
   priority = false,
+  actionLabel,
 }: {
   href: string;
   title: string;
@@ -213,27 +215,35 @@ export function CategoryCard({
   alt?: string;
   objectPosition?: string;
   priority?: boolean;
+  actionLabel?: string;
 }) {
   return (
     <Link
       href={href}
-      className="group card-surface overflow-hidden rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
+      className="group card-surface overflow-hidden rounded-2xl transition hover:border-iwin-yellow/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iwin-yellow/50"
     >
-      <div className="relative aspect-[16/10] overflow-hidden">
+      <div className="relative aspect-[5/3] overflow-hidden sm:aspect-[16/10]">
         <Image
           src={image}
           alt={alt ?? title}
           fill
           sizes="(max-width:768px) 100vw, (max-width:1024px) 50vw, 25vw"
-          className="object-cover transition duration-500 group-hover:scale-[1.04]"
+          className="object-cover transition duration-500 group-hover:scale-[1.03]"
           style={{ objectPosition }}
           priority={priority}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-transparent" />
+        <div className="absolute bottom-0 left-0 p-4 sm:p-5">
+          <h3 className="font-display text-lg font-semibold text-white sm:text-xl">{title}</h3>
+        </div>
       </div>
       <div className="p-4 sm:p-5">
-        <h3 className="font-display text-lg font-semibold text-white">{title}</h3>
-        <p className="mt-2 text-sm leading-relaxed text-zinc-300">{description}</p>
+        <p className="text-sm leading-relaxed text-zinc-300">{description}</p>
+        {actionLabel ? (
+          <p className="mt-3 text-xs font-semibold uppercase tracking-[0.14em] text-iwin-yellow group-hover:text-iwin-yellow-bright">
+            {actionLabel} →
+          </p>
+        ) : null}
       </div>
     </Link>
   );
@@ -244,33 +254,49 @@ export function FinalCtaBand({
   title,
   description,
   showExternalNotice = true,
+  primaryLabel,
+  primaryHref,
+  secondaryLabel,
+  secondaryHref,
 }: {
   locale: Locale;
   title: string;
   description: string;
   showExternalNotice?: boolean;
+  primaryLabel?: string;
+  primaryHref?: string;
+  secondaryLabel?: string;
+  secondaryHref?: string;
 }) {
   const common = getCommon(locale);
+  const visual = getVisual(locale);
   const register = hasExternalUrl(SITE_CONFIG.registerUrl)
     ? SITE_CONFIG.registerUrl
     : routePath("guides-how-to-register", locale);
+  const primary = primaryHref || register;
+  const secondary = secondaryHref || routePath("guides", locale);
 
   return (
-    <section className="section-band bg-[linear-gradient(180deg,rgba(245,197,24,0.08),transparent)]">
-      <Container className="py-12 text-center">
-        <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">{title}</h2>
-        <p className="mx-auto mt-4 max-w-2xl text-zinc-300">{description}</p>
-        <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Button href={register} size="lg" external={register.startsWith("http")}>
-            {common.visitPlatform}
-          </Button>
-          <Button href={routePath("guides", locale)} variant="secondary" size="lg">
-            {common.exploreGuides}
-          </Button>
+    <section className="section-band">
+      <Container className="py-10 sm:py-12">
+        <div className="final-cta-panel px-6 py-10 sm:px-10 sm:py-12">
+          <div className="relative mx-auto max-w-2xl text-center">
+            <p className="eyebrow">{visual.finalCtaEyebrow}</p>
+            <h2 className="font-display mt-3 text-2xl font-semibold text-white sm:text-3xl">{title}</h2>
+            <p className="mx-auto mt-4 max-w-xl text-zinc-300">{description}</p>
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
+              <Button href={primary} size="lg" external={primary.startsWith("http")}>
+                {primaryLabel || common.visitPlatform}
+              </Button>
+              <Button href={secondary} variant="secondary" size="lg">
+                {secondaryLabel || common.exploreGuides}
+              </Button>
+            </div>
+            {showExternalNotice ? (
+              <p className="mx-auto mt-4 max-w-lg text-xs text-zinc-500">{common.externalCtaNote}</p>
+            ) : null}
+          </div>
         </div>
-        {showExternalNotice ? (
-          <p className="mx-auto mt-4 max-w-xl text-xs text-zinc-500">{common.externalCtaNote}</p>
-        ) : null}
       </Container>
     </section>
   );

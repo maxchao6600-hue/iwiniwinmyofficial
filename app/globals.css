@@ -75,6 +75,18 @@ a {
   font-family: var(--font-display), var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--iwin-yellow);
+}
+
+.prose-width {
+  max-width: 48rem;
+}
+
 .card-surface {
   border: 1px solid color-mix(in oklab, var(--iwin-yellow) 18%, transparent);
   background: linear-gradient(180deg, rgba(28, 28, 33, 0.95), rgba(14, 14, 16, 0.92));
@@ -83,4 +95,112 @@ a {
 
 .section-band {
   border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.section-band-alt {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background:
+    radial-gradient(800px 400px at 0% 50%, rgba(245, 197, 24, 0.04), transparent 60%),
+    radial-gradient(600px 300px at 100% 0%, rgba(245, 197, 24, 0.03), transparent 55%);
+}
+
+.visual-panel {
+  border: 1px solid color-mix(in oklab, var(--iwin-yellow) 16%, transparent);
+  background: linear-gradient(165deg, rgba(28, 28, 33, 0.92), rgba(10, 10, 12, 0.95));
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+}
+
+.visual-panel-gold {
+  border: 1px solid color-mix(in oklab, var(--iwin-yellow) 28%, transparent);
+  background: linear-gradient(145deg, rgba(28, 24, 12, 0.95), rgba(14, 14, 16, 0.98));
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+}
+
+.provider-tile {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(180deg, rgba(21, 21, 24, 0.95), rgba(10, 10, 12, 0.9));
+  transition: border-color 0.2s ease;
+}
+
+.provider-tile:hover {
+  border-color: color-mix(in oklab, var(--iwin-yellow) 35%, transparent);
+}
+
+.premium-table-wrap {
+  border: 1px solid color-mix(in oklab, var(--iwin-yellow) 18%, transparent);
+}
+
+.premium-table thead tr {
+  background: linear-gradient(90deg, rgba(245, 197, 24, 0.12), rgba(245, 197, 24, 0.04));
+  border-bottom: 1px solid rgba(245, 197, 24, 0.2);
+}
+
+.premium-table th {
+  font-weight: 600;
+  color: var(--iwin-yellow);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  background: rgba(14, 14, 16, 0.95);
+}
+
+.premium-table tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.premium-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.premium-table tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.premium-table td {
+  color: var(--iwin-muted);
+  background: rgba(14, 14, 16, 0.85);
+}
+
+.premium-table td:first-child {
+  font-weight: 500;
+  color: var(--iwin-text);
+}
+
+.hero-glow {
+  background:
+    radial-gradient(900px 500px at 15% 20%, rgba(245, 197, 24, 0.14), transparent 55%),
+    radial-gradient(700px 400px at 85% 10%, rgba(245, 197, 24, 0.08), transparent 50%);
+}
+
+.final-cta-panel {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid color-mix(in oklab, var(--iwin-yellow) 22%, transparent);
+  border-radius: 1rem;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(245, 197, 24, 0.12), transparent 65%),
+    linear-gradient(180deg, rgba(20, 20, 22, 0.98), rgba(8, 8, 10, 0.99));
+}
+
+.final-cta-panel::before,
+.final-cta-panel::after {
+  content: "";
+  position: absolute;
+  border: 1px solid rgba(245, 197, 24, 0.12);
+  border-radius: 9999px;
+  pointer-events: none;
+}
+
+.final-cta-panel::before {
+  width: 120px;
+  height: 120px;
+  top: -40px;
+  right: 10%;
+}
+
+.final-cta-panel::after {
+  width: 80px;
+  height: 80px;
+  bottom: -20px;
+  left: 8%;
 }

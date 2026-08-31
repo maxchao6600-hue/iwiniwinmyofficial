@@ -18,9 +18,9 @@ function FooterColumn({
 }) {
   return (
     <div>
-      <h2 className="text-sm font-semibold uppercase tracking-[0.14em] text-zinc-300">
+      <p className="text-sm font-semibold uppercase tracking-[0.14em] text-zinc-300">
         {title}
-      </h2>
+      </p>
       <ul className="mt-4 space-y-3">
         {links.map((link) => (
           <li key={`${link.href}-${link.label}`}>
@@ -45,12 +45,12 @@ export function Footer() {
 
   return (
     <footer className="mt-auto border-t border-[color:var(--iwin-border)]/40 bg-[linear-gradient(180deg,#050505_0%,#0e0e10_100%)]">
-      <Container className="py-14">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-6">
-          <div className="lg:col-span-2">
+      <Container className="py-10 sm:py-12">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-6">
+          <div className="visual-panel lg:col-span-2 rounded-2xl p-6">
             <Link
               href={routePath("home", locale)}
-              className="relative mb-4 inline-block h-8 w-[140px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+              className="relative mb-4 inline-block h-9 w-[128px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iwin-yellow/50"
             >
               <Image
                 src={SITE_CONFIG.brandLogo}
@@ -80,7 +80,7 @@ export function Footer() {
           <FooterColumn title={ui.footerGroups.legal.title} links={ui.footerGroups.legal.links} />
         </div>
 
-        <div className="mt-12 space-y-3 border-t border-white/10 pt-8 text-sm text-zinc-500">
+        <div className="mt-10 space-y-3 border-t border-white/10 pt-6 text-sm text-zinc-500">
           <p>{ui.responsibleNotice}</p>
           <p>
             © {year} {SITE_CONFIG.siteName}. {ui.rightsReserved}

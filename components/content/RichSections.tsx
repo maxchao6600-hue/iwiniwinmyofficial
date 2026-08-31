@@ -44,16 +44,16 @@ function StepsBlock({ block }: { block: Extract<RichBlock, { type: "steps" }> })
   return (
     <section className="scroll-mt-28">
       <BlockHeading title={block.title} />
-      <ol className="mt-5 max-w-3xl space-y-3">
+      <ol className="mt-6 grid gap-4 sm:grid-cols-2">
         {block.steps.map((step, index) => (
           <li
             key={step.slice(0, 48)}
-            className="flex gap-3 rounded-xl border border-white/10 bg-surface-900/60 px-4 py-3 text-zinc-200"
+            className="visual-panel flex gap-4 rounded-2xl p-5 text-zinc-200"
           >
-            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-iwin-yellow text-sm font-bold text-black">
-              {index + 1}
+            <span className="font-display text-3xl font-bold leading-none text-iwin-yellow/80">
+              {String(index + 1).padStart(2, "0")}
             </span>
-            <span className="pt-0.5 leading-relaxed">{step}</span>
+            <span className="pt-1 text-sm leading-relaxed sm:text-base">{step}</span>
           </li>
         ))}
       </ol>
@@ -143,13 +143,15 @@ function TableBlock({ block }: { block: Extract<RichBlock, { type: "table" }> })
   return (
     <section className="scroll-mt-28">
       <BlockHeading title={block.title} />
-      <div className="mt-5 overflow-x-auto rounded-xl border border-white/10">
-        <table className="min-w-full text-left text-sm">
+      <div className="premium-table-wrap mt-5 overflow-x-auto rounded-2xl">
+        <table className="premium-table min-w-full text-left text-sm">
           <tbody>
             {block.rows.map((row) => (
-              <tr key={row.label} className="border-b border-white/10 last:border-0">
-                <th className="bg-surface-900/80 px-4 py-3 font-medium text-zinc-200">{row.label}</th>
-                <td className="px-4 py-3 text-zinc-300">{row.value}</td>
+              <tr key={row.label}>
+                <th scope="row" className="sticky left-0 z-10 px-4 py-3 sm:static">
+                  {row.label}
+                </th>
+                <td className="px-4 py-3">{row.value}</td>
               </tr>
             ))}
           </tbody>

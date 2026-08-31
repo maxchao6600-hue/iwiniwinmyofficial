@@ -1,6 +1,7 @@
 import type { Locale, RouteKey } from "@/lib/i18n/config";
 import { routePath } from "@/lib/i18n/paths";
 import { GAME_CATEGORIES } from "@/content/games/catalog";
+import { SITE_CONFIG, hasExternalUrl } from "@/lib/constants/site";
 import { getHomeFaqs, type FaqItem } from "./faq";
 
 type Cta = { label: string; routeKey?: RouteKey; href?: string };
@@ -31,7 +32,7 @@ const localized = {
       "IWIN Malaysia Official Partner",
       "IWIN Malaysia Official Partner — IWIN Games, Promotions & Guides",
       "Your practical IWIN Malaysia information resource: compare game categories, read account and payment guides, understand promotion conditions, and learn about the agent programme — with clear boundaries between this site and the external platform.",
-      "Read the registration guide",
+      "Register on IWIN platform",
       "Browse IWIN games",
       "This is an official partner information website, not the gambling operator. External-platform terms apply.",
     ],
@@ -176,7 +177,7 @@ const localized = {
       "Rakan Rasmi IWIN Malaysia",
       "Rakan Rasmi IWIN Malaysia — Permainan, Promosi & Panduan IWIN",
       "Sumber maklumat praktikal IWIN Malaysia: bandingkan kategori permainan, baca panduan akaun dan bayaran, fahami syarat promosi, dan ketahui program ejen — dengan sempadan jelas antara laman ini dan platform luar.",
-      "Baca panduan pendaftaran",
+      "Daftar di platform IWIN",
       "Lihat permainan IWIN",
       "Ini laman maklumat rakan rasmi, bukan pengendali perjudian. Terma platform luar terpakai.",
     ],
@@ -321,7 +322,7 @@ const localized = {
       "IWIN Malaysia 官方合作伙伴",
       "IWIN Malaysia 官方合作伙伴 — IWIN 游戏、优惠与指南",
       "实用的 IWIN Malaysia 信息资源：比较游戏类别、阅读账户与支付指南、了解优惠条件，并学习代理计划 — 同时清楚区分本站与外部平台。",
-      "阅读注册指南",
+      "在 IWIN 平台注册",
       "浏览 IWIN 游戏",
       "本站是官方合作伙伴信息网站，并非博彩运营商。外部平台条款适用。",
     ],
@@ -486,7 +487,12 @@ export function getHomeContent(locale: Locale): HomeContent {
       eyebrow: c.hero[0],
       h1: c.hero[1],
       description: c.hero[2],
-      primaryCta: cta(c.hero[3], "guides-how-to-register"),
+      primaryCta: {
+        label: c.hero[3],
+        href: hasExternalUrl(SITE_CONFIG.registerUrl)
+          ? SITE_CONFIG.registerUrl
+          : routePath("guides-how-to-register", locale),
+      },
       secondaryCta: cta(c.hero[4], "games"),
       note: c.hero[5],
     },
