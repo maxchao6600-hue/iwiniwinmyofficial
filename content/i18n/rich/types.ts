@@ -16,7 +16,13 @@ export type RichBlock =
   | { type: "grid"; title: string; intro?: string; items: { title: string; description: string }[] }
   | { type: "table"; title: string; rows: { label: string; value: string }[] }
   | { type: "callout"; title: string; body: string; variant?: "info" | "warning" }
-  | { type: "split"; title: string; leftTitle?: string; left: string[]; rightTitle?: string; right: string[] };
+  | { type: "split"; title: string; leftTitle?: string; left: string[]; rightTitle?: string; right: string[] }
+  | {
+      type: "subsections";
+      title: string;
+      intro?: string;
+      items: { title: string; paragraphs: string[] }[];
+    };
 
 export type RichPageCta = {
   primaryLabel: string;

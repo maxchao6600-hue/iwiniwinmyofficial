@@ -30,6 +30,9 @@ export default function NotFound() {
         <Button href="/guides/" variant="secondary">
           Guides
         </Button>
+        <Button href="/promotions/" variant="ghost">
+          Promotions
+        </Button>
         <Button href="/contact/" variant="ghost">
           Contact
         </Button>

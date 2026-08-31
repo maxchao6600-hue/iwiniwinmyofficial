@@ -16,7 +16,7 @@ function ProseBlock({ block }: { block: Extract<RichBlock, { type: "prose" }> })
       {block.title ? <BlockHeading title={block.title} /> : null}
       <div className={block.title ? "mt-4 space-y-4" : "space-y-4"}>
         {block.paragraphs.map((p) => (
-          <p key={p.slice(0, 48)} className="text-base leading-relaxed text-zinc-300">
+          <p key={p.slice(0, 48)} className="max-w-3xl text-base leading-relaxed text-zinc-300">
             {p}
           </p>
         ))}
@@ -29,7 +29,7 @@ function BulletsBlock({ block }: { block: Extract<RichBlock, { type: "bullets" }
   return (
     <section className="scroll-mt-28">
       <BlockHeading title={block.title} />
-      <ul className="mt-4 list-disc space-y-2 pl-5 text-zinc-300">
+      <ul className="mt-4 max-w-3xl list-disc space-y-2 pl-5 text-zinc-300">
         {block.items.map((item) => (
           <li key={item.slice(0, 48)} className="leading-relaxed">
             {item}
@@ -44,7 +44,7 @@ function StepsBlock({ block }: { block: Extract<RichBlock, { type: "steps" }> })
   return (
     <section className="scroll-mt-28">
       <BlockHeading title={block.title} />
-      <ol className="mt-5 space-y-3">
+      <ol className="mt-5 max-w-3xl space-y-3">
         {block.steps.map((step, index) => (
           <li
             key={step.slice(0, 48)}
@@ -208,9 +208,34 @@ function SplitBlock({ block }: { block: Extract<RichBlock, { type: "split" }> })
   );
 }
 
+function SubsectionsBlock({ block }: { block: Extract<RichBlock, { type: "subsections" }> }) {
+  return (
+    <section className="scroll-mt-28">
+      <BlockHeading title={block.title} />
+      {block.intro ? (
+        <p className="mt-3 max-w-3xl text-base leading-relaxed text-zinc-300">{block.intro}</p>
+      ) : null}
+      <div className="mt-6 space-y-7">
+        {block.items.map((item) => (
+          <article key={item.title} className="max-w-3xl">
+            <h3 className="font-display text-xl font-semibold text-white">{item.title}</h3>
+            <div className="mt-3 space-y-3">
+              {item.paragraphs.map((p) => (
+                <p key={p.slice(0, 48)} className="text-base leading-relaxed text-zinc-300">
+                  {p}
+                </p>
+              ))}
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export function RichSections({ blocks, locale }: { blocks: RichBlock[]; locale: Locale }) {
   return (
-    <div className="space-y-12">
+    <div className="space-y-10">
       {blocks.map((block) => {
         switch (block.type) {
           case "prose":
@@ -229,6 +254,8 @@ export function RichSections({ blocks, locale }: { blocks: RichBlock[]; locale: 
             return <CalloutBlock key={block.title} block={block} />;
           case "split":
             return <SplitBlock key={block.title} block={block} />;
+          case "subsections":
+            return <SubsectionsBlock key={block.title} block={block} />;
           default:
             return null;
         }

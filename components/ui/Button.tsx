@@ -56,6 +56,9 @@ export function Button(props: ButtonAsButton | ButtonAsLink) {
           rel={href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
         >
           {children}
+          {href.startsWith("http") ? (
+            <span className="sr-only"> (opens in a new tab)</span>
+          ) : null}
         </a>
       );
     }

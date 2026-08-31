@@ -31,7 +31,7 @@ export const zhSpecs = {
   },
   "official-partner": {
     eyebrow: "合作网站透明度",
-    h1: "此处“IWIN Malaysia 官方合作伙伴”的含义",
+    h1: "IWIN Malaysia 官方合作伙伴",
     intro: [
       "官方合作伙伴描述本网站在 IWIN Malaysia 语境下的信息与引荐角色，并非声称本网站运营目标游戏平台。",
       "这一区分很重要，因为只有外部平台才能显示当前账户规则、处理交易，并为个人账户提供已验证的支持。",
@@ -58,7 +58,7 @@ export const zhSpecs = {
   },
   games: {
     eyebrow: "游戏类别概览",
-    h1: "IWIN 游戏：选择前先比较各类格式",
+    h1: "IWIN 游戏类别",
     intro: [
       "IWIN 生态系统可能涉及老虎机、真人娱乐场桌台、体育市场及 4D 数字游戏，各类规则、节奏与信息要求不同。",
       "本中心帮助读者比较这些格式，但不暗示任何游戏能可靠盈利，也不表示所有游戏始终可用。",
@@ -75,7 +75,7 @@ export const zhSpecs = {
     ],
     related: ["games-slots", "games-live-casino", "games-sports"],
     cta: {
-      primaryLabel: "在外部查看游戏",
+      primaryLabel: "浏览 IWIN 游戏",
       secondaryLabel: "阅读负责任博彩",
       secondaryRoute: "responsible-gaming",
       footerTitle: "先比较格式，再设定限额",
@@ -86,7 +86,7 @@ export const zhSpecs = {
   },
   "games-slots": {
     eyebrow: "老虎机游戏指南",
-    h1: "IWIN 老虎机：功能、波动性与检查要点",
+    h1: "IWIN Malaysia 老虎机游戏",
     intro: [
       "老虎机游戏外观可能相似，但转轴布局、赔付规则、功能触发及投注范围可能不同。",
       "谨慎评估应关注游戏内信息面板与个人限额，而非连胜、“该出”结果或促销描述。",
@@ -103,7 +103,7 @@ export const zhSpecs = {
     ],
     related: ["game-providers", "games", "responsible-gaming"],
     cta: {
-      primaryLabel: "在外部浏览老虎机",
+      primaryLabel: "浏览老虎机游戏",
       secondaryLabel: "比较游戏提供商",
       secondaryRoute: "game-providers",
       footerTitle: "旋转前先读赔付表",
@@ -270,7 +270,7 @@ export const zhSpecs = {
     ],
     related: ["guides-how-to-login", "guides-account-security", "terms"],
     cta: {
-      primaryLabel: "在外部注册",
+      primaryLabel: "前往 IWIN 注册",
       secondaryLabel: "了解如何登录",
       secondaryRoute: "guides-how-to-login",
       footerTitle: "使用可找回的资料创建账户",
@@ -560,7 +560,7 @@ export const zhSpecs = {
   },
   agent: {
     eyebrow: "IWIN Malaysia 代理概览",
-    h1: "IWIN 代理信息（不作收入承诺）",
+    h1: "IWIN Malaysia 代理与合作指南",
     intro: [
       "IWIN 代理路径可能允许符合条件用户免注册费加入，并通过合作伙伴仪表板引荐活动。",
       "可能适用基于流水的佣金，但费率、资格、调整与支付状态须在当期仪表板确认；不承诺任何收入水平。",
@@ -577,12 +577,11 @@ export const zhSpecs = {
     ],
     related: ["partner-program", "affiliate-guide", "partner-faq"],
     cta: {
-      primaryLabel: "在外部加入代理",
+      primaryLabel: "了解合作伙伴计划",
       secondaryLabel: "阅读合作伙伴常见问题",
       secondaryRoute: "partner-faq",
       footerTitle: "引荐前先查看仪表板",
       footerDescription: "在可用处免费加入，然后核实实时流水规则与佣金条件，勿假设收入。",
-      external: true,
     },
     notice: "免费加入不代表保证通过、佣金或收入。",
   },

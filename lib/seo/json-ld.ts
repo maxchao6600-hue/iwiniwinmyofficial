@@ -76,6 +76,9 @@ export function webPageJsonLd(input: {
     name: input.name,
     description: input.description,
     url: absoluteUrl(input.path),
+    inLanguage: input.locale
+      ? { en: "en-MY", ms: "ms-MY", zh: "zh-CN" }[input.locale]
+      : "en-MY",
     isPartOf: {
       "@type": "WebSite",
       name: SITE_CONFIG.siteName,

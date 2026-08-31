@@ -31,7 +31,7 @@ export const msSpecs = {
   },
   "official-partner": {
     eyebrow: "Ketelusan laman rakan kongsi",
-    h1: "Apa maksud \"Rakan Kongsi Rasmi IWIN Malaysia\" di sini",
+    h1: "Rakan Rasmi IWIN Malaysia",
     intro: [
       "Rakan Kongsi Rasmi menerangkan peranan maklumat dan rujukan laman web ini dalam konteks IWIN Malaysia; ia bukan tuntutan bahawa laman ini mengendalikan platform permainan destinasi.",
       "Perbezaan ini penting kerana hanya platform luar yang boleh memaparkan peraturan akaun semasa, memproses transaksi dan menyediakan sokongan disahkan untuk akaun individu.",
@@ -58,7 +58,7 @@ export const msSpecs = {
   },
   games: {
     eyebrow: "Gambaran kategori permainan",
-    h1: "Permainan IWIN: bandingkan format sebelum memilih",
+    h1: "Kategori Permainan IWIN",
     intro: [
       "Ekosistem IWIN mungkin merujuk slot, meja kasino langsung, pasaran sukan dan permainan nombor 4D, masing-masing dengan peraturan, rentak dan keperluan maklumat yang berbeza.",
       "Hab ini membantu pembaca membandingkan format tersebut tanpa mencadangkan bahawa mana-mana permainan boleh menghasilkan keuntungan dengan boleh dipercayai atau bahawa setiap tajuk sentiasa tersedia.",
@@ -75,7 +75,7 @@ export const msSpecs = {
     ],
     related: ["games-slots", "games-live-casino", "games-sports"],
     cta: {
-      primaryLabel: "Lihat permainan secara luar",
+      primaryLabel: "Terokai Permainan IWIN",
       secondaryLabel: "Baca permainan bertanggungjawab",
       secondaryRoute: "responsible-gaming",
       footerTitle: "Bandingkan format, kemudian tetapkan had",
@@ -86,7 +86,7 @@ export const msSpecs = {
   },
   "games-slots": {
     eyebrow: "Panduan permainan slot",
-    h1: "Permainan slot IWIN: ciri, volatiliti dan semakan",
+    h1: "Permainan Slot IWIN Malaysia",
     intro: [
       "Tajuk slot mungkin kelihatan serupa sementara menggunakan susun atur gulungan, peraturan bayaran, pencetus ciri dan julat pertaruhan yang berbeza.",
       "Semakan berhati-hati memberi tumpuan pada panel maklumat dalam permainan dan had peribadi, bukan pada rentetan, hasil \"wajib\" atau penerangan promosi.",
@@ -103,7 +103,7 @@ export const msSpecs = {
     ],
     related: ["game-providers", "games", "responsible-gaming"],
     cta: {
-      primaryLabel: "Layari slot secara luar",
+      primaryLabel: "Terokai Permainan Slot",
       secondaryLabel: "Bandingkan penyedia permainan",
       secondaryRoute: "game-providers",
       footerTitle: "Baca jadual bayaran sebelum memutar",
@@ -270,7 +270,7 @@ export const msSpecs = {
     ],
     related: ["guides-how-to-login", "guides-account-security", "terms"],
     cta: {
-      primaryLabel: "Daftar secara luar",
+      primaryLabel: "前往 IWIN 注册",
       secondaryLabel: "Pelajari cara log masuk",
       secondaryRoute: "guides-how-to-login",
       footerTitle: "Cipta akaun dengan butiran boleh dipulihkan",
@@ -560,7 +560,7 @@ export const msSpecs = {
   },
   agent: {
     eyebrow: "Gambaran ejen IWIN Malaysia",
-    h1: "Maklumat ejen IWIN tanpa janji pendapatan",
+    h1: "Panduan Ejen & Rakan IWIN Malaysia",
     intro: [
       "Laluan ejen IWIN mungkin membenarkan pengguna layak menyertai tanpa yuran pendaftaran dan merujuk aktiviti melalui papan pemuka rakan kongsi.",
       "Komisen berasaskan turnover mungkin terpakai, tetapi kadar, kelayakan, pelarasan dan status pembayaran mesti disahkan dalam papan pemuka semasa; tiada tahap pendapatan dijanjikan.",
@@ -577,12 +577,11 @@ export const msSpecs = {
     ],
     related: ["partner-program", "affiliate-guide", "partner-faq"],
     cta: {
-      primaryLabel: "Sertai sebagai ejen secara luar",
+      primaryLabel: "Terokai Program Rakan",
       secondaryLabel: "Baca FAQ rakan kongsi",
       secondaryRoute: "partner-faq",
       footerTitle: "Semak papan pemuka sebelum merujuk",
       footerDescription: "Sertai percuma di mana tersedia, kemudian sahkan peraturan turnover langsung dan syarat komisen tanpa menganggap pendapatan.",
-      external: true,
     },
     notice: "Penyertaan percuma tidak bermaksud penerimaan, komisen atau pendapatan terjamin.",
   },

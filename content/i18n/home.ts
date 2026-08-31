@@ -17,6 +17,7 @@ export type HomeContent = {
   agent: { eyebrow: string; title: string; description: string; points: string[]; cta: Cta };
   faq: { eyebrow: string; title: string; items: FaqItem[]; cta: Cta };
   responsibleBand: { title: string; description: string; cta: Cta };
+  getStarted: { eyebrow: string; title: string; description: string; steps: Feature[] };
   finalCta: { title: string; description: string; primaryCta: Cta; secondaryCta: Cta; disclosure: string };
 };
 
@@ -32,6 +33,7 @@ const localized = {
     agent: ["Partner information", "Considering the agent programme?", "Platform information describes free agent registration and turnover-based referral commissions. Confirm current rates and rules in the agent dashboard; no income is promised.", ["Joining is described as free", "Commissions may depend on valid referred-player turnover", "Rates, eligibility and adjustments can change"], "Explore agent information"],
     faq: ["Quick answers", "Common questions, answered carefully", "View all FAQs"],
     responsible: ["Keep play within your limits", "Gaming is entertainment with a real risk of loss. Set time and spending limits, never borrow to play, and take a break when needed.", "Responsible gaming guidance"],
+    start: ["How to get started", "A practical sequence before any external action", "Read the matching guide first. Confirm live terms on the destination only after you understand the task, the conditions and your personal limits.", ["Read the registration guide", "Prepare a mobile number you control, a unique password and accurate details before opening the external form."], ["Review payments", "Compare deposit, withdrawal and method checks so you are not relying on old screenshots or chat instructions."], ["Compare game formats", "Understand how slots, live casino, sports and 4D differ before choosing a category in the live lobby."], ["Set personal limits", "Decide time and spending limits in advance. Do not treat promotions or previous results as a reason to spend more."]],
     final: ["Ready to continue?", "Read the guides first, then decide whether an external IWIN platform is appropriate for you.", "Visit external platform", "Explore guides", "You may leave this information website. Check destination terms, eligibility and privacy practices."],
   },
   ms: {
@@ -45,6 +47,7 @@ const localized = {
     agent: ["Maklumat rakan", "Mempertimbangkan program ejen?", "Maklumat platform menerangkan pendaftaran ejen percuma dan komisen rujukan berasaskan pusing ganti. Sahkan kadar serta peraturan dalam papan pemuka; pendapatan tidak dijanjikan.", ["Penyertaan diterangkan sebagai percuma", "Komisen mungkin bergantung pada pusing ganti sah pemain dirujuk", "Kadar, kelayakan dan pelarasan boleh berubah"], "Terokai maklumat ejen"],
     faq: ["Jawapan pantas", "Soalan lazim, dijawab dengan teliti", "Lihat semua soalan"],
     responsible: ["Pastikan permainan dalam had", "Permainan ialah hiburan dengan risiko kerugian sebenar. Tetapkan had masa dan belanja, jangan meminjam untuk bermain dan berehat apabila perlu.", "Panduan permainan bertanggungjawab"],
+    start: ["Cara bermula", "Urutan praktikal sebelum sebarang tindakan luar", "Baca panduan yang sepadan dahulu. Sahkan terma langsung di destinasi hanya selepas anda faham tugas, syarat dan had peribadi.", ["Baca panduan pendaftaran", "Sediakan nombor mudah alih sendiri, kata laluan unik dan butiran tepat sebelum membuka borang luar."], ["Semak pembayaran", "Bandingkan deposit, pengeluaran dan semakan kaedah supaya tidak bergantung pada tangkapan skrin lama atau arahan sembang."], ["Bandingkan format permainan", "Fahami perbezaan slot, kasino langsung, sukan dan 4D sebelum memilih kategori di lobi langsung."], ["Tetapkan had peribadi", "Tentukan had masa dan belanja awal. Jangan gunakan promosi atau keputusan terdahulu sebagai alasan untuk belanja lebih."]],
     final: ["Bersedia untuk meneruskan?", "Baca panduan dahulu, kemudian tentukan sama ada platform luar IWIN sesuai untuk anda.", "Lawati platform luar", "Terokai panduan", "Anda mungkin meninggalkan laman maklumat ini. Semak terma, kelayakan dan privasi destinasi."],
   },
   zh: {
@@ -58,6 +61,7 @@ const localized = {
     agent: ["合作伙伴信息", "考虑加入代理计划？", "平台资料称代理注册免费，推荐佣金可能按流水计算。请在代理后台确认当前费率与规则；本站不承诺收入。", ["加入被描述为免费", "佣金可能取决于被推荐玩家的有效流水", "费率、资格及调整规则可能改变"], "了解代理信息"],
     faq: ["快速解答", "谨慎回答常见问题", "查看所有常见问题"],
     responsible: ["让游戏保持在限度内", "游戏是有真实亏损风险的娱乐。设定时间和支出限额，切勿借钱游戏，并在需要时休息。", "负责任游戏指南"],
+    start: ["如何开始", "采取任何外部操作前的实用顺序", "先阅读对应指南。只有在理解任务、条件与个人限额后，再到目标平台确认实时条款。", ["阅读注册指南", "打开外部表格前，准备本人控制的手机号、独立密码与准确资料。"], ["核对支付", "比较存款、提款与支付方式检查，避免依赖旧截图或聊天指示。"], ["比较游戏形式", "先了解老虎机、真人、体育与 4D 的差异，再在实时大厅选择类别。"], ["设定个人限额", "事先决定时间与支出上限。不要把优惠或过往结果当成增加支出的理由。"]],
     final: ["准备继续？", "先阅读指南，再判断外部 IWIN 平台是否适合您。", "前往外部平台", "浏览指南", "您可能会离开本信息网站。请核对目标平台的条款、资格及隐私惯例。"],
   },
 } as const;
@@ -79,6 +83,12 @@ export function getHomeContent(locale: Locale): HomeContent {
     agent: { eyebrow: c.agent[0], title: c.agent[1], description: c.agent[2], points: [...c.agent[3]], cta: cta(c.agent[4], "agent") },
     faq: { eyebrow: c.faq[0], title: c.faq[1], items: getHomeFaqs(locale), cta: cta(c.faq[2], "faqs") },
     responsibleBand: { title: c.responsible[0], description: c.responsible[1], cta: cta(c.responsible[2], "responsible-gaming") },
+    getStarted: {
+      eyebrow: c.start[0],
+      title: c.start[1],
+      description: c.start[2],
+      steps: [3, 4, 5, 6].map((i) => ({ title: c.start[i][0], description: c.start[i][1] })),
+    },
     finalCta: { title: c.final[0], description: c.final[1], primaryCta: cta(c.final[2]), secondaryCta: cta(c.final[3], "guides"), disclosure: c.final[4] },
   };
 }

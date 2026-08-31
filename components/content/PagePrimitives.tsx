@@ -215,20 +215,20 @@ export function CategoryCard({
       href={href}
       className="group card-surface overflow-hidden rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
     >
-      <div className="relative aspect-square overflow-hidden">
+      <div className="relative aspect-[16/10] overflow-hidden">
         <Image
           src={image}
           alt={title}
           fill
-          sizes="(max-width:768px) 50vw, 25vw"
+          sizes="(max-width:768px) 100vw, (max-width:1024px) 50vw, 25vw"
           className="object-cover transition duration-500 group-hover:scale-[1.04]"
           priority={priority}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 p-4">
-          <h3 className="font-display text-lg font-semibold text-white">{title}</h3>
-          <p className="mt-1 text-sm text-zinc-300 line-clamp-2">{description}</p>
-        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+      </div>
+      <div className="p-4 sm:p-5">
+        <h3 className="font-display text-lg font-semibold text-white">{title}</h3>
+        <p className="mt-2 text-sm leading-relaxed text-zinc-300">{description}</p>
       </div>
     </Link>
   );
@@ -238,10 +238,12 @@ export function FinalCtaBand({
   locale,
   title,
   description,
+  showExternalNotice = true,
 }: {
   locale: Locale;
   title: string;
   description: string;
+  showExternalNotice?: boolean;
 }) {
   const common = getCommon(locale);
   const register = hasExternalUrl(SITE_CONFIG.registerUrl)
@@ -250,8 +252,8 @@ export function FinalCtaBand({
 
   return (
     <section className="section-band bg-[linear-gradient(180deg,rgba(245,197,24,0.08),transparent)]">
-      <Container className="py-14 text-center">
-        <h2 className="font-display text-3xl font-semibold text-white sm:text-4xl">{title}</h2>
+      <Container className="py-12 text-center">
+        <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">{title}</h2>
         <p className="mx-auto mt-4 max-w-2xl text-zinc-300">{description}</p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Button href={register} size="lg" external={register.startsWith("http")}>
@@ -261,7 +263,9 @@ export function FinalCtaBand({
             {common.exploreGuides}
           </Button>
         </div>
-        <p className="mx-auto mt-4 max-w-xl text-xs text-zinc-500">{common.externalCtaNote}</p>
+        {showExternalNotice ? (
+          <p className="mx-auto mt-4 max-w-xl text-xs text-zinc-500">{common.externalCtaNote}</p>
+        ) : null}
       </Container>
     </section>
   );

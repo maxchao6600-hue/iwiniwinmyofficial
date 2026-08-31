@@ -67,7 +67,7 @@ export function getUi(locale: Locale): UiContent {
     footer: { language: c.language },
     navLinks: links([["home", home], ["games", games], ["promotions", promotions], ["guides", guides], ["agent", agent], ["about-iwin", about], ["faqs", faq]]),
     footerGroups: {
-      explore: { title: c.groups[0], links: links([["about-iwin", aboutIwin], ["official-partner", official], ["game-providers", providers]]) },
+      explore: { title: c.groups[0], links: links([["about-iwin", aboutIwin], ["official-partner", official], ["promotions", promotions], ["game-providers", providers]]) },
       play: { title: c.groups[1], links: links([["games-slots", slots], ["games-live-casino", live], ["games-sports", sports], ["games-4d", fourD]]) },
       support: { title: c.groups[2], links: links([["guides", guideLabel], ["faqs", faqLabel], ["contact", contact]]) },
       legal: { title: c.groups[3], links: links([["responsible-gaming", responsible], ["terms", terms], ["privacy-policy", privacy], ["disclaimer", disclaimer]]) },

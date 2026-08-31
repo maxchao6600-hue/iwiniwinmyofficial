@@ -12,7 +12,7 @@ import type { RichPageContent } from "@/content/i18n/rich/types";
 import { SITE_CONFIG, hasExternalUrl } from "@/lib/constants/site";
 import type { Locale, RouteKey } from "@/lib/i18n/config";
 import { routePath } from "@/lib/i18n/paths";
-import { breadcrumbJsonLd, faqPageJsonLd } from "@/lib/seo/json-ld";
+import { breadcrumbJsonLd, faqPageJsonLd, webPageJsonLd } from "@/lib/seo/json-ld";
 
 function externalUrl(kind: RichPageContent["cta"]["primaryExternalUrl"]): string | undefined {
   if (kind === "agent" && hasExternalUrl(SITE_CONFIG.agentUrl)) return SITE_CONFIG.agentUrl;
@@ -43,46 +43,41 @@ function secondaryHref(locale: Locale, cta: RichPageContent["cta"]): string | un
 
 export function CompactPageHero({
   content,
-  locale,
   primaryLabel,
   primaryUrl,
   secondaryLabel,
   secondaryUrl,
-  showExternalNotice = false,
 }: {
   content: Pick<RichPageContent, "eyebrow" | "h1" | "intro" | "heroImage">;
-  locale: Locale;
   primaryLabel: string;
   primaryUrl: string;
   secondaryLabel?: string;
   secondaryUrl?: string;
-  showExternalNotice?: boolean;
 }) {
+  const isExternal = primaryUrl.startsWith("http");
   return (
     <section className="relative overflow-hidden border-b border-white/5">
       {content.heroImage ? (
-        <>
-          <div className="absolute inset-0">
-            <Image
-              src={content.heroImage}
-              alt=""
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover object-center opacity-35"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-black via-black/90 to-black/70" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50" />
-          </div>
-        </>
+        <div className="absolute inset-0">
+          <Image
+            src={content.heroImage}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-[center_25%] opacity-35"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/92 to-black/75" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/45" />
+        </div>
       ) : (
         <div className="absolute inset-0 bg-gradient-to-br from-iwin-charcoal via-black to-black" />
       )}
-      <Container className="relative max-h-[500px] py-10 sm:py-12 lg:py-14">
+      <Container className="relative py-7 sm:py-8 lg:py-10">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-iwin-yellow">
           {content.eyebrow}
         </p>
-        <h1 className="font-display mt-3 max-w-3xl text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-[2.5rem]">
+        <h1 className="font-display mt-3 max-w-3xl text-3xl font-semibold tracking-tight text-white sm:text-4xl">
           {content.h1}
         </h1>
         <div className="mt-4 max-w-3xl space-y-3">
@@ -93,11 +88,7 @@ export function CompactPageHero({
           ))}
         </div>
         <div className="mt-6 flex flex-wrap gap-3">
-          <Button
-            href={primaryUrl}
-            size="lg"
-            external={primaryUrl.startsWith("http")}
-          >
+          <Button href={primaryUrl} size="lg" external={isExternal}>
             {primaryLabel}
           </Button>
           {secondaryUrl && secondaryLabel ? (
@@ -106,9 +97,6 @@ export function CompactPageHero({
             </Button>
           ) : null}
         </div>
-        {showExternalNotice ? (
-          <ExternalLinkNotice locale={locale} className="mt-4 max-w-2xl" />
-        ) : null}
       </Container>
     </section>
   );
@@ -126,7 +114,7 @@ export function ContextualFinalCta({
 
   return (
     <section className="section-band bg-[linear-gradient(180deg,rgba(245,197,24,0.08),transparent)]">
-      <Container className="py-12 sm:py-14">
+      <Container className="py-8 sm:py-10">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">
             {cta.footerTitle}
@@ -161,7 +149,7 @@ export function RelatedInformation({
   const common = getCommon(locale);
   if (!links.length) return null;
   return (
-    <section className="mt-14 border-t border-white/10 pt-10">
+    <section className="mt-10 border-t border-white/10 pt-8">
       <h2 className="font-display text-xl font-semibold text-white sm:text-2xl">
         {common.relatedLinks}
       </h2>
@@ -187,18 +175,17 @@ export function RichPageLayout({
   crumbs,
   beforeBlocks,
   afterBlocks,
-  showHeroCta = true,
 }: {
   locale: Locale;
   content: RichPageContent;
   crumbs: { name: string; path: string }[];
   beforeBlocks?: React.ReactNode;
   afterBlocks?: React.ReactNode;
-  showHeroCta?: boolean;
 }) {
   const common = getCommon(locale);
   const primary = primaryHref(locale, content.cta);
   const secondary = secondaryHref(locale, content.cta);
+  const pageUrl = crumbs[crumbs.length - 1]?.path ?? routePath("home", locale);
 
   return (
     <>
@@ -206,8 +193,16 @@ export function RichPageLayout({
       <JsonLd
         data={breadcrumbJsonLd(crumbs.map((c) => ({ name: c.name, path: c.path })))}
       />
+      <JsonLd
+        data={webPageJsonLd({
+          name: content.h1,
+          description: content.intro[0] ?? content.h1,
+          path: pageUrl,
+          locale,
+        })}
+      />
       <div className="border-b border-white/5 bg-iwin-charcoal/30">
-        <Container className="py-6 sm:py-8">
+        <Container className="py-4 sm:py-5">
           <Breadcrumbs
             items={crumbs.map((c, i) => ({
               label: c.name,
@@ -217,33 +212,24 @@ export function RichPageLayout({
         </Container>
       </div>
 
-      {showHeroCta ? (
-        <CompactPageHero
-          locale={locale}
-          content={content}
-          primaryLabel={content.cta.primaryLabel}
-          primaryUrl={primary}
-          secondaryLabel={content.cta.secondaryLabel}
-          secondaryUrl={secondary}
-          showExternalNotice={content.cta.showExternalNotice}
-        />
-      ) : (
-        <CompactPageHero
-          locale={locale}
-          content={content}
-          primaryLabel={content.cta.primaryLabel}
-          primaryUrl={primary}
-        />
-      )}
+      <CompactPageHero
+        content={content}
+        primaryLabel={content.cta.primaryLabel}
+        primaryUrl={primary}
+        secondaryLabel={content.cta.secondaryLabel}
+        secondaryUrl={secondary}
+      />
 
-      <Container className="py-12 sm:py-14">
+      <Container className="py-8 sm:py-10">
         {beforeBlocks}
         <RichSections blocks={content.blocks} locale={locale} />
         {afterBlocks}
 
         {content.faqs?.length ? (
-          <section className="mt-14">
-            <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">FAQ</h2>
+          <section className="mt-10">
+            <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">
+              {common.faqHeading}
+            </h2>
             <div className="mt-6">
               <Accordion items={content.faqs} />
             </div>

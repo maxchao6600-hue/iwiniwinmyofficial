@@ -19,7 +19,8 @@ import { getCommon } from "@/content/i18n/common";
 import { flattenFaqs, getFaqGroups, getHomeFaqs } from "@/content/i18n/faq";
 import { getHomeContent } from "@/content/i18n/home";
 import { getRichPageContent, type PageId } from "@/content/i18n/rich";
-import { SITE_CONFIG, hasExternalUrl } from "@/lib/constants/site";
+import { GUIDE_META } from "@/content/i18n/rich/related";
+import { SITE_CONFIG, getActiveContactChannels, hasExternalUrl } from "@/lib/constants/site";
 import type { Locale, RouteKey } from "@/lib/i18n/config";
 import { routePath } from "@/lib/i18n/paths";
 import { faqPageJsonLd } from "@/lib/seo/json-ld";
@@ -62,49 +63,35 @@ export function HomePageView({ locale }: { locale: Locale }) {
             fill
             priority
             sizes="100vw"
-            className="object-cover object-center opacity-45"
+            className="object-cover object-[center_22%] opacity-55"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/85 to-black/55" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/40" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/92 via-black/72 to-black/45" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-black/50" />
         </div>
-        <Container className="relative grid gap-10 py-16 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:py-24">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-iwin-yellow">
-              {home.hero.eyebrow}
-            </p>
-            <h1 className="font-display mt-4 max-w-xl text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
-              {home.hero.h1}
-            </h1>
-            <p className="mt-5 max-w-xl text-base leading-relaxed text-zinc-300 sm:text-lg">
-              {home.hero.description}
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Button href={register} size="lg" external={register.startsWith("http")}>
-                {common.visitPlatform}
-              </Button>
-              <Button href={routePath("guides", locale)} variant="secondary" size="lg">
-                {home.hero.secondaryCta.label}
-              </Button>
-            </div>
-            <p className="mt-4 max-w-lg text-xs leading-relaxed text-zinc-400">
-              {home.hero.note}
-            </p>
+        <Container className="relative py-14 sm:py-16 lg:py-20">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-iwin-yellow">
+            {home.hero.eyebrow}
+          </p>
+          <h1 className="font-display mt-4 max-w-3xl text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
+            {home.hero.h1}
+          </h1>
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-zinc-300 sm:text-lg">
+            {home.hero.description}
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Button href={register} size="lg" external={register.startsWith("http")}>
+              {common.visitPlatform}
+            </Button>
+            <Button href={routePath("guides", locale)} variant="secondary" size="lg">
+              {home.hero.secondaryCta.label}
+            </Button>
           </div>
-          <div className="relative hidden aspect-[16/10] overflow-hidden rounded-2xl border border-iwin-yellow/20 shadow-[0_0_60px_rgba(245,197,24,0.12)] lg:block">
-            <Image
-              src="/images/hero/banner-2.png"
-              alt="IWIN Malaysia promotional visual"
-              fill
-              sizes="560px"
-              className="object-cover"
-              priority
-            />
-          </div>
+          <p className="mt-4 max-w-2xl text-xs leading-relaxed text-zinc-400">{home.hero.note}</p>
         </Container>
       </section>
 
       <section className="section-band">
-        <Container className="py-14">
+        <Container className="py-10 sm:py-12">
           <SectionHeading title={home.partnerBand.title} description={home.partnerBand.body} />
           <div className="mt-8 flex flex-wrap gap-3">
             <Button href={routePath("official-partner", locale)} variant="secondary">
@@ -118,7 +105,7 @@ export function HomePageView({ locale }: { locale: Locale }) {
       </section>
 
       <section className="section-band">
-        <Container className="py-14">
+        <Container className="py-10 sm:py-12">
           <SectionHeading
             eyebrow={home.categories.eyebrow}
             title={home.categories.title}
@@ -140,7 +127,7 @@ export function HomePageView({ locale }: { locale: Locale }) {
       </section>
 
       <section className="section-band">
-        <Container className="py-14">
+        <Container className="py-10 sm:py-12">
           <SectionHeading eyebrow={home.whyIwin.eyebrow} title={home.whyIwin.title} />
           <div className="mt-8 grid gap-4 md:grid-cols-2">
             {home.whyIwin.features.map((feature) => (
@@ -154,7 +141,7 @@ export function HomePageView({ locale }: { locale: Locale }) {
       </section>
 
       <section className="section-band">
-        <Container className="py-14">
+        <Container className="py-10 sm:py-12">
           <SectionHeading
             eyebrow={home.providers.eyebrow}
             title={home.providers.title}
@@ -185,7 +172,7 @@ export function HomePageView({ locale }: { locale: Locale }) {
       </section>
 
       <section className="section-band">
-        <Container className="grid gap-8 py-14 lg:grid-cols-2 lg:items-center">
+        <Container className="grid gap-8 py-10 sm:py-12 lg:grid-cols-2 lg:items-center">
           <div>
             <SectionHeading
               eyebrow={home.promotions.eyebrow}
@@ -206,7 +193,7 @@ export function HomePageView({ locale }: { locale: Locale }) {
               </Button>
             </div>
           </div>
-          <div className="relative aspect-square overflow-hidden rounded-2xl border border-white/10">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-white/10">
             <Image
               src="/images/games/promo.webp"
               alt="IWIN promotions visual"
@@ -219,7 +206,7 @@ export function HomePageView({ locale }: { locale: Locale }) {
       </section>
 
       <section className="section-band">
-        <Container className="py-14">
+        <Container className="py-10 sm:py-12">
           <SectionHeading
             eyebrow={home.guides.eyebrow}
             title={home.guides.title}
@@ -246,7 +233,7 @@ export function HomePageView({ locale }: { locale: Locale }) {
       </section>
 
       <section className="section-band">
-        <Container className="grid gap-8 py-14 lg:grid-cols-2 lg:items-center">
+        <Container className="grid gap-8 py-10 sm:py-12 lg:grid-cols-2 lg:items-center">
           <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-white/10">
             <Image
               src="/images/games/agent.webp"
@@ -284,7 +271,39 @@ export function HomePageView({ locale }: { locale: Locale }) {
       </section>
 
       <section className="section-band">
-        <Container className="py-14">
+        <Container className="py-10 sm:py-12">
+          <SectionHeading
+            eyebrow={home.getStarted.eyebrow}
+            title={home.getStarted.title}
+            description={home.getStarted.description}
+          />
+          <ol className="mt-8 grid gap-4 md:grid-cols-2">
+            {home.getStarted.steps.map((step, index) => (
+              <li key={step.title} className="flex gap-4 rounded-2xl border border-white/10 bg-surface-900/60 p-5">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-iwin-yellow text-sm font-bold text-black">
+                  {index + 1}
+                </span>
+                <div>
+                  <h3 className="font-display text-lg font-semibold text-white">{step.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-zinc-300">{step.description}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Button href={routePath("guides-how-to-register", locale)}>{home.guides.items[0].title}</Button>
+            <Button href={routePath("games", locale)} variant="secondary">
+              {home.hero.secondaryCta.label}
+            </Button>
+            <Button href={routePath("responsible-gaming", locale)} variant="ghost">
+              {home.responsibleBand.cta.label}
+            </Button>
+          </div>
+        </Container>
+      </section>
+
+      <section className="section-band">
+        <Container className="py-10 sm:py-12">
           <SectionHeading eyebrow={home.faq.eyebrow} title={home.faq.title} />
           <div className="mt-8">
             <Accordion items={home.faq.items} />
@@ -298,8 +317,8 @@ export function HomePageView({ locale }: { locale: Locale }) {
       </section>
 
       <section className="section-band">
-        <Container className="py-14">
-          <div className="card-surface rounded-2xl p-8 sm:p-10">
+        <Container className="py-10 sm:py-12">
+          <div className="card-surface rounded-2xl p-6 sm:p-8">
             <SectionHeading
               title={home.responsibleBand.title}
               description={home.responsibleBand.description}
@@ -355,14 +374,37 @@ export function GamesHubPageView({ locale }: { locale: Locale }) {
       : locale === "zh"
         ? "浏览游戏类别"
         : "Explore IWIN game categories";
+  const cardCopy =
+    locale === "ms"
+      ? [
+          "Permainan gelendong digital dengan jadual pembayaran, ciri bonus dan kawalan pertaruhan. Pelajari cara membaca peraturan sebelum bermain.",
+          "Meja yang distrim dengan tetingkap pertaruhan terhad. Pelajari had meja, peraturan dan semakan sambungan.",
+          "Pasaran pra-perlawanan dan langsung. Fahami odds, had dan penyelesaian — tanpa dakwaan keuntungan.",
+          "Format pilihan nombor yang terikat pada cabutan. Pelajari kemasukan, semakan keputusan dan rekod tiket.",
+        ]
+      : locale === "zh"
+        ? [
+            "数字转轴游戏，含赔付表、奖励功能与投注控制。学习如何在游戏前阅读规则。",
+            "荷官直播桌台，投注窗口有时限。了解桌台限额、规则与网络检查。",
+            "赛前与滚球盘口。理解赔率、限额与结算——不承诺获利。",
+            "与开奖绑定的选号形式。了解投注方式、核对开奖结果与票据记录。",
+          ]
+        : [
+            "Digital reel games with paytables, bonus features and stake controls. Learn how to read the rules before you play.",
+            "Dealer-streamed tables with timed betting windows. Learn table limits, rules and connection checks.",
+            "Pre-match and in-play markets. Understand odds, limits and settlement — without profit claims.",
+            "Number-selection formats tied to scheduled draws. Learn how entries, results and ticket records work.",
+          ];
 
   return (
     <RichPageLayout
       locale={locale}
       content={content}
-      crumbs={richCrumbs(locale, [{ key: "games", label: content.h1 }])}
+      crumbs={richCrumbs(locale, [
+        { key: "games", label: locale === "ms" ? "Permainan" : locale === "zh" ? "游戏" : "Games" },
+      ])}
       beforeBlocks={
-        <section className="mb-12">
+        <section className="mb-10">
           <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">
             {exploreLabel}
           </h2>
@@ -372,7 +414,7 @@ export function GamesHubPageView({ locale }: { locale: Locale }) {
                 key={cat.id}
                 href={routePath(cat.routeKey, locale)}
                 title={cat.name}
-                description={content.blocks[1]?.type === "grid" ? content.blocks[1].items[index]?.description ?? "" : ""}
+                description={cardCopy[index]}
                 image={cat.image}
                 priority={index < 2}
               />
@@ -394,7 +436,6 @@ function GameCategoryPage({
   parentLabel: string;
 }) {
   const content = getRichPageContent(locale, pageId);
-  const category = GAME_CATEGORIES.find((c) => c.routeKey === pageId);
 
   return (
     <RichPageLayout
@@ -404,38 +445,24 @@ function GameCategoryPage({
         { key: "games", label: parentLabel },
         { key: pageId, label: content.h1 },
       ])}
-      beforeBlocks={
-        category ? (
-          <div className="relative mb-10 aspect-[16/9] max-w-3xl overflow-hidden rounded-2xl border border-white/10">
-            <Image
-              src={category.image}
-              alt={content.h1}
-              fill
-              sizes="(max-width:768px) 100vw, 768px"
-              className="object-cover"
-              priority
-            />
-          </div>
-        ) : null
-      }
     />
   );
 }
 
 export function SlotsPageView({ locale }: { locale: Locale }) {
-  const gamesLabel = getRichPageContent(locale, "games").h1;
+  const gamesLabel = locale === "ms" ? "Permainan" : locale === "zh" ? "游戏" : "Games";
   return <GameCategoryPage locale={locale} pageId="games-slots" parentLabel={gamesLabel} />;
 }
 export function LiveCasinoPageView({ locale }: { locale: Locale }) {
-  const gamesLabel = getRichPageContent(locale, "games").h1;
+  const gamesLabel = locale === "ms" ? "Permainan" : locale === "zh" ? "游戏" : "Games";
   return <GameCategoryPage locale={locale} pageId="games-live-casino" parentLabel={gamesLabel} />;
 }
 export function SportsPageView({ locale }: { locale: Locale }) {
-  const gamesLabel = getRichPageContent(locale, "games").h1;
+  const gamesLabel = locale === "ms" ? "Permainan" : locale === "zh" ? "游戏" : "Games";
   return <GameCategoryPage locale={locale} pageId="games-sports" parentLabel={gamesLabel} />;
 }
 export function Lottery4dPageView({ locale }: { locale: Locale }) {
-  const gamesLabel = getRichPageContent(locale, "games").h1;
+  const gamesLabel = locale === "ms" ? "Permainan" : locale === "zh" ? "游戏" : "Games";
   return <GameCategoryPage locale={locale} pageId="games-4d" parentLabel={gamesLabel} />;
 }
 
@@ -466,6 +493,9 @@ export function ProvidersPageView({ locale }: { locale: Locale }) {
                   />
                 </div>
                 <h3 className="text-lg font-semibold text-white">{provider.name}</h3>
+                <p className="mt-1 text-xs font-medium uppercase tracking-wide text-iwin-yellow/80">
+                  {provider.category}
+                </p>
                 <p className="mt-2 text-sm leading-relaxed text-zinc-400">{provider.note}</p>
               </article>
             ))}
@@ -508,42 +538,90 @@ function GuidePage({
 
 export function GuidesHubPageView({ locale }: { locale: Locale }) {
   const content = getRichPageContent(locale, "guides");
-  const guideKeys: RouteKey[] = [
+  const featuredKeys = [
     "guides-how-to-register",
-    "guides-how-to-login",
     "guides-how-to-deposit",
     "guides-how-to-withdraw",
-    "guides-payment-methods",
-    "guides-mobile",
-    "guides-account-security",
-  ];
-  const hubCardsTitle =
-    locale === "ms" ? "Panduan mengikut topik" : locale === "zh" ? "按主题浏览指南" : "Guides by topic";
+  ] as const;
+  const featuredTitle =
+    locale === "ms" ? "Panduan paling berguna" : locale === "zh" ? "最有用的指南" : "Most useful guides";
+  const groups: { title: string; keys: RouteKey[] }[] =
+    locale === "ms"
+      ? [
+          { title: "Panduan akaun", keys: ["guides-how-to-register", "guides-how-to-login", "guides-account-security"] },
+          { title: "Panduan bayaran", keys: ["guides-how-to-deposit", "guides-how-to-withdraw", "guides-payment-methods"] },
+          { title: "Panduan permainan", keys: ["games", "games-slots", "games-live-casino"] },
+          { title: "Panduan promosi", keys: ["promotions", "promotions-free-credit", "promotions-bonus-guide"] },
+          { title: "Mudah alih & keselamatan", keys: ["guides-mobile", "guides-account-security"] },
+          { title: "Panduan rakan", keys: ["agent", "partner-program", "affiliate-guide", "referral-guide"] },
+        ]
+      : locale === "zh"
+        ? [
+            { title: "账户指南", keys: ["guides-how-to-register", "guides-how-to-login", "guides-account-security"] },
+            { title: "支付指南", keys: ["guides-how-to-deposit", "guides-how-to-withdraw", "guides-payment-methods"] },
+            { title: "游戏指南", keys: ["games", "games-slots", "games-live-casino"] },
+            { title: "优惠指南", keys: ["promotions", "promotions-free-credit", "promotions-bonus-guide"] },
+            { title: "移动端与安全", keys: ["guides-mobile", "guides-account-security"] },
+            { title: "合作伙伴指南", keys: ["agent", "partner-program", "affiliate-guide", "referral-guide"] },
+          ]
+        : [
+            { title: "Account guides", keys: ["guides-how-to-register", "guides-how-to-login", "guides-account-security"] },
+            { title: "Payment guides", keys: ["guides-how-to-deposit", "guides-how-to-withdraw", "guides-payment-methods"] },
+            { title: "Game guides", keys: ["games", "games-slots", "games-live-casino"] },
+            { title: "Promotion guides", keys: ["promotions", "promotions-free-credit", "promotions-bonus-guide"] },
+            { title: "Mobile and security", keys: ["guides-mobile", "guides-account-security"] },
+            { title: "Partner guides", keys: ["agent", "partner-program", "affiliate-guide", "referral-guide"] },
+          ];
 
   return (
     <RichPageLayout
       locale={locale}
       content={content}
-      crumbs={richCrumbs(locale, [{ key: "guides", label: content.h1 }])}
+      crumbs={richCrumbs(locale, [
+        { key: "guides", label: locale === "ms" ? "Panduan" : locale === "zh" ? "指南" : "Guides" },
+      ])}
       beforeBlocks={
-        <section className="mb-12">
-          <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">{hubCardsTitle}</h2>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {guideKeys.map((key) => {
-              const page = getRichPageContent(locale, key as PageId);
-              return (
-                <Link
-                  key={key}
-                  href={routePath(key, locale)}
-                  className="card-surface rounded-2xl p-6 transition hover:border-iwin-yellow/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
-                >
-                  <h3 className="font-display text-lg font-semibold text-white">{page.h1}</h3>
-                  <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-zinc-300">{page.intro[0]}</p>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
+        <>
+          <section className="mb-10">
+            <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">{featuredTitle}</h2>
+            <div className="mt-6 grid gap-4 md:grid-cols-3">
+              {featuredKeys.map((key) => {
+                const page = getRichPageContent(locale, key);
+                const meta = GUIDE_META[key];
+                return (
+                  <Link
+                    key={key}
+                    href={routePath(key, locale)}
+                    className="card-surface rounded-2xl p-5 transition hover:border-iwin-yellow/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+                  >
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-iwin-yellow">
+                      {meta.category[locale]}
+                    </p>
+                    <h3 className="font-display mt-2 text-lg font-semibold text-white">{page.h1}</h3>
+                    <p className="mt-3 text-sm leading-relaxed text-zinc-300">{meta.purpose[locale]}</p>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+          {groups.map((group) => (
+            <section key={group.title} className="mb-10">
+              <h2 className="font-display text-xl font-semibold text-white sm:text-2xl">{group.title}</h2>
+              <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {group.keys.map((key) => (
+                  <li key={key}>
+                    <Link
+                      href={routePath(key, locale)}
+                      className="block rounded-xl border border-white/10 bg-surface-900/50 px-4 py-3 text-sm text-zinc-200 transition hover:border-iwin-yellow/40 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+                    >
+                      {getRichPageContent(locale, key as PageId).h1}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </>
       }
     />
   );
@@ -749,6 +827,12 @@ export function FaqsPageView({ locale }: { locale: Locale }) {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-iwin-yellow">{titles.eyebrow}</p>
           <h1 className="font-display mt-3 max-w-3xl text-3xl font-semibold text-white sm:text-4xl">{titles.h1}</h1>
           <p className="mt-4 max-w-3xl text-base leading-relaxed text-zinc-300">{titles.intro}</p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Button href={routePath("guides", locale)}>{common.exploreGuides}</Button>
+            <Button href={routePath("contact", locale)} variant="secondary">
+              {getRichPageContent(locale, "contact").h1}
+            </Button>
+          </div>
         </Container>
       </section>
       <Container className="py-12 sm:py-14">
@@ -792,8 +876,46 @@ export function FaqsPageView({ locale }: { locale: Locale }) {
 
 export function ContactPageView({ locale }: { locale: Locale }) {
   const content = getRichPageContent(locale, "contact");
+  const channels = getActiveContactChannels();
+  const channelTitle =
+    locale === "ms" ? "Saluran yang disahkan" : locale === "zh" ? "已核实的联系方式" : "Verified contact options";
+  const noneLabel =
+    locale === "ms"
+      ? "Tiada nombor WhatsApp, Telegram atau e-mel yang direka. Gunakan sokongan platform yang disahkan untuk akaun, atau halaman ini untuk pembetulan maklumat."
+      : locale === "zh"
+        ? "本站不编造 WhatsApp、Telegram 或电子邮件。账户问题请使用已核实的平台支持；信息勘误请使用本页说明。"
+        : "No invented WhatsApp, Telegram or email addresses are published. Use verified platform support for accounts, or this page for information corrections.";
+
   return (
-    <RichStandardPage locale={locale} pageId="contact" trail={[{ key: "contact", label: content.h1 }]} />
+    <RichPageLayout
+      locale={locale}
+      content={content}
+      crumbs={richCrumbs(locale, [{ key: "contact", label: content.h1 }])}
+      afterBlocks={
+        <section className="mt-12">
+          <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">{channelTitle}</h2>
+          {channels.length ? (
+            <ul className="mt-6 grid gap-4 sm:grid-cols-2">
+              {channels.map((channel) => (
+                <li key={channel.id}>
+                  <a
+                    href={channel.href}
+                    target={channel.href.startsWith("http") ? "_blank" : undefined}
+                    rel={channel.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                    className="card-surface block rounded-2xl p-5 transition hover:border-iwin-yellow/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+                  >
+                    <h3 className="font-display text-lg font-semibold text-white">{channel.label}</h3>
+                    <p className="mt-2 text-sm text-zinc-300">{channel.description}</p>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="mt-4 max-w-3xl text-sm leading-relaxed text-zinc-300">{noneLabel}</p>
+          )}
+        </section>
+      }
+    />
   );
 }
 export function ResponsibleGamingPageView({ locale }: { locale: Locale }) {

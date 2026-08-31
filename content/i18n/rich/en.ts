@@ -31,7 +31,7 @@ export const enSpecs = {
   },
   "official-partner": {
     eyebrow: "Partner-site transparency",
-    h1: "What “IWIN Malaysia Official Partner” means here",
+    h1: "IWIN Malaysia Official Partner",
     intro: [
       "Official Partner describes this website’s information and referral role within the IWIN Malaysia context; it is not a claim that this site runs the destination gaming platform.",
       "The distinction matters because only the external platform can display current account rules, process transactions and provide authenticated support for an individual account.",
@@ -57,8 +57,8 @@ export const enSpecs = {
     notice: "Partner status does not create a payout guarantee, income guarantee or authority over external-platform decisions.",
   },
   games: {
-    eyebrow: "Game category overview",
-    h1: "IWIN games: compare formats before choosing",
+    eyebrow: "IWIN Malaysia games",
+    h1: "IWIN Game Categories",
     intro: [
       "The IWIN ecosystem may reference slots, live casino tables, sports markets and 4D number games, each with different rules, pace and information requirements.",
       "This hub helps readers compare those formats without suggesting that any game can reliably produce a profit or that every title is always available.",
@@ -75,7 +75,7 @@ export const enSpecs = {
     ],
     related: ["games-slots", "games-live-casino", "games-sports"],
     cta: {
-      primaryLabel: "View games externally",
+      primaryLabel: "Explore IWIN Games",
       secondaryLabel: "Read responsible gaming",
       secondaryRoute: "responsible-gaming",
       footerTitle: "Compare the format, then set limits",
@@ -85,8 +85,8 @@ export const enSpecs = {
     notice: "Game outcomes are uncertain. Category information is educational and does not predict results.",
   },
   "games-slots": {
-    eyebrow: "Slot game guide",
-    h1: "IWIN slot games: features, volatility and checks",
+    eyebrow: "IWIN Malaysia slot games",
+    h1: "IWIN Malaysia Slot Games",
     intro: [
       "Slot titles can look similar while using different reel layouts, pay rules, feature triggers and stake ranges.",
       "A careful review focuses on the in-game information panel and personal limits, not on streaks, “due” outcomes or promotional descriptions.",
@@ -103,7 +103,7 @@ export const enSpecs = {
     ],
     related: ["game-providers", "games", "responsible-gaming"],
     cta: {
-      primaryLabel: "Browse slots externally",
+      primaryLabel: "Explore Slot Games",
       secondaryLabel: "Compare game providers",
       secondaryRoute: "game-providers",
       footerTitle: "Read the paytable before spinning",
@@ -270,7 +270,7 @@ export const enSpecs = {
     ],
     related: ["guides-how-to-login", "guides-account-security", "terms"],
     cta: {
-      primaryLabel: "Register externally",
+      primaryLabel: "Visit IWIN Registration",
       secondaryLabel: "Learn how to log in",
       secondaryRoute: "guides-how-to-login",
       footerTitle: "Create an account with recoverable details",
@@ -560,7 +560,7 @@ export const enSpecs = {
   },
   agent: {
     eyebrow: "IWIN Malaysia agent overview",
-    h1: "IWIN agent information without income promises",
+    h1: "IWIN Malaysia Agent & Partner Guide",
     intro: [
       "The IWIN agent route may allow eligible users to join without a registration fee and refer activity through a partner dashboard.",
       "Turnover-based commissions may apply, but rates, qualification, adjustments and payment status must be confirmed in the current dashboard; no income level is promised.",
@@ -577,13 +577,11 @@ export const enSpecs = {
     ],
     related: ["partner-program", "affiliate-guide", "partner-faq"],
     cta: {
-      primaryLabel: "Join as agent externally",
+      primaryLabel: "Explore the Partner Program",
       secondaryLabel: "Read partner FAQs",
       secondaryRoute: "partner-faq",
       footerTitle: "Check the dashboard before referring",
       footerDescription: "Join free where available, then verify live turnover rules and commission conditions without assuming income.",
-      external: true,
-      externalUrl: "agent",
     },
     notice: "Free joining does not mean guaranteed acceptance, commission or earnings.",
   },

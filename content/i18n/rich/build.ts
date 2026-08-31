@@ -1,8 +1,11 @@
 import { getRouteSeo } from "../seo";
-import type { Locale } from "@/lib/i18n/config";
+import type { Locale, RouteKey } from "@/lib/i18n/config";
 import type { PageId, RichBlock, RichPageContent, RichPageCta } from "./types";
 import { resolveHeroImage } from "./hero-images";
 import { getBlockLabels } from "./labels";
+import { getPageExtras, type ExtraPack } from "./extras";
+import { getPageDepth, type DepthPack } from "./depth";
+import { EXTRA_RELATED } from "./related";
 
 export type Detail = readonly [title: string, description: string];
 
@@ -24,30 +27,136 @@ export type PageSpec = {
   notice: string;
 };
 
-function gamesHubBlocks(locale: Locale, spec: PageSpec): RichBlock[] {
+function packToBlocks(pack: ExtraPack | DepthPack): RichBlock[] {
+  const blocks: RichBlock[] = pack.sections.map((section) => ({
+    type: "prose" as const,
+    title: section.title,
+    paragraphs: section.paragraphs,
+  }));
+  if (pack.bullets) {
+    blocks.push({ type: "bullets", title: pack.bullets.title, items: pack.bullets.items });
+  }
+  if (pack.steps) {
+    blocks.push({ type: "steps", title: pack.steps.title, steps: pack.steps.steps });
+  }
+  return blocks;
+}
+
+function detailsAsProse(details: PageSpec["details"]): RichBlock[] {
+  return details.map(([title, description]) => ({
+    type: "prose" as const,
+    title,
+    paragraphs: [description],
+  }));
+}
+
+function pagePacks(locale: Locale, pageId: PageId): { extras: ExtraPack; depth: DepthPack } {
+  return {
+    extras: getPageExtras(locale, pageId),
+    depth: getPageDepth(locale, pageId),
+  };
+}
+
+function callout(spec: PageSpec, locale: Locale, pageId: PageId): RichBlock {
+  const L = getBlockLabels(locale);
+  return {
+    type: "callout",
+    title: L.importantBoundary,
+    body: spec.notice,
+    variant: pageId === "responsible-gaming" || pageId === "disclaimer" ? "warning" : "info",
+  };
+}
+
+function splitPlatform(locale: Locale, spec: PageSpec): RichBlock {
+  const L = getBlockLabels(locale);
+  const researchLine =
+    locale === "ms"
+      ? `Kaji ${spec.eyebrow.toLowerCase()} dalam bahasa mudah.`
+      : locale === "zh"
+        ? `以清晰语言了解${spec.eyebrow}。`
+        : `Research ${spec.eyebrow.toLowerCase()} in plain language.`;
+  return {
+    type: "split",
+    title: L.infoSiteTitle,
+    leftTitle: L.useSiteTo,
+    left: [
+      researchLine,
+      locale === "ms"
+        ? "Bandingkan panduan berkaitan sebelum tindakan luar."
+        : locale === "zh"
+          ? "采取外部操作前先比较相关指南。"
+          : "Compare related guidance before following an external action.",
+      locale === "ms"
+        ? "Kenal pasti soalan dan rekod untuk disediakan awal."
+        : locale === "zh"
+          ? "提前整理问题与记录。"
+          : "Identify questions and records to prepare in advance.",
+    ],
+    rightTitle: L.usePlatformTo,
+    right: [
+      locale === "ms"
+        ? "Sahkan peraturan semasa, ketersediaan dan status khusus akaun di platform luar."
+        : locale === "zh"
+          ? "确认外部平台上的当前规则、可用性与账户专属状态。"
+          : "Confirm current rules, availability and account-specific status on the external platform.",
+      locale === "ms"
+        ? "Lengkapkan tindakan disahkan dan semak terma langsung."
+        : locale === "zh"
+          ? "完成需认证的操作并查看实时条款。"
+          : "Complete authenticated actions and review live terms.",
+      locale === "ms"
+        ? "Selesaikan perkara yang memerlukan rekod akaun atau transaksi peribadi."
+        : locale === "zh"
+          ? "处理需要私人账户或交易记录的事项。"
+          : "Resolve matters that require private account or transaction records.",
+    ],
+  };
+}
+
+function gamesHubBlocks(locale: Locale, spec: PageSpec, extras: ExtraPack, depth: DepthPack): RichBlock[] {
   const d = spec.details;
   const L = getBlockLabels(locale);
+  const guideCards: { title: string; description: string; href: RouteKey }[] =
+    locale === "ms"
+      ? [
+          { title: "Cara mendaftar", description: "Sediakan butiran tepat sebelum borang luar.", href: "guides-how-to-register" },
+          { title: "Cara log masuk", description: "Sahkan destinasi dan lindungi kelayakan.", href: "guides-how-to-login" },
+          { title: "Cara deposit", description: "Ikuti juruwang semasa, bukan tangkapan skrin lama.", href: "guides-how-to-deposit" },
+          { title: "Cara pengeluaran", description: "Semak pengesahan dan pusing ganti sebelum permohonan.", href: "guides-how-to-withdraw" },
+          { title: "Kaedah bayaran", description: "Bandingkan had, pemilikan dan rekod.", href: "guides-payment-methods" },
+          { title: "Mudah alih", description: "Akses pelayar dan sumber pemasangan yang disahkan.", href: "guides-mobile" },
+          { title: "Keselamatan akaun", description: "Kata laluan unik, OTP dan semakan URL.", href: "guides-account-security" },
+          { title: "Permainan bertanggungjawab", description: "Had peribadi dan jangan kejar kerugian.", href: "responsible-gaming" },
+        ]
+      : locale === "zh"
+        ? [
+            { title: "如何注册", description: "打开外部表格前准备准确资料。", href: "guides-how-to-register" },
+            { title: "如何登录", description: "核实网址并保护凭据。", href: "guides-how-to-login" },
+            { title: "如何存款", description: "遵循实时收银台，而非旧截图。", href: "guides-how-to-deposit" },
+            { title: "如何提款", description: "申请前检查验证与流水。", href: "guides-how-to-withdraw" },
+            { title: "支付方式", description: "比较限额、所有权与记录。", href: "guides-payment-methods" },
+            { title: "移动端", description: "浏览器访问与已核实的安装来源。", href: "guides-mobile" },
+            { title: "账户安全", description: "唯一密码、OTP 与网址检查。", href: "guides-account-security" },
+            { title: "负责任游戏", description: "个人限额，勿追回损失。", href: "responsible-gaming" },
+          ]
+        : [
+            { title: "How to register", description: "Prepare accurate details before the external form.", href: "guides-how-to-register" },
+            { title: "How to log in", description: "Verify the destination and keep credentials private.", href: "guides-how-to-login" },
+            { title: "How to deposit", description: "Follow the live cashier, not old screenshots.", href: "guides-how-to-deposit" },
+            { title: "How to withdraw", description: "Check verification and turnover before requesting.", href: "guides-how-to-withdraw" },
+            { title: "Payment methods", description: "Compare limits, ownership and records.", href: "guides-payment-methods" },
+            { title: "Mobile access", description: "Browser access and verified installation sources only.", href: "guides-mobile" },
+            { title: "Account security", description: "Unique passwords, OTP privacy and URL checks.", href: "guides-account-security" },
+            { title: "Responsible gaming", description: "Personal limits and no chasing losses.", href: "responsible-gaming" },
+          ];
+
   return [
-    {
-      type: "prose",
-      title: L.gamesFormatsTitle,
-      paragraphs: [L.gamesFormatsIntro1, L.gamesFormatsIntro2],
-    },
-    {
-      type: "grid",
-      title: L.gamesGlanceTitle,
-      intro: L.gamesGlanceIntro,
-      items: d.slice(0, 4).map(([title, description]) => ({ title, description })),
-    },
+    ...packToBlocks(extras),
+    ...packToBlocks(depth),
     {
       type: "prose",
       title: L.gamesProvidersTitle,
       paragraphs: [`${d[7][1]} ${L.gamesProvidersP1}`, L.gamesProvidersP2],
-    },
-    {
-      type: "bullets",
-      title: L.gamesChoosingTitle,
-      items: d.slice(4, 7).map(([title, description]) => `${title}: ${description}`),
     },
     {
       type: "steps",
@@ -67,7 +176,7 @@ function gamesHubBlocks(locale: Locale, spec: PageSpec): RichBlock[] {
                 `${d[5][0]}：${d[5][1]}`,
                 "若适用奖金，请阅读优惠条款——流水、排除项与到期日可能影响提款。",
                 "存款或提款前确认支付与账户条件。",
-                "设定个人消费上限与停止点；勿为提高赌注以追回损失。",
+                "设定个人消费上限与停止点；勿为追回损失而提高赌注。",
               ]
             : [
                 d[4][1],
@@ -78,15 +187,21 @@ function gamesHubBlocks(locale: Locale, spec: PageSpec): RichBlock[] {
               ],
     },
     {
-      type: "callout",
-      title: L.importantBoundary,
-      body: spec.notice,
-      variant: "info",
+      type: "cards",
+      title: locale === "ms" ? "Panduan IWIN yang berguna" : locale === "zh" ? "实用 IWIN 指南" : "Useful IWIN guides",
+      intro:
+        locale === "ms"
+          ? "Gunakan panduan operasi selepas anda faham format permainan."
+          : locale === "zh"
+            ? "在理解游戏形式后，再使用这些操作指南。"
+            : "Use these operational guides after you understand the game formats.",
+      items: guideCards,
     },
+    callout(spec, locale, "games"),
   ];
 }
 
-function guidesHubBlocks(locale: Locale, spec: PageSpec): RichBlock[] {
+function guidesHubBlocks(locale: Locale, spec: PageSpec, extras: ExtraPack, depth: DepthPack): RichBlock[] {
   const d = spec.details;
   const L = getBlockLabels(locale);
   const categoryItems =
@@ -121,11 +236,8 @@ function guidesHubBlocks(locale: Locale, spec: PageSpec): RichBlock[] {
           ];
 
   return [
-    {
-      type: "prose",
-      title: L.guidesHubTitle,
-      paragraphs: [spec.intro[0], spec.intro[1]],
-    },
+    ...packToBlocks(extras),
+    ...packToBlocks(depth),
     {
       type: "grid",
       title: L.guidesCategoriesTitle,
@@ -133,223 +245,111 @@ function guidesHubBlocks(locale: Locale, spec: PageSpec): RichBlock[] {
       items: categoryItems,
     },
     {
-      type: "bullets",
-      title: L.guidesUsefulTitle,
-      items: d.slice(0, 4).map(([title, description]) => `${title}: ${description}`),
-    },
-    {
-      type: "split",
-      title: L.infoSiteTitle,
-      leftTitle: L.guidesPrepareTitle,
-      left: d.slice(4, 7).map(([title, description]) => `${title}: ${description}`),
-      rightTitle: L.guidesCompleteTitle,
-      right: [d[7][1], spec.notice],
-    },
-    {
       type: "table",
-      title: L.quickReference,
+      title: locale === "ms" ? "Panduan mengikut tugas" : locale === "zh" ? "按任务查找指南" : "Guides by task",
       rows: d.map(([label, value]) => ({ label, value })),
     },
-    {
-      type: "callout",
-      title: L.importantBoundary,
-      body: spec.notice,
-      variant: "info",
-    },
+    splitPlatform(locale, spec),
+    callout(spec, locale, "guides"),
   ];
 }
 
-function promotionsHubBlocks(locale: Locale, spec: PageSpec): RichBlock[] {
+function promotionsHubBlocks(locale: Locale, spec: PageSpec, extras: ExtraPack, depth: DepthPack): RichBlock[] {
   const d = spec.details;
   const L = getBlockLabels(locale);
-  const commonConditions =
-    locale === "ms"
-      ? [
-          "Keperluan pusing ganti sebelum nilai promosi boleh dikeluarkan.",
-          "Tarikh luput selepas tawaran tidak digunakan atau syarat tidak lengkap.",
-          "Had kuota apabila tawaran hanya untuk bilangan pengguna tertentu.",
-          "Semakan pengesahan sebelum bonus dikredit atau pengeluaran diluluskan.",
-          "Konflik antara promosi serentak melainkan platform benarkan gabungan.",
-        ]
-      : locale === "zh"
-        ? [
-            "提款前需满足的流水要求。",
-            "未使用或未完成条件的优惠到期日。",
-            "名额有限的广告优惠配额。",
-            "奖金入账或批准提款前的验证检查。",
-            "除非平台明确允许，否则不可叠加的优惠冲突。",
-          ]
-        : [
-            "Turnover requirements before promotional value can be withdrawn.",
-            "Expiry dates after which unused or uncompleted offers lapse.",
-            "Quota limits when an advertised offer is available only to a set number of users.",
-            "Verification checks before a bonus is credited or a withdrawal is approved.",
-            "Conflicts between simultaneous promotions unless the platform explicitly allows stacking.",
-          ];
-
-  const readSteps = d.slice(4, 8).map(([title, description]) => `${title}: ${description}`);
-
   return [
-    {
-      type: "prose",
-      title: L.promoCategoriesTitle,
-      paragraphs: [L.promoCategoriesP1, L.promoCategoriesP2],
-    },
-    {
-      type: "grid",
-      title: L.promoEligibilityTitle,
-      items: d.slice(0, 4).map(([title, description]) => ({ title, description })),
-    },
-    {
-      type: "steps",
-      title: L.promoReadTermsTitle,
-      steps: readSteps,
-    },
-    {
-      type: "bullets",
-      title: L.promoCommonTitle,
-      items: commonConditions,
-    },
+    ...packToBlocks(extras),
+    ...packToBlocks(depth),
+    ...detailsAsProse(d),
     {
       type: "callout",
       title: L.promoResponsibleTitle,
       body: L.promoResponsibleBody,
       variant: "warning",
     },
-    {
-      type: "callout",
-      title: L.importantBoundary,
-      body: spec.notice,
-      variant: "info",
-    },
+    callout(spec, locale, "promotions"),
   ];
 }
 
-function providersPageBlocks(locale: Locale, spec: PageSpec): RichBlock[] {
+function providersPageBlocks(locale: Locale, spec: PageSpec, extras: ExtraPack, depth: DepthPack): RichBlock[] {
   const d = spec.details;
-  const L = getBlockLabels(locale);
   return [
-    {
-      type: "prose",
-      title: L.providersWhatTitle,
-      paragraphs: [L.providersWhatP1, L.providersWhatP2],
-    },
-    {
-      type: "grid",
-      title: L.providersHelpTitle,
-      items: d.slice(0, 4).map(([title, description]) => ({ title, description })),
-    },
-    {
-      type: "bullets",
-      title: L.providersBeforeTitle,
-      items: d.slice(4).map(([title, description]) => `${title}: ${description}`),
-    },
-    {
-      type: "callout",
-      title: L.importantBoundary,
-      body: spec.notice,
-      variant: "info",
-    },
+    ...packToBlocks(extras),
+    ...packToBlocks(depth),
+    ...detailsAsProse(d),
+    callout(spec, locale, "game-providers"),
   ];
 }
 
-function defaultBlocks(locale: Locale, pageId: PageId, spec: PageSpec): RichBlock[] {
+function categoryGameBlocks(locale: Locale, pageId: PageId, spec: PageSpec, extras: ExtraPack, depth: DepthPack): RichBlock[] {
+  return [
+    ...packToBlocks(extras),
+    ...packToBlocks(depth),
+    ...detailsAsProse(spec.details),
+    splitPlatform(locale, spec),
+    callout(spec, locale, pageId),
+  ];
+}
+
+function howToBlocks(locale: Locale, pageId: PageId, spec: PageSpec, extras: ExtraPack, depth: DepthPack): RichBlock[] {
   const d = spec.details;
   const L = getBlockLabels(locale);
-  const researchLine =
-    locale === "ms"
-      ? `Kaji ${spec.eyebrow.toLowerCase()} dalam bahasa mudah.`
-      : locale === "zh"
-        ? `以清晰语言了解${spec.eyebrow}。`
-        : `Research ${spec.eyebrow.toLowerCase()} in plain language.`;
-
   return [
-    {
-      type: "prose",
-      title: `${L.understandingPrefix} ${spec.h1.toLowerCase()}`,
-      paragraphs: [`${d[0][1]} ${d[1][1]}`, `${d[2][1]} ${d[3][1]}`],
-    },
-    {
-      type: "bullets",
-      title: L.checksFirst,
-      items: d.slice(0, 4).map(([title, description]) => `${title}: ${description}`),
-    },
+    ...packToBlocks(extras),
+    ...packToBlocks(depth),
     {
       type: "steps",
       title: L.reviewSequence,
-      steps: d.slice(4).map(([title, description]) => `${title} — ${description}`),
+      steps: d.map(([title, description]) => `${title} — ${description}`),
     },
-    {
-      type: "grid",
-      title: L.detailsAttention,
-      items: d.slice(4).map(([title, description]) => ({ title, description })),
-    },
-    {
-      type: "table",
-      title: L.quickReference,
-      rows: d.map(([label, value]) => ({ label, value })),
-    },
-    {
-      type: "split",
-      title: L.infoSiteTitle,
-      leftTitle: L.useSiteTo,
-      left: [
-        researchLine,
-        locale === "ms"
-          ? "Bandingkan panduan berkaitan sebelum tindakan luar."
-          : locale === "zh"
-            ? "采取外部操作前先比较相关指南。"
-            : "Compare related guidance before following an external action.",
-        locale === "ms"
-          ? "Kenal pasti soalan dan rekod untuk disediakan awal."
-          : locale === "zh"
-            ? "提前整理问题与记录。"
-            : "Identify questions and records to prepare in advance.",
-      ],
-      rightTitle: L.usePlatformTo,
-      right: [
-        locale === "ms"
-          ? `Sahkan peraturan semasa, ketersediaan dan status khusus akaun untuk ${pageId}.`
-          : locale === "zh"
-            ? `确认${pageId}的当前规则、可用性与账户专属状态。`
-            : `Confirm current rules, availability and account-specific status for ${pageId}.`,
-        locale === "ms"
-          ? "Lengkapkan tindakan disahkan dan semak terma langsung."
-          : locale === "zh"
-            ? "完成需认证的操作并查看实时条款。"
-            : "Complete authenticated actions and review live terms.",
-        locale === "ms"
-          ? "Selesaikan perkara yang memerlukan rekod akaun atau transaksi peribadi."
-          : locale === "zh"
-            ? "处理需要私人账户或交易记录的事项。"
-            : "Resolve matters that require private account or transaction records.",
-      ],
-    },
-    {
-      type: "callout",
-      title: L.importantBoundary,
-      body: spec.notice,
-      variant: pageId === "responsible-gaming" || pageId === "disclaimer" ? "warning" : "info",
-    },
+    splitPlatform(locale, spec),
+    callout(spec, locale, pageId),
+  ];
+}
+
+function editorialBlocks(locale: Locale, pageId: PageId, spec: PageSpec, extras: ExtraPack, depth: DepthPack): RichBlock[] {
+  return [
+    ...packToBlocks(extras),
+    ...packToBlocks(depth),
+    ...detailsAsProse(spec.details),
+    splitPlatform(locale, spec),
+    callout(spec, locale, pageId),
   ];
 }
 
 export function buildBlocks(locale: Locale, pageId: PageId, spec: PageSpec): RichBlock[] {
+  const { extras, depth } = pagePacks(locale, pageId);
   switch (pageId) {
     case "games":
-      return gamesHubBlocks(locale, spec);
+      return gamesHubBlocks(locale, spec, extras, depth);
     case "guides":
-      return guidesHubBlocks(locale, spec);
+      return guidesHubBlocks(locale, spec, extras, depth);
     case "promotions":
-      return promotionsHubBlocks(locale, spec);
+      return promotionsHubBlocks(locale, spec, extras, depth);
     case "game-providers":
-      return providersPageBlocks(locale, spec);
+      return providersPageBlocks(locale, spec, extras, depth);
+    case "games-slots":
+    case "games-live-casino":
+    case "games-sports":
+    case "games-4d":
+      return categoryGameBlocks(locale, pageId, spec, extras, depth);
+    case "guides-how-to-register":
+    case "guides-how-to-login":
+    case "guides-how-to-deposit":
+    case "guides-how-to-withdraw":
+    case "guides-payment-methods":
+    case "guides-mobile":
+    case "guides-account-security":
+      return howToBlocks(locale, pageId, spec, extras, depth);
     default:
-      return defaultBlocks(locale, pageId, spec);
+      return editorialBlocks(locale, pageId, spec, extras, depth);
   }
 }
 
-function buildFaqs(locale: Locale, spec: PageSpec): RichPageContent["faqs"] {
+function buildFaqs(locale: Locale, pageId: PageId, spec: PageSpec): RichPageContent["faqs"] {
+  const { extras, depth } = pagePacks(locale, pageId);
+  const merged = [...extras.faqs, ...(depth.faqs ?? [])];
+  if (merged.length) return merged;
   const d = spec.details;
   const L = getBlockLabels(locale);
   return [
@@ -377,6 +377,21 @@ function buildCta(spec: PageSpec): RichPageCta {
   };
 }
 
+function uniqueRelated(locale: Locale, pageId: PageId, spec: PageSpec): RichPageContent["related"] {
+  const seen = new Set<string>();
+  const keys = [...spec.related, ...EXTRA_RELATED[pageId]];
+  const items: RichPageContent["related"] = [];
+  for (const key of keys) {
+    if (seen.has(key) || key === pageId) continue;
+    seen.add(key);
+    items.push({
+      key: key as RouteKey,
+      label: getRouteSeo(locale, key as RouteKey).title,
+    });
+  }
+  return items;
+}
+
 export function buildRichPageContent(
   locale: Locale,
   pageId: PageId,
@@ -388,11 +403,8 @@ export function buildRichPageContent(
     intro: [...spec.intro],
     heroImage: resolveHeroImage(pageId),
     blocks: buildBlocks(locale, pageId, spec),
-    faqs: buildFaqs(locale, spec),
-    related: spec.related.map((key) => ({
-      key: key as RichPageContent["related"][number]["key"],
-      label: getRouteSeo(locale, key as RichPageContent["related"][number]["key"]).title,
-    })),
+    faqs: buildFaqs(locale, pageId, spec),
+    related: uniqueRelated(locale, pageId, spec),
     cta: buildCta(spec),
   };
 }
