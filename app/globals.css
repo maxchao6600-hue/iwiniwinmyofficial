@@ -292,3 +292,35 @@ a {
     animation: none;
   }
 }
+
+/* Agent partner visual — subtle motion */
+.agent-path-dash {
+  animation: agent-path-flow 18s linear infinite;
+}
+
+.agent-node-pulse {
+  animation: agent-node-soft 3.2s ease-in-out infinite;
+}
+
+@keyframes agent-path-flow {
+  to {
+    stroke-dashoffset: -88;
+  }
+}
+
+@keyframes agent-node-soft {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.82;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .agent-path-dash,
+  .agent-node-pulse {
+    animation: none;
+  }
+}

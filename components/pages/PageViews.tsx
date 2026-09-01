@@ -51,6 +51,7 @@ import {
   TopicNavigation,
   WarningPanel,
 } from "@/components/visual/EditorialPrimitives";
+import { AgentPartnerVisual } from "@/components/visual/AgentPartnerVisual";
 import { SITE_CONFIG, getActiveContactChannels, hasExternalUrl } from "@/lib/constants/site";
 import type { Locale, RouteKey } from "@/lib/i18n/config";
 import { routePath } from "@/lib/i18n/paths";
@@ -986,25 +987,21 @@ export function AgentPageView({ locale }: { locale: Locale }) {
             variant="subtle"
             className="mb-8 rounded-xl"
           />
-          <section className="mb-10 grid items-start gap-8 lg:grid-cols-2">
-            <div className="relative min-h-[280px] overflow-hidden rounded-2xl border border-white/10 sm:min-h-[360px]">
-              <Image
-                src={VISUAL_IMAGES.agent}
-                alt={content.h1}
-                fill
-                sizes="(max-width:1024px) 100vw, 50vw"
-                className="object-cover object-center"
-                priority
+          <section className="mb-10">
+            <div className="overflow-hidden rounded-2xl border border-iwin-yellow/20 shadow-[0_20px_48px_rgba(0,0,0,0.35)] lg:grid lg:grid-cols-2">
+              <AgentPartnerVisual
+                locale={locale}
+                title={content.h1}
+                className="rounded-none border-0 shadow-none sm:min-h-[400px] lg:min-h-full lg:rounded-none"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-            </div>
-            <div className="visual-panel rounded-2xl p-6 sm:p-8">
-              <p className="eyebrow">{content.eyebrow}</p>
-              <h2 className="font-display mt-3 text-xl font-semibold text-white sm:text-2xl">
-                {content.h1}
-              </h2>
-              <div className="mt-6">
-                <ProcessTimeline steps={visual.agentTimeline} />
+              <div className="flex flex-col justify-center border-t border-iwin-yellow/15 bg-[linear-gradient(165deg,rgba(28,28,33,0.95),rgba(10,10,12,0.98))] p-6 sm:p-8 lg:border-l lg:border-t-0">
+                <p className="eyebrow">{content.eyebrow}</p>
+                <h2 className="font-display mt-3 text-xl font-semibold text-white sm:text-2xl">
+                  {content.h1}
+                </h2>
+                <div className="mt-6">
+                  <ProcessTimeline steps={visual.agentTimeline} />
+                </div>
               </div>
             </div>
           </section>
