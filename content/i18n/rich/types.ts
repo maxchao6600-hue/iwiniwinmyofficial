@@ -37,6 +37,7 @@ export type RichPageCta = {
 };
 
 export type RichPageContent = {
+  pageId: PageId;
   eyebrow: string;
   h1: string;
   intro: string[];

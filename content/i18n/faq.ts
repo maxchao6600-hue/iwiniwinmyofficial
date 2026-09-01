@@ -83,8 +83,6 @@ const groups: Record<Locale, FaqGroup[]> = {
       { question: "Adakah laman ini mengendalikan permainan?", answer: "Tidak. Pusingan permainan, lobi dan keputusan diurus di platform luar selepas log masuk. Laman ini hanya menyediakan maklumat pendidikan kategori dan penyedia." },
       { question: "Adakah laman ini memegang dana pemain?", answer: "Tidak. Deposit, baki dan pengeluaran milik platform luar. Laman maklumat rakan ini tidak menerima, menyimpan atau memproses wang pemain." },
       { question: "Di manakah saya perlu mengesahkan terma semasa?", answer: "Di platform luar yang disahkan untuk peraturan akaun, promosi, bayaran dan sokongan. Gunakan laman ini untuk orientasi, kemudian sahkan terma langsung sebelum bertindak." },
-      { question: "Apakah kategori permainan?", answer: "Kategori yang dirujuk ialah slot, kasino langsung, sukan dan 4D. Setiap satu mempunyai peraturan, tempo dan semakan berbeza. Panduan kategori di laman ini menerangkan format; tajuk individu bergantung pada lobi langsung selepas log masuk." },
-      { question: "Bagaimanakah syarat promosi berfungsi?", answer: "Promosi mungkin termasuk peraturan kelayakan, keperluan pusing ganti, had masa dan sekatan permainan. Maklumat sumber di laman ini menerangkan contoh disahkan seperti syarat kredit percuma RM10 — sentiasa sahkan halaman promosi langsung sebelum mendaftar atau menuntut." },
       { question: "Apa perlu disemak sebelum menggunakan platform luar?", answer: "Sahkan URL destinasi, baca terma semasa, fahami peraturan deposit dan pengeluaran, semak syarat promosi dan tetapkan had perbelanjaan peribadi. Laman maklumat ini tidak menggantikan pendedahan platform sendiri." },
     ] },
     { id: "account", title: "Akaun", items: [
@@ -119,6 +117,7 @@ const groups: Record<Locale, FaqGroup[]> = {
       { question: "Di mana bermula jika baharu dengan format?", answer: "Baca hab permainan, kemudian buka panduan kategori yang sepadan. Teruskan dengan halaman pendaftaran, bayaran dan permainan bertanggungjawab sebelum berbelanja." },
     ] },
     { id: "promotions", title: "Promosi", items: [
+      { question: "Bagaimanakah syarat promosi berfungsi?", answer: "Promosi mungkin termasuk peraturan kelayakan, keperluan pusing ganti, had masa dan sekatan permainan. Maklumat sumber di laman ini menerangkan contoh disahkan seperti syarat kredit percuma RM10 — sentiasa sahkan halaman promosi langsung sebelum mendaftar atau menuntut." },
       { question: "Bagaimanakah tawaran kredit percuma RM10 berfungsi?", answer: "Maklumat sumber menyatakan RM10 untuk pendaftaran baharu yang layak melalui laman rakan rasmi, tertakluk pada kuota harian, pusing ganti 5x, satu tuntutan setiap nombor mudah alih dan tidak boleh dipindah. Ia tidak dijamin; sahkan terma semasa." },
       { question: "Apakah maksud pusing ganti 5x bagi RM10?", answer: "Keperluan 5x bermaksud pusing ganti layak RM50 (RM10 × 5), bukan janji kemenangan atau pengeluaran. Semak permainan layak, tempoh dan peraturan penyelesaian." },
       { question: "Adakah promosi luput dipaparkan sebagai aktif di sini?", answer: "Tidak. Laman ini menerangkan syarat sumber yang disahkan dan cara membaca terma. Ketersediaan langsung mesti disemak pada halaman promosi luar." },
@@ -149,8 +148,6 @@ const groups: Record<Locale, FaqGroup[]> = {
       { question: "本网站是否运营游戏？", answer: "否。游戏局、大厅与结果由登录后的外部平台处理。本站仅提供类别与提供商的教育性信息。" },
       { question: "本网站是否持有玩家资金？", answer: "否。存款、余额与提款属于外部平台。本合作伙伴信息网站不接收、保管或处理玩家资金。" },
       { question: "应在哪里核实当前条款？", answer: "在已认证的外部平台核实账户规则、优惠、支付与支持事项。可先使用本站了解概况，再采取行动前确认实时条款。" },
-      { question: "游戏类别有哪些？", answer: "本站参考的类别包括老虎机、真人娱乐场、体育与 4D。各类别规则、节奏与核对要点不同。本站类别指南解释形式；具体游戏仍以登录后实时大厅为准。" },
-      { question: "优惠条件如何运作？", answer: "优惠可能包含资格规则、流水要求、时限与游戏限制。本站说明已核实来源（如 RM10 免费彩金条件）——注册或领取前务必核对实时优惠页。" },
       { question: "使用外部平台前应检查什么？", answer: "核实目标网址、阅读当前条款、了解存提款规则、核对优惠条件并设定个人支出限额。本信息网站不能替代平台自身披露。" },
     ] },
     { id: "account", title: "账户", items: [
@@ -185,6 +182,7 @@ const groups: Record<Locale, FaqGroup[]> = {
       { question: "刚接触这些形式应从哪里开始？", answer: "先阅读游戏中心，再打开符合您玩法的类别指南。消费前继续阅读注册、支付与负责任游戏页。" },
     ] },
     { id: "promotions", title: "优惠", items: [
+      { question: "优惠条件如何运作？", answer: "优惠可能包含资格规则、流水要求、时限与游戏限制。本站说明已核实来源（如 RM10 免费彩金条件）——注册或领取前务必核对实时优惠页。" },
       { question: "RM10 免费彩金如何运作？", answer: "来源资料说明，符合资格并通过官方合作伙伴网站新注册者可申请 RM10，但受每日名额、5倍流水、每个手机号一次及不可转让等条件限制。并非保证获得；注册前请确认最新条款。" },
       { question: "RM10 的5倍流水是什么意思？", answer: "5倍要求即 RM50 合资格流水（RM10 × 5），并非保证赢利或提款。请在平台核对合资格游戏、时限及结算规则。" },
       { question: "过期优惠会在本站写成正在进行吗？", answer: "不会。本站说明已核实来源条件及如何阅读条款。是否仍可用须在外部优惠页核对。" },

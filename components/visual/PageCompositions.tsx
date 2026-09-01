@@ -3,10 +3,12 @@ import Link from "next/link";
 import { getVisual } from "@/content/i18n/visual";
 import { getVisualFlows } from "@/content/i18n/visual-flows";
 import { VISUAL_IMAGES } from "@/lib/visual/images";
+import { getHeroImageAlt } from "@/lib/visual/alt";
 import type { Locale, RouteKey } from "@/lib/i18n/config";
 import { routePath } from "@/lib/i18n/paths";
 import { cn } from "@/lib/utils/cn";
 import { ProcessTimeline, StatFactStrip, WarningPanel } from "@/components/visual/EditorialPrimitives";
+import type { PageId } from "@/content/i18n/rich/types";
 
 type GuideKind =
   | "register"
@@ -47,7 +49,7 @@ export function GuideProcessPanel({ locale, pageId }: { locale: Locale; pageId: 
           <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-white/10 sm:aspect-auto sm:min-h-[200px] sm:flex-1">
             <Image
               src={flow.image}
-              alt=""
+              alt={getHeroImageAlt(locale, pageId as PageId, flow.chapterLabel)}
               fill
               sizes="(max-width:1024px) 100vw, 40vw"
               className="object-cover opacity-60"
@@ -84,13 +86,13 @@ export function PromoFlowPanel({
     { label: v.promo.claimLabel, value: v.promo.claimValue },
     { label: v.promo.turnoverLabel, value: v.promo.turnoverValue },
     {
-      label: locale === "ms" ? "Had" : locale === "zh" ? "限制" : "Limitations",
+      label: locale === "ms" ? "Tamat" : locale === "zh" ? "有效期" : "Expiry",
       value:
         locale === "ms"
-          ? "Kuota harian; tidak dijamin"
+          ? "Ikuti terma platform langsung"
           : locale === "zh"
-            ? "每日配额；不保证"
-            : "Daily quota; not guaranteed",
+            ? "以实时平台条款为准"
+            : "Follow live platform terms",
     },
     {
       label: locale === "ms" ? "Pengeluaran" : locale === "zh" ? "提款" : "Withdrawal",
@@ -102,13 +104,13 @@ export function PromoFlowPanel({
             : "Confirm turnover first",
     },
     {
-      label: locale === "ms" ? "Tamat" : locale === "zh" ? "有效期" : "Expiry",
+      label: locale === "ms" ? "Sekatan" : locale === "zh" ? "限制" : "Restrictions",
       value:
         locale === "ms"
-          ? "Ikuti terma platform langsung"
+          ? "Kuota harian; tidak dijamin; tidak boleh dipindah"
           : locale === "zh"
-            ? "以实时平台条款为准"
-            : "Follow live platform terms",
+            ? "每日配额；不保证；不可转让"
+            : "Daily quota; not guaranteed; non-transferable",
     },
   ] as const;
 
@@ -276,12 +278,12 @@ export function RelatedContentRail({
           <Link
             key={link.key}
             href={routePath(link.key, locale)}
-            className="group flex min-w-[200px] max-w-[240px] shrink-0 flex-col justify-between rounded-2xl border border-white/10 bg-[linear-gradient(160deg,rgba(28,28,33,0.9),rgba(10,10,12,0.95))] p-4 transition hover:border-iwin-yellow/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iwin-yellow/50"
+            className="group flex min-h-[7.5rem] min-w-[210px] max-w-[250px] shrink-0 flex-col justify-between rounded-2xl border border-white/10 bg-[linear-gradient(160deg,rgba(28,28,33,0.9),rgba(10,10,12,0.95))] p-4 transition hover:border-iwin-yellow/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iwin-yellow/50"
           >
             <span className="font-display text-2xl font-bold text-iwin-yellow/25 transition group-hover:text-iwin-yellow/40">
               {String(index + 1).padStart(2, "0")}
             </span>
-            <span className="mt-3 text-sm font-medium leading-snug text-zinc-200 group-hover:text-white">
+            <span className="mt-3 text-[15px] font-medium leading-snug text-zinc-200 group-hover:text-white">
               {link.label}
             </span>
           </Link>

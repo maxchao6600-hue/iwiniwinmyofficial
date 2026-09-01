@@ -331,19 +331,8 @@ function howToBlocks(locale: Locale, pageId: PageId, spec: PageSpec, extras: Ext
 }
 
 function editorialBlocks(locale: Locale, pageId: PageId, spec: PageSpec, extras: ExtraPack, depth: DepthPack): RichBlock[] {
-  const L = getBlockLabels(locale);
   const factsTitle =
-    pageId === "agent"
-      ? locale === "ms"
-        ? "Model operasi rakan"
-        : locale === "zh"
-          ? "合作伙伴运营要点"
-          : "Partner operating facts"
-      : locale === "ms"
-        ? "Perkara utama"
-        : locale === "zh"
-          ? "关键要点"
-          : "Key points";
+    locale === "ms" ? "Perkara utama" : locale === "zh" ? "关键要点" : "Key points";
   return [
     ...packToBlocks(extras),
     ...packToBlocks(depth),
@@ -351,6 +340,118 @@ function editorialBlocks(locale: Locale, pageId: PageId, spec: PageSpec, extras:
     splitPlatform(locale, spec),
     callout(spec, locale, pageId),
   ];
+}
+
+/** Agent: keep scannable facts — skip long prose that restates the partner timeline. */
+function agentBlocks(locale: Locale, pageId: PageId, spec: PageSpec, extras: ExtraPack): RichBlock[] {
+  const factsTitle =
+    locale === "ms"
+      ? "Model operasi rakan"
+      : locale === "zh"
+        ? "合作伙伴运营要点"
+        : "Partner operating facts";
+  const focusTitle =
+    locale === "ms" ? "Peranan & model" : locale === "zh" ? "角色与模式" : "Role & model";
+  const topicsTitle =
+    locale === "ms"
+      ? "Topik rakan seterusnya"
+      : locale === "zh"
+        ? "下一步伙伴主题"
+        : "Next partner topics";
+  const blocks: RichBlock[] = [];
+  if (extras.sections.length) {
+    blocks.push({
+      type: "grid",
+      title: focusTitle,
+      items: extras.sections.map((section) => ({
+        title: section.title,
+        description: section.paragraphs[0],
+      })),
+    });
+  }
+  if (extras.bullets) {
+    blocks.push({
+      type: "bullets",
+      title: extras.bullets.title,
+      items: extras.bullets.items,
+    });
+  }
+  blocks.push(detailsAsGrid(spec.details, factsTitle));
+  blocks.push({
+    type: "cards",
+    title: topicsTitle,
+    items:
+      locale === "ms"
+        ? [
+            {
+              title: "Peranan rakan",
+              description: "Hubungan, sempadan dan tanggungjawab program.",
+              href: "partner-program",
+            },
+            {
+              title: "Atribusi & pendedahan",
+              description: "Penerbitan, pautan penjejakan dan pendedahan.",
+              href: "affiliate-guide",
+            },
+            {
+              title: "Penjejakan rujukan",
+              description: "Kitaran rujukan, status dan semakan.",
+              href: "referral-guide",
+            },
+            {
+              title: "Soalan rakan",
+              description: "FAQ tentang kelayakan, komisen dan pematuhan.",
+              href: "partner-faq",
+            },
+          ]
+        : locale === "zh"
+          ? [
+              {
+                title: "伙伴角色",
+                description: "计划关系、边界与责任。",
+                href: "partner-program",
+              },
+              {
+                title: "归因与披露",
+                description: "发布内容、跟踪链接与披露要求。",
+                href: "affiliate-guide",
+              },
+              {
+                title: "推荐跟踪",
+                description: "推荐生命周期、状态与核对。",
+                href: "referral-guide",
+              },
+              {
+                title: "伙伴常见问题",
+                description: "资格、佣金与合规相关问答。",
+                href: "partner-faq",
+              },
+            ]
+          : [
+              {
+                title: "Partner role",
+                description: "Programme relationship, boundaries and responsibilities.",
+                href: "partner-program",
+              },
+              {
+                title: "Attribution & disclosure",
+                description: "Publishing, tracking links and required disclosure.",
+                href: "affiliate-guide",
+              },
+              {
+                title: "Referral tracking",
+                description: "Referral lifecycle, statuses and review checks.",
+                href: "referral-guide",
+              },
+              {
+                title: "Partner FAQ",
+                description: "Eligibility, commission and compliance questions.",
+                href: "partner-faq",
+              },
+            ],
+  });
+  blocks.push(callout(spec, locale, pageId));
+  return blocks;
 }
 
 export function buildBlocks(locale: Locale, pageId: PageId, spec: PageSpec): RichBlock[] {
@@ -377,6 +478,8 @@ export function buildBlocks(locale: Locale, pageId: PageId, spec: PageSpec): Ric
     case "guides-mobile":
     case "guides-account-security":
       return howToBlocks(locale, pageId, spec, extras, depth);
+    case "agent":
+      return agentBlocks(locale, pageId, spec, extras);
     default:
       return editorialBlocks(locale, pageId, spec, extras, depth);
   }
@@ -434,6 +537,7 @@ export function buildRichPageContent(
   spec: PageSpec,
 ): RichPageContent {
   return {
+    pageId,
     eyebrow: spec.eyebrow,
     h1: spec.h1,
     intro: [...spec.intro],

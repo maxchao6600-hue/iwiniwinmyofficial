@@ -199,7 +199,7 @@ export function StatFactStrip({
 export function ProcessTimeline({
   steps,
 }: {
-  steps: readonly { label: string; hint?: string }[];
+  steps: readonly { label: string; hint?: string; href?: string }[];
 }) {
   return (
     <ol className="relative space-y-0">
@@ -217,6 +217,14 @@ export function ProcessTimeline({
           <div className="pt-0.5">
             <p className="font-display text-base font-semibold text-white">{step.label}</p>
             {step.hint ? <p className="mt-1 text-sm text-zinc-400">{step.hint}</p> : null}
+            {step.href ? (
+              <Link
+                href={step.href}
+                className="mt-2 inline-flex min-h-10 items-center text-xs font-semibold uppercase tracking-[0.12em] text-iwin-yellow transition hover:text-iwin-yellow-bright focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iwin-yellow/50"
+              >
+                {step.label} →
+              </Link>
+            ) : null}
           </div>
         </li>
       ))}
@@ -431,12 +439,11 @@ export function SupportTopicGrid({
             </ul>
           </div>
           {topic.href && topic.nextAction ? (
-            <Link
-              href={topic.href}
-              className="mt-5 inline-flex min-h-11 items-center text-xs font-semibold uppercase tracking-[0.14em] text-iwin-yellow transition hover:text-iwin-yellow-bright focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iwin-yellow/50"
-            >
-              {topic.nextAction} →
-            </Link>
+            <div className="mt-5">
+              <Button href={topic.href} size="lg" className="w-full justify-center sm:w-auto">
+                {topic.nextAction}
+              </Button>
+            </div>
           ) : null}
         </article>
       ))}

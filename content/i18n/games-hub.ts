@@ -26,15 +26,15 @@ export type GamesHubExtra = {
 const en: GamesHubExtra = {
   categoryNavTitle: "Jump to a category",
   exploreLabel: "Explore IWIN game categories",
-  chooseTitle: "How to choose a game category",
+  chooseTitle: "Game format map",
   chooseIntro:
     "Each IWIN game category has different rules, pace and checks. Use this comparison before opening the live lobby — individual titles still depend on what is available after login.",
-  chooseHeaders: ["Format", "Style", "What to check", "Beginner note"],
+  chooseHeaders: ["Format", "Style", "Key information", "What to check"],
   chooseRows: [
-    ["Slots", "Digital reels and features", "Paytable, volatility, stake limits", "Start with low stakes and read rules"],
-    ["Live casino", "Streamed timed tables", "Limits, connection, betting windows", "Join only when you can follow the pace"],
-    ["Sports", "Pre-match and in-play markets", "Odds, settlement, market rules", "Confirm market type before submitting"],
-    ["4D", "Scheduled number draws", "Draw schedule, entry types, results", "Treat selections as entertainment"],
+    ["Slots", "Digital reels and features", "Reels, paylines, paytable, volatility, bonus features", "Stake limits and rules before play"],
+    ["Live casino", "Streamed timed tables", "Table format, dealer stream, betting window, limits, connection", "Join only when you can follow the pace"],
+    ["Sports", "Pre-match and in-play markets", "Markets, odds, pre-match, in-play, settlement", "Confirm market type before submitting"],
+    ["4D", "Scheduled number draws", "Number selection, draw, ticket, result and prize rules", "Treat selections as entertainment"],
   ],
   providersTitle: "Game provider references",
   providersIntro:
@@ -99,15 +99,15 @@ const en: GamesHubExtra = {
 const ms: GamesHubExtra = {
   categoryNavTitle: "Lompat ke kategori",
   exploreLabel: "Terokai kategori permainan IWIN",
-  chooseTitle: "Cara memilih kategori permainan",
+  chooseTitle: "Peta format permainan",
   chooseIntro:
     "Setiap kategori permainan IWIN mempunyai peraturan, tempo dan semakan berbeza. Gunakan perbandingan ini sebelum membuka lobi langsung — tajuk individu masih bergantung pada ketersediaan selepas log masuk.",
-  chooseHeaders: ["Format", "Gaya", "Semak dahulu", "Nota pemula"],
+  chooseHeaders: ["Format", "Gaya", "Maklumat utama", "Apa yang perlu disemak"],
   chooseRows: [
-    ["Slot", "Gulung digital & ciri", "Jadual bayaran, volatiliti, had", "Mulakan dengan pertaruhan rendah"],
-    ["Kasino langsung", "Meja langsung bertempoh", "Had, sambungan, tetingkap", "Sertai jika boleh ikut tempo"],
-    ["Sukan", "Pra-perlawanan & langsung", "Odds, penyelesaian, peraturan", "Sahkan jenis pasaran dahulu"],
-    ["4D", "Cabutan berjadual", "Jadual, jenis entri, keputusan", "Anggap sebagai hiburan"],
+    ["Slot", "Gulung digital & ciri", "Gulung, payline, jadual bayaran, volatiliti, bonus", "Had pertaruhan dan peraturan sebelum main"],
+    ["Kasino langsung", "Meja langsung bertempoh", "Format meja, strim peniaga, tetingkap, had, sambungan", "Sertai jika boleh ikut tempo"],
+    ["Sukan", "Pra-perlawanan & langsung", "Pasaran, odds, pra-perlawanan, langsung, penyelesaian", "Sahkan jenis pasaran dahulu"],
+    ["4D", "Cabutan berjadual", "Pilihan nombor, cabutan, tiket, keputusan & hadiah", "Anggap sebagai hiburan"],
   ],
   providersTitle: "Rujukan penyedia permainan",
   providersIntro:
@@ -172,15 +172,15 @@ const ms: GamesHubExtra = {
 const zh: GamesHubExtra = {
   categoryNavTitle: "跳转到类别",
   exploreLabel: "浏览 IWIN 游戏类别",
-  chooseTitle: "如何选择游戏类别",
+  chooseTitle: "游戏形式对照",
   chooseIntro:
     "每个 IWIN 游戏类别的规则、节奏与核对要点不同。打开实时大厅前可参考下表——具体游戏仍以登录后可用内容为准。",
-  chooseHeaders: ["形式", "风格", "先核对", "新手提示"],
+  chooseHeaders: ["形式", "风格", "关键信息", "需要核对"],
   chooseRows: [
-    ["老虎机", "数字转轮与特色", "赔付表、波动、投注限额", "先用低注并阅读规则"],
-    ["真人娱乐场", "限时直播牌桌", "限额、网络、下注窗口", "跟得上节奏再加入"],
-    ["体育", "赛前与滚球市场", "赔率、结算、市场规则", "提交前确认市场类型"],
-    ["4D", "定时开奖", "开奖时间、投注类型、结果", "将选号视为娱乐"],
+    ["老虎机", "数字转轮与特色", "转轮、赔付线、赔付表、波动、奖励功能", "投注限额与规则"],
+    ["真人娱乐场", "限时直播牌桌", "桌台形式、荷官直播、下注窗口、限额、网络", "跟得上节奏再加入"],
+    ["体育", "赛前与滚球市场", "市场、赔率、赛前、滚球、结算", "提交前确认市场类型"],
+    ["4D", "定时开奖", "选号、开奖、票据、结果与派彩规则", "将选号视为娱乐"],
   ],
   providersTitle: "游戏提供商参考",
   providersIntro:

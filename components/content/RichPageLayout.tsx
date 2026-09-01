@@ -14,6 +14,8 @@ import type { Locale, RouteKey } from "@/lib/i18n/config";
 import { routePath } from "@/lib/i18n/paths";
 import { cn } from "@/lib/utils/cn";
 import { breadcrumbJsonLd, faqPageJsonLd, webPageJsonLd } from "@/lib/seo/json-ld";
+import type { HeroAtmosphere } from "@/lib/visual/alt";
+import { getHeroAtmosphere } from "@/lib/visual/alt";
 
 function externalUrl(kind: RichPageContent["cta"]["primaryExternalUrl"]): string | undefined {
   if (kind === "agent" && hasExternalUrl(SITE_CONFIG.agentUrl)) return SITE_CONFIG.agentUrl;
@@ -49,6 +51,7 @@ export function CompactPageHero({
   secondaryLabel,
   secondaryUrl,
   variant = "editorial",
+  atmosphere = "default",
 }: {
   content: Pick<RichPageContent, "eyebrow" | "h1" | "intro" | "heroImage" | "heroImageAlt">;
   primaryLabel: string;
@@ -56,6 +59,7 @@ export function CompactPageHero({
   secondaryLabel?: string;
   secondaryUrl?: string;
   variant?: "editorial" | "immersive" | "quiet" | "guide";
+  atmosphere?: HeroAtmosphere;
 }) {
   const isExternal = primaryUrl.startsWith("http");
   const introLimit = variant === "quiet" ? 1 : variant === "guide" ? 1 : 2;
@@ -63,7 +67,12 @@ export function CompactPageHero({
 
   if (variant === "quiet") {
     return (
-      <section className="border-b border-white/5 bg-[linear-gradient(180deg,rgba(14,14,16,0.9),rgba(5,5,5,1))]">
+      <section
+        className={cn(
+          "border-b border-white/5 bg-[linear-gradient(180deg,rgba(14,14,16,0.9),rgba(5,5,5,1))]",
+          atmosphere === "legal" && "hero-atmosphere-legal",
+        )}
+      >
         <Container className="py-10 sm:py-12 lg:py-14">
           <p className="eyebrow">{content.eyebrow}</p>
           <h1 className="font-display mt-4 max-w-3xl text-3xl font-semibold tracking-tight text-white sm:text-4xl">
@@ -89,7 +98,19 @@ export function CompactPageHero({
         : "min-h-[280px] sm:min-h-[320px]";
 
   return (
-    <section className={cn("relative overflow-hidden border-b border-white/5", minH)}>
+    <section
+      className={cn(
+        "relative overflow-hidden border-b border-white/5",
+        minH,
+        atmosphere === "games" && "hero-atmosphere-games",
+        atmosphere === "category" && "hero-atmosphere-category",
+        atmosphere === "promo" && "hero-atmosphere-promo",
+        atmosphere === "guide" && "hero-atmosphere-guide",
+        atmosphere === "partner" && "hero-atmosphere-partner",
+        atmosphere === "help" && "hero-atmosphere-help",
+        atmosphere === "support" && "hero-atmosphere-support",
+      )}
+    >
       {content.heroImage ? (
         <div className="absolute inset-0">
           <Image
@@ -99,25 +120,51 @@ export function CompactPageHero({
             priority
             sizes="100vw"
             className={cn(
-              "object-cover object-[center_28%]",
-              variant === "immersive" ? "opacity-60" : "opacity-45",
+              "object-cover",
+              variant === "immersive" ? "opacity-60 object-[center_28%]" : "opacity-45 object-[center_28%]",
+              atmosphere === "category" && "object-[center_20%]",
+              atmosphere === "promo" && "object-[center_35%] opacity-35",
+              atmosphere === "guide" && "opacity-30 object-left",
+              atmosphere === "partner" && "opacity-25 object-center",
             )}
           />
           <div className="absolute inset-0 hero-glow" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-black/45" />
+          <div
+            className={cn(
+              "absolute inset-0",
+              atmosphere === "guide"
+                ? "bg-gradient-to-r from-black via-black/90 to-black/70"
+                : atmosphere === "promo"
+                  ? "bg-gradient-to-br from-black via-black/85 to-black/55"
+                  : atmosphere === "partner"
+                    ? "bg-gradient-to-t from-black via-black/80 to-black/50"
+                    : "bg-gradient-to-r from-black/95 via-black/80 to-black/45",
+            )}
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50" />
         </div>
       ) : (
         <div className="absolute inset-0 bg-gradient-to-br from-iwin-charcoal via-black to-black" />
       )}
       <Container className="relative py-10 sm:py-12 lg:py-14">
+        {atmosphere === "guide" ? (
+          <div className="mb-4 h-px w-16 bg-iwin-yellow/50" aria-hidden="true" />
+        ) : null}
+        {atmosphere === "promo" ? (
+          <div
+            className="pointer-events-none absolute right-6 top-8 hidden h-24 w-24 rounded-full border border-iwin-yellow/20 sm:block"
+            aria-hidden="true"
+          />
+        ) : null}
         <p className="eyebrow">{content.eyebrow}</p>
         <h1
           className={cn(
             "font-display mt-4 max-w-3xl font-semibold tracking-tight text-white",
-            variant === "immersive"
+            variant === "immersive" || atmosphere === "games"
               ? "text-3xl sm:text-5xl lg:text-6xl"
-              : "text-3xl sm:text-4xl lg:text-5xl",
+              : atmosphere === "guide"
+                ? "text-2xl sm:text-4xl lg:text-[2.75rem]"
+                : "text-3xl sm:text-4xl lg:text-5xl",
           )}
         >
           {content.h1}
@@ -253,6 +300,7 @@ export function RichPageLayout({
         secondaryLabel={content.cta.secondaryLabel}
         secondaryUrl={secondary}
         variant={heroVariant}
+        atmosphere={getHeroAtmosphere(content.pageId)}
       />
 
       <Container className="py-8 sm:py-10">

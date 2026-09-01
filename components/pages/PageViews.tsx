@@ -139,7 +139,7 @@ export function HomePageView({ locale }: { locale: Locale }) {
         <div className="absolute inset-0">
           <Image
             src={VISUAL_IMAGES.hero.home}
-            alt="IWIN Malaysia information and partner website"
+            alt="IWIN Malaysia official partner information"
             fill
             priority
             sizes="100vw"
@@ -216,14 +216,6 @@ export function HomePageView({ locale }: { locale: Locale }) {
           <div className="mt-10">
             <EcosystemMapComposition locale={locale} />
           </div>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Button href={routePath("official-partner", locale)} variant="secondary">
-              {common.partnerBoundaries}
-            </Button>
-            <Button href={routePath("disclaimer", locale)} variant="ghost">
-              {getRichPageContent(locale, "disclaimer").h1}
-            </Button>
-          </div>
         </Container>
       </section>
 
@@ -244,51 +236,20 @@ export function HomePageView({ locale }: { locale: Locale }) {
               actionLabel={visual.exploreCategory}
             />
           </div>
-        </Container>
-      </section>
-
-      <section className="section-media">
-        <Container className="py-12 sm:py-14">
-          <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-12">
-            <div className="relative min-h-[300px] overflow-hidden rounded-2xl border border-white/10 lg:min-h-[420px]">
-              <Image
-                src={VISUAL_IMAGES.hero.banner2}
-                alt=""
-                fill
-                sizes="(max-width:1024px) 100vw, 50vw"
-                className="object-cover object-center opacity-60"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
-                <SectionHeading eyebrow={home.whyIwin.eyebrow} title={home.whyIwin.title} />
-              </div>
+          <div className="mt-10 border-t border-white/10 pt-10">
+            <SectionHeading
+              eyebrow={home.providers.eyebrow}
+              title={home.providers.title}
+              description={home.providers.intro}
+            />
+            <div className="mt-6">
+              <ProviderLogoGrid />
             </div>
-            <div className="grid gap-5">
-              {home.whyIwin.features.map((feature) => (
-                <article key={feature.title} className="border-l-2 border-iwin-yellow/40 pl-5">
-                  <h3 className="font-display text-xl font-semibold text-white">{feature.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-zinc-300">{feature.description}</p>
-                </article>
-              ))}
+            <div className="mt-6">
+              <Button href={home.providers.cta.href || routePath("game-providers", locale)} variant="secondary">
+                {home.providers.cta.label}
+              </Button>
             </div>
-          </div>
-        </Container>
-      </section>
-
-      <section className="section-band">
-        <Container className="py-12 sm:py-14">
-          <SectionHeading
-            eyebrow={home.providers.eyebrow}
-            title={home.providers.title}
-            description={home.providers.intro}
-          />
-          <div className="mt-8">
-            <ProviderLogoGrid />
-          </div>
-          <div className="mt-6">
-            <Button href={home.providers.cta.href || routePath("game-providers", locale)} variant="secondary">
-              {home.providers.cta.label}
-            </Button>
           </div>
         </Container>
       </section>
@@ -1015,10 +976,60 @@ export function BonusGuidePageView({ locale }: { locale: Locale }) {
 export function AgentPageView({ locale }: { locale: Locale }) {
   const content = getRichPageContent(locale, "agent");
   const visual = getVisual(locale);
+  const timeline = [
+    {
+      ...visual.agentTimeline[0],
+      href: routePath("partner-program", locale),
+    },
+    {
+      ...visual.agentTimeline[1],
+      href: routePath("referral-guide", locale),
+    },
+    {
+      ...visual.agentTimeline[2],
+      href: routePath("referral-guide", locale),
+    },
+    {
+      ...visual.agentTimeline[3],
+      href: routePath("partner-faq", locale),
+    },
+    {
+      ...visual.agentTimeline[4],
+      href: routePath("affiliate-guide", locale),
+    },
+  ] as const;
+  const partnerFocus =
+    locale === "ms"
+      ? [
+          { title: "Peranan rakan", body: "Terangkan hubungan dan sempadan tanpa menjanjikan pendapatan." },
+          { title: "Atribusi", body: "Gunakan pautan atau kod yang ditetapkan; dedahkan status rujukan." },
+          { title: "Penjejakan", body: "Semak status di papan pemuka — pending, diluluskan, diselaraskan." },
+          { title: "Semakan", body: "Bandingkan tempoh dan rujukan sebelum melaporkan perbezaan." },
+          { title: "Promosi bertanggungjawab", body: "Tiada spam, tiada khalayak tidak sesuai, tiada dakwaan palsu." },
+        ]
+      : locale === "zh"
+        ? [
+            { title: "伙伴角色", body: "说明关系与边界，不承诺收入。" },
+            { title: "归因", body: "使用指定链接或代码，并披露推荐关系。" },
+            { title: "跟踪", body: "在后台核对待处理、已批准、已调整等状态。" },
+            { title: "复核", body: "提出差异前先比对周期与编号。" },
+            { title: "负责任推广", body: "禁止骚扰、不当受众与虚假宣传。" },
+          ]
+        : [
+            { title: "Partner role", body: "Describe the relationship and boundaries without promising income." },
+            { title: "Attribution", body: "Use assigned links or codes and disclose referral status." },
+            { title: "Tracking", body: "Review dashboard statuses — pending, approved, adjusted." },
+            { title: "Review", body: "Compare period dates and references before raising a discrepancy." },
+            { title: "Responsible promotion", body: "No spam, unsuitable audiences, or false claims." },
+          ];
+
   return (
     <RichPageLayout
       locale={locale}
-      content={content}
+      content={{
+        ...content,
+        intro: content.intro.slice(0, 1),
+      }}
       crumbs={richCrumbs(locale, [{ key: "agent", label: content.h1 }])}
       beforeBlocks={
         <>
@@ -1029,17 +1040,28 @@ export function AgentPageView({ locale }: { locale: Locale }) {
           />
           <section className="mb-10 space-y-8">
             <AgentPartnerVisual locale={locale} title={content.h1} />
-            <div className="grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:items-start">
-              <div>
-                <p className="eyebrow">{content.eyebrow}</p>
-                <h2 className="font-display mt-3 text-xl font-semibold text-white sm:text-2xl">
-                  {content.h1}
-                </h2>
-                <p className="mt-4 text-sm leading-relaxed text-zinc-400">
-                  {content.intro[0]}
-                </p>
+            <div>
+              <p className="eyebrow">{content.eyebrow}</p>
+              <h2 className="font-display mt-3 text-xl font-semibold text-white sm:text-2xl">
+                {locale === "ms"
+                  ? "Kitaran rakan"
+                  : locale === "zh"
+                    ? "伙伴流程"
+                    : "Partner cycle"}
+              </h2>
+              <div className="mt-6 max-w-2xl">
+                <ProcessTimeline steps={timeline} />
               </div>
-              <ProcessTimeline steps={visual.agentTimeline} />
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+              {partnerFocus.map((item) => (
+                <article key={item.title} className="rounded-xl border border-white/10 bg-black/40 px-4 py-4">
+                  <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-iwin-yellow/80">
+                    {item.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-zinc-400">{item.body}</p>
+                </article>
+              ))}
             </div>
           </section>
         </>
@@ -1305,7 +1327,11 @@ export function ContactPageView({ locale }: { locale: Locale }) {
   return (
     <RichPageLayout
       locale={locale}
-      content={content}
+      content={{
+        ...content,
+        intro: content.intro.slice(0, 1),
+      }}
+      heroVariant="editorial"
       crumbs={richCrumbs(locale, [{ key: "contact", label: content.h1 }])}
       beforeBlocks={
         <section className="mb-10">
