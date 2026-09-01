@@ -124,6 +124,7 @@ export function CategoryImmersion({
   objectPosition,
   imageFirst,
   checkpoints,
+  theme = "slots",
 }: {
   locale: Locale;
   title: string;
@@ -133,9 +134,19 @@ export function CategoryImmersion({
   objectPosition?: string;
   imageFirst: boolean;
   checkpoints: readonly string[];
+  theme?: "slots" | "live-casino" | "sports" | "4d";
 }) {
   const v = getVisual(locale);
   const checkpointLabel = getVisualFlows(locale).categoryCheckpointLabel;
+  const themeOverlay =
+    theme === "slots"
+      ? "bg-[linear-gradient(90deg,rgba(0,0,0,0.55)_0%,transparent_40%,transparent_60%,rgba(0,0,0,0.55)_100%)]"
+      : theme === "live-casino"
+        ? "bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(0,0,0,0.55)_100%)]"
+        : theme === "sports"
+          ? "bg-gradient-to-t from-black via-transparent to-black/40"
+          : "bg-[radial-gradient(circle_at_70%_30%,rgba(245,197,24,0.12),transparent_45%)]";
+
   const media = (
     <div className="relative min-h-[260px] overflow-hidden rounded-2xl border border-iwin-yellow/20 sm:min-h-[340px] lg:min-h-[420px]">
       <Image
@@ -147,11 +158,20 @@ export function CategoryImmersion({
         className="object-cover transition duration-700 hover:scale-[1.02]"
         style={{ objectPosition: objectPosition ?? "center" }}
       />
+      <div className={cn("absolute inset-0", themeOverlay)} />
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/35 to-black/10" />
       <div className="absolute inset-0 hero-glow opacity-40" />
+      {theme === "4d" ? (
+        <p className="pointer-events-none absolute right-4 top-4 font-display text-6xl font-bold tracking-tight text-iwin-yellow/20 sm:text-7xl" aria-hidden="true">
+          4D
+        </p>
+      ) : null}
+      {theme === "slots" ? (
+        <div className="pointer-events-none absolute inset-y-6 left-1/2 w-px -translate-x-1/2 bg-iwin-yellow/20" aria-hidden="true" />
+      ) : null}
       <div className="absolute inset-x-0 bottom-0 p-5 sm:p-7">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-iwin-yellow">{v.featuredCategory}</p>
-        <p className="font-display mt-2 text-2xl font-semibold text-white sm:text-3xl">{title}</p>
+        <p className="font-display mt-2 text-2xl font-semibold text-white sm:text-3xl lg:text-4xl">{title}</p>
       </div>
     </div>
   );

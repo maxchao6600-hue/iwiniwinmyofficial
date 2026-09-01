@@ -287,6 +287,28 @@ a {
   }
 }
 
+/* Horizontal category rail — touch scroll, no body overflow */
+.category-rail {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  max-width: 100%;
+}
+
+.category-rail::-webkit-scrollbar {
+  height: 4px;
+}
+
+.category-rail::-webkit-scrollbar-thumb {
+  background: rgba(245, 197, 24, 0.25);
+  border-radius: 999px;
+}
+
+.content-rail {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  max-width: 100%;
+}
+
 .footer-gold-divider {
   height: 2px;
   background: linear-gradient(90deg, transparent, var(--iwin-yellow), transparent);

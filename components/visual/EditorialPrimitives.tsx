@@ -244,15 +244,17 @@ export function ComparisonPanel({
 /** Large topic navigation cards for FAQ / help centre. */
 export function TopicNavigation({
   items,
+  baseHref = "",
 }: {
   items: readonly { id: string; label: string; description: string; count?: number; countLabel?: string }[];
+  baseHref?: string;
 }) {
   return (
     <nav className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {items.map((item) => (
         <a
           key={item.id}
-          href={`#faq-${item.id}`}
+          href={`${baseHref}#faq-${item.id}`}
           className="group visual-panel rounded-2xl p-5 transition hover:border-iwin-yellow/35 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iwin-yellow/50"
         >
           <h3 className="font-display text-lg font-semibold text-white group-hover:text-iwin-yellow">{item.label}</h3>

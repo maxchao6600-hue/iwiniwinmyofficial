@@ -25,19 +25,21 @@ import { GUIDE_META } from "@/content/i18n/rich/related";
 import { VISUAL_IMAGES } from "@/lib/visual/images";
 import {
   AgentSplitPanel,
-  BrandEditorialPanel,
-  ClusterNavCard,
+  AttributionLifecycle,
+  CategoryRail,
   ContactVisualPanel,
   EcosystemComposition,
+  EcosystemMapComposition,
   GuideNavCard,
+  HelpCenterMasthead,
   JourneyComposition,
   MasonryCategoryGrid,
   PartnerFlowComposition,
   PremiumDataTable,
-  ProcessFlow,
   PromoFactCards,
   PromoHeroComposition,
   ProviderLogoGrid,
+  ReferralJourneyComposition,
   ResponsibleEditorial,
   SplitCategorySection,
 } from "@/components/visual/VisualPanels";
@@ -211,16 +213,9 @@ export function HomePageView({ locale }: { locale: Locale }) {
             </div>
             <EcosystemComposition locale={locale} />
           </div>
-        </Container>
-      </section>
-
-      <section className="section-band">
-        <Container className="py-12 sm:py-14">
-          <BrandEditorialPanel
-            locale={locale}
-            title={home.partnerBand.title}
-            body={home.partnerBand.body}
-          />
+          <div className="mt-10">
+            <EcosystemMapComposition locale={locale} />
+          </div>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button href={routePath("official-partner", locale)} variant="secondary">
               {common.partnerBoundaries}
@@ -232,23 +227,6 @@ export function HomePageView({ locale }: { locale: Locale }) {
         </Container>
       </section>
 
-      <section className="section-media">
-        <Container className="py-12 sm:py-14">
-          <SectionHeading eyebrow={home.clusterLinks.eyebrow} title={home.clusterLinks.title} />
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {home.clusterLinks.items.map((item) => (
-              <ClusterNavCard
-                key={item.routeKey}
-                href={item.href}
-                label={item.label}
-                description={item.description}
-                routeKey={item.routeKey}
-              />
-            ))}
-          </div>
-        </Container>
-      </section>
-
       <section className="section-band">
         <Container className="py-12 sm:py-14">
           <SectionHeading
@@ -256,6 +234,9 @@ export function HomePageView({ locale }: { locale: Locale }) {
             title={home.categories.title}
             description={home.categories.intro}
           />
+          <div className="mt-5">
+            <CategoryRail locale={locale} ariaLabel={home.categories.title} />
+          </div>
           <div className="mt-8">
             <MasonryCategoryGrid
               locale={locale}
@@ -346,17 +327,6 @@ export function HomePageView({ locale }: { locale: Locale }) {
           <div className="mt-8">
             <JourneyComposition locale={locale} />
           </div>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {home.guides.items.map((item, index) => (
-              <GuideNavCard
-                key={item.routeKey}
-                href={item.href}
-                number={String(index + 1).padStart(2, "0")}
-                title={item.title}
-                description={item.description}
-              />
-            ))}
-          </div>
           <div className="mt-6">
             <Button href={home.guides.cta.href || routePath("guides", locale)} variant="secondary">
               {home.guides.cta.label}
@@ -392,6 +362,18 @@ export function HomePageView({ locale }: { locale: Locale }) {
       <section className="section-band">
         <Container className="py-12 sm:py-14">
           <SectionHeading eyebrow={home.faq.eyebrow} title={home.faq.title} />
+          <div className="mt-6">
+            <TopicNavigation
+              baseHref={routePath("faqs", locale)}
+              items={getFaqGroups(locale).slice(0, 6).map((g) => ({
+                id: g.id,
+                label: visual.faqCategoryLabels[g.id],
+                description: visual.faqCategoryDescriptions[g.id],
+                count: g.items.length,
+                countLabel: visual.faqQuestionCount,
+              }))}
+            />
+          </div>
           <div className="mt-8">
             <GroupedAccordion
               groups={getFaqGroups(locale).slice(0, 3).map((g) => ({
@@ -518,7 +500,10 @@ export function GamesHubPageView({ locale }: { locale: Locale }) {
             <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">
               {hub.exploreLabel}
             </h2>
-            <nav aria-label={hub.categoryNavTitle} className="mt-5 flex flex-wrap gap-2">
+            <div className="mt-5">
+              <CategoryRail locale={locale} ariaLabel={hub.categoryNavTitle} />
+            </div>
+            <nav aria-label={hub.categoryNavTitle} className="mt-5 flex flex-wrap gap-2 lg:hidden">
               {GAME_CATEGORIES.map((cat) => (
                 <a
                   key={cat.id}
@@ -658,6 +643,7 @@ function GameCategoryPage({
             objectPosition={category.objectPosition}
             imageFirst={imageFirst}
             checkpoints={checkpoints}
+            theme={category.id}
           />
         ) : null
       }
@@ -935,6 +921,7 @@ export function PromotionsHubPageView({ locale }: { locale: Locale }) {
               <p className="text-sm leading-relaxed text-zinc-300">{content.intro[0]}</p>
             </div>
           </section>
+          <PromoFlowPanel locale={locale} variant="free-credit" />
           <section className="mb-12">
           <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">{promoCardsTitle}</h2>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
@@ -980,7 +967,7 @@ function PromoPage({
     <RichPageLayout
       locale={locale}
       content={content}
-      heroVariant={variant === "free-credit" ? "immersive" : "editorial"}
+      heroVariant={variant === "free-credit" ? "quiet" : "editorial"}
       crumbs={richCrumbs(locale, [
         { key: "promotions", label: promoLabel },
         { key: pageId, label: content.h1 },
@@ -1027,22 +1014,19 @@ export function AgentPageView({ locale }: { locale: Locale }) {
             variant="subtle"
             className="mb-8 rounded-xl"
           />
-          <section className="mb-10">
-            <div className="overflow-hidden rounded-2xl border border-iwin-yellow/20 shadow-[0_20px_48px_rgba(0,0,0,0.35)] lg:grid lg:grid-cols-2">
-              <AgentPartnerVisual
-                locale={locale}
-                title={content.h1}
-                className="rounded-none border-0 shadow-none sm:min-h-[400px] lg:min-h-full lg:rounded-none"
-              />
-              <div className="flex flex-col justify-center border-t border-iwin-yellow/15 bg-[linear-gradient(165deg,rgba(28,28,33,0.95),rgba(10,10,12,0.98))] p-6 sm:p-8 lg:border-l lg:border-t-0">
+          <section className="mb-10 space-y-8">
+            <AgentPartnerVisual locale={locale} title={content.h1} />
+            <div className="grid gap-8 lg:grid-cols-[1fr_1.1fr] lg:items-start">
+              <div>
                 <p className="eyebrow">{content.eyebrow}</p>
                 <h2 className="font-display mt-3 text-xl font-semibold text-white sm:text-2xl">
                   {content.h1}
                 </h2>
-                <div className="mt-6">
-                  <ProcessTimeline steps={visual.agentTimeline} />
-                </div>
+                <p className="mt-4 text-sm leading-relaxed text-zinc-400">
+                  {content.intro[0]}
+                </p>
               </div>
+              <ProcessTimeline steps={visual.agentTimeline} />
             </div>
           </section>
         </>
@@ -1085,10 +1069,9 @@ export function AffiliateGuidePageView({ locale }: { locale: Locale }) {
         { key: "affiliate-guide", label: content.h1 },
       ])}
       beforeBlocks={
-        <section className="mb-10">
-          <WarningPanel title={disclosureTitle}>
-            {content.intro[0]}
-          </WarningPanel>
+        <section className="mb-10 space-y-6">
+          <AttributionLifecycle locale={locale} />
+          <WarningPanel title={disclosureTitle}>{content.intro[0]}</WarningPanel>
         </section>
       }
     />
@@ -1097,7 +1080,6 @@ export function AffiliateGuidePageView({ locale }: { locale: Locale }) {
 export function ReferralGuidePageView({ locale }: { locale: Locale }) {
   const content = getRichPageContent(locale, "referral-guide");
   const agentLabel = locale === "ms" ? "Ejen" : locale === "zh" ? "代理" : "Agent";
-  const visual = getVisual(locale);
   return (
     <RichPageLayout
       locale={locale}
@@ -1108,7 +1090,7 @@ export function ReferralGuidePageView({ locale }: { locale: Locale }) {
       ])}
       beforeBlocks={
         <section className="mb-10">
-          <ProcessFlow steps={visual.agentProcess} />
+          <ReferralJourneyComposition locale={locale} />
         </section>
       }
     />
@@ -1142,21 +1124,21 @@ export function FaqsPageView({ locale }: { locale: Locale }) {
   const visual = getVisual(locale);
   const titles = {
     en: {
-      h1: "IWIN Malaysia Frequently Asked Questions",
+      h1: "IWIN Help Center",
       intro:
         "Practical answers about accounts, payments, games, promotions, partners and security — organised by topic so you can find relevant guidance quickly.",
-      eyebrow: "Help centre",
+      eyebrow: "FAQ",
     },
     ms: {
-      h1: "Soalan Lazim IWIN Malaysia",
+      h1: "Pusat Bantuan IWIN",
       intro:
         "Jawapan praktikal tentang akaun, bayaran, permainan, promosi, rakan dan keselamatan — disusun mengikut topik untuk carian pantas.",
-      eyebrow: "Pusat bantuan",
+      eyebrow: "Soalan Lazim",
     },
     zh: {
-      h1: "IWIN Malaysia 常见问题",
+      h1: "IWIN 帮助中心",
       intro: "关于账户、支付、游戏、优惠、合作伙伴与安全的实用解答——按主题分类，便于快速查找。",
-      eyebrow: "帮助中心",
+      eyebrow: "常见问题",
     },
   }[locale];
   const faqPath = routePath("faqs", locale);
@@ -1198,11 +1180,9 @@ export function FaqsPageView({ locale }: { locale: Locale }) {
           />
         </Container>
       </div>
-      <section className="border-b border-white/5 bg-gradient-to-br from-iwin-charcoal/80 to-black">
+      <section className="border-b border-white/5">
         <Container className="py-10 sm:py-12">
-          <p className="eyebrow">{titles.eyebrow}</p>
-          <h1 className="font-display mt-3 max-w-3xl text-3xl font-semibold text-white sm:text-4xl">{titles.h1}</h1>
-          <p className="mt-4 max-w-3xl text-base leading-relaxed text-zinc-300">{titles.intro}</p>
+          <HelpCenterMasthead eyebrow={titles.eyebrow} title={titles.h1} intro={titles.intro} />
           <div className="mt-6 flex flex-wrap gap-3">
             <Button href={routePath("guides", locale)}>{common.exploreGuides}</Button>
             <Button href={routePath("contact", locale)} variant="secondary">
@@ -1253,7 +1233,31 @@ export function FaqsPageView({ locale }: { locale: Locale }) {
           }))}
         />
         <section className="mt-14 border-t border-white/10 pt-10">
-          <h2 className="font-display text-xl font-semibold text-white">{common.relatedLinks}</h2>
+          <div className="visual-panel-gold rounded-2xl p-6 sm:p-8">
+            <h2 className="font-display text-xl font-semibold text-white sm:text-2xl">
+              {locale === "ms"
+                ? "Masih perlukan bantuan?"
+                : locale === "zh"
+                  ? "仍需帮助？"
+                  : "Still need help?"}
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-zinc-300">
+              {locale === "ms"
+                ? "Gunakan pusat sokongan untuk memilih laluan yang betul, atau terus ke panduan langkah demi langkah."
+                : locale === "zh"
+                  ? "使用支持路由选择正确路径，或继续查阅分步指南。"
+                  : "Use the support router to pick the right path, or continue with step-by-step guides."}
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Button href={routePath("contact", locale)}>
+                {getRichPageContent(locale, "contact").h1}
+              </Button>
+              <Button href={routePath("guides", locale)} variant="secondary">
+                {common.exploreGuides}
+              </Button>
+            </div>
+          </div>
+          <h2 className="font-display mt-10 text-xl font-semibold text-white">{common.relatedLinks}</h2>
           <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {relatedKeys.map((key) => (
               <li key={key}>

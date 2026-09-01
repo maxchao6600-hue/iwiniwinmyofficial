@@ -15,8 +15,12 @@ export const VISUAL_IMAGES = {
     logo: SITE_CONFIG.brandLogo,
     mark: SITE_CONFIG.brandMark,
   },
-  promotion: "/images/games/promo.webp",
-  agent: "/images/games/agent.webp",
+  /**
+   * Promo/agent webps are byte-identical to slots/sports — do not use them as
+   * subject imagery. Prefer banners or CSS/SVG compositions for those topics.
+   */
+  promotionAtmosphere: "/images/hero/banner-3.png",
+  partnerAtmosphere: "/images/hero/banner-2.png",
   category: Object.fromEntries(
     GAME_CATEGORIES.map((cat) => [cat.id, cat.image]),
   ) as Record<GameCategoryId, string>,

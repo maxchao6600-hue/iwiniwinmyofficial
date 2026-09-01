@@ -2,19 +2,223 @@ import Image from "next/image";
 import Link from "next/link";
 import { GAME_CATEGORIES, PROVIDERS, getGameCategoryName } from "@/content/games/catalog";
 import { getVisual } from "@/content/i18n/visual";
+import { AgentPartnerVisual } from "@/components/visual/AgentPartnerVisual";
+import { ProcessTimeline } from "@/components/visual/EditorialPrimitives";
 import { VISUAL_IMAGES } from "@/lib/visual/images";
-import type { Locale } from "@/lib/i18n/config";
+import type { Locale, RouteKey } from "@/lib/i18n/config";
 import { routePath } from "@/lib/i18n/paths";
 import { cn } from "@/lib/utils/cn";
 
-/** Brand-centered collage using real category artwork. */
+const ECOSYSTEM_NODE_ROUTES: RouteKey[] = ["games", "promotions", "guides", "agent", "faqs"];
+const JOURNEY_STEP_ROUTES: RouteKey[] = [
+  "guides-how-to-register",
+  "guides-how-to-login",
+  "guides-how-to-deposit",
+  "games",
+  "guides-how-to-withdraw",
+  "guides-account-security",
+];
+
+/** Linked information-architecture map — not icon cards. */
+export function EcosystemMapComposition({ locale }: { locale: Locale }) {
+  const v = getVisual(locale);
+  return (
+    <nav
+      aria-label={v.ecosystem.subtitle}
+      className="relative overflow-hidden rounded-2xl border border-iwin-yellow/25 bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(245,197,24,0.12),transparent_55%),linear-gradient(165deg,#121214_0%,#0a0a0c_100%)] p-6 sm:p-8"
+    >
+      <div className="mx-auto flex max-w-lg flex-col items-center text-center">
+        <div className="relative mb-3 h-9 w-[120px]">
+          <Image src={VISUAL_IMAGES.brand.logo} alt="" fill sizes="120px" className="object-contain" />
+        </div>
+        <p className="font-display text-3xl font-semibold text-iwin-yellow sm:text-4xl">{v.ecosystem.hub}</p>
+        <p className="mt-1 text-[11px] uppercase tracking-[0.16em] text-zinc-500">{v.ecosystem.subtitle}</p>
+        <div className="my-5 h-8 w-px bg-gradient-to-b from-iwin-yellow/50 to-iwin-yellow/10" aria-hidden="true" />
+      </div>
+      <ul className="mx-auto grid max-w-3xl gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        {v.ecosystem.nodes.map((label, index) => {
+          const routeKey = ECOSYSTEM_NODE_ROUTES[index] ?? "home";
+          return (
+            <li key={label}>
+              <Link
+                href={routePath(routeKey, locale)}
+                className="group flex h-full flex-col items-center justify-center rounded-xl border border-white/10 bg-black/45 px-3 py-4 text-center transition hover:border-iwin-yellow/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iwin-yellow/50"
+              >
+                <span className="font-display text-xl font-bold text-iwin-yellow/30 transition group-hover:text-iwin-yellow/50">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <span className="mt-2 text-xs font-semibold uppercase tracking-[0.14em] text-zinc-200 group-hover:text-white">
+                  {label}
+                </span>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  );
+}
+
+/** Touch-safe horizontal category index rail. */
+export function CategoryRail({
+  locale,
+  ariaLabel,
+}: {
+  locale: Locale;
+  ariaLabel: string;
+}) {
+  return (
+    <nav aria-label={ariaLabel} className="category-rail -mx-1 overflow-x-auto px-1">
+      <ul className="flex w-max min-w-full items-stretch gap-2 pb-1">
+        {GAME_CATEGORIES.map((cat, index) => (
+          <li key={cat.id} className="flex items-center">
+            <Link
+              href={routePath(cat.routeKey, locale)}
+              className="shrink-0 rounded-full border border-white/10 bg-black/50 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-zinc-300 transition hover:border-iwin-yellow/40 hover:text-iwin-yellow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iwin-yellow/50"
+            >
+              {getGameCategoryName(cat.id, locale)}
+            </Link>
+            {index < GAME_CATEGORIES.length - 1 ? (
+              <span className="mx-1 text-iwin-yellow/30" aria-hidden="true">
+                •
+              </span>
+            ) : null}
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
+
+/** Affiliate attribution lifecycle — distinct from agent partner cycle. */
+export function AttributionLifecycle({ locale }: { locale: Locale }) {
+  const steps =
+    locale === "ms"
+      ? [
+          { label: "Pautan", hint: "Kongsi URL rujukan yang sah" },
+          { label: "Klik", hint: "Pengunjung tiba melalui pautan anda" },
+          { label: "Daftar", hint: "Akaun baharu dilengkapkan" },
+          { label: "Atribusi", hint: "Aktiviti dilampirkan kepada ID anda" },
+          { label: "Laporan", hint: "Semak status dalam papan pemuka" },
+        ]
+      : locale === "zh"
+        ? [
+            { label: "链接", hint: "分享有效推荐链接" },
+            { label: "点击", hint: "访客通过您的链接到达" },
+            { label: "注册", hint: "完成新账户流程" },
+            { label: "归因", hint: "活动关联到您的 ID" },
+            { label: "报告", hint: "在后台核对状态" },
+          ]
+        : [
+            { label: "Link", hint: "Share a valid referral URL" },
+            { label: "Click", hint: "Visitor arrives via your link" },
+            { label: "Register", hint: "New account completes signup" },
+            { label: "Attribute", hint: "Activity attaches to your ID" },
+            { label: "Report", hint: "Review status in the dashboard" },
+          ];
+  const title =
+    locale === "ms" ? "Kitaran atribusi" : locale === "zh" ? "归因生命周期" : "Attribution lifecycle";
+
+  return (
+    <div className="overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(155deg,#101014_0%,#08080a_100%)] p-6 sm:p-8">
+      <p className="eyebrow">{title}</p>
+      <ol className="mt-8 grid gap-3 sm:grid-cols-5">
+        {steps.map((step, index) => (
+          <li key={step.label} className="relative rounded-xl border border-white/10 bg-black/40 p-4">
+            <p className="font-display text-3xl font-bold text-iwin-yellow/25">
+              {String(index + 1).padStart(2, "0")}
+            </p>
+            <p className="mt-2 text-sm font-semibold uppercase tracking-[0.12em] text-white">{step.label}</p>
+            <p className="mt-1 text-xs leading-relaxed text-zinc-400">{step.hint}</p>
+            {index < steps.length - 1 ? (
+              <span className="absolute -right-2 top-1/2 hidden -translate-y-1/2 text-iwin-yellow/35 sm:block" aria-hidden="true">
+                →
+              </span>
+            ) : null}
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
+}
+
+/** Referral journey — person-to-person path, not partner ops cycle. */
+export function ReferralJourneyComposition({ locale }: { locale: Locale }) {
+  const steps =
+    locale === "ms"
+      ? [
+          { label: "Dapatkan pautan", hint: "Ambil pautan rujukan anda" },
+          { label: "Kongsi dengan rakan", hint: "Jelaskan dengan jelas & jujur" },
+          { label: "Rakan mendaftar", hint: "Mereka lengkapkan pendaftaran" },
+          { label: "Semak syarat", hint: "Sahkan kelayakan di platform" },
+        ]
+      : locale === "zh"
+        ? [
+            { label: "获取链接", hint: "取得您的推荐链接" },
+            { label: "分享给朋友", hint: "清楚如实说明" },
+            { label: "朋友注册", hint: "对方完成开户" },
+            { label: "核对条件", hint: "在平台确认资格" },
+          ]
+        : [
+            { label: "Get your link", hint: "Copy your referral URL" },
+            { label: "Share with a friend", hint: "Explain clearly and honestly" },
+            { label: "Friend registers", hint: "They complete signup" },
+            { label: "Check conditions", hint: "Confirm eligibility on-platform" },
+          ];
+  const title =
+    locale === "ms" ? "Perjalanan rujukan" : locale === "zh" ? "推荐旅程" : "Referral journey";
+
+  return (
+    <div className="relative overflow-hidden rounded-2xl border border-iwin-yellow/20 bg-[radial-gradient(ellipse_70%_50%_at_10%_0%,rgba(245,197,24,0.1),transparent_50%),linear-gradient(160deg,#121214,#08080a)] p-6 sm:p-8">
+      <p className="eyebrow">{title}</p>
+      <ol className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {steps.map((step, index) => (
+          <li key={step.label}>
+            <p className="font-display text-5xl font-bold text-iwin-yellow/20">
+              {String(index + 1).padStart(2, "0")}
+            </p>
+            <p className="font-display mt-2 text-lg font-semibold text-white">{step.label}</p>
+            <p className="mt-1 text-sm text-zinc-400">{step.hint}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
+}
+
+/** Help-centre masthead for FAQ. */
+export function HelpCenterMasthead({
+  eyebrow,
+  title,
+  intro,
+}: {
+  eyebrow: string;
+  title: string;
+  intro: string;
+}) {
+  return (
+    <div className="relative overflow-hidden rounded-2xl border border-white/10">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_70%_80%_at_15%_20%,rgba(245,197,24,0.14),transparent_50%),linear-gradient(135deg,#161618_0%,#0a0a0c_60%,#050505_100%)]" />
+      <div className="pointer-events-none absolute right-8 top-8 hidden h-32 w-32 rounded-full border border-iwin-yellow/15 sm:block" aria-hidden="true" />
+      <div className="relative px-6 py-10 sm:px-10 sm:py-12">
+        <p className="eyebrow">{eyebrow}</p>
+        <h1 className="font-display mt-3 max-w-3xl text-3xl font-semibold text-white sm:text-4xl lg:text-5xl">
+          {title}
+        </h1>
+        <p className="mt-4 max-w-2xl text-base leading-relaxed text-zinc-300">{intro}</p>
+      </div>
+    </div>
+  );
+}
+
+/** Brand-centered collage using distinct category artwork only. */
 export function EcosystemComposition({ locale }: { locale: Locale }) {
   const v = getVisual(locale);
   const tiles = [
-    { src: VISUAL_IMAGES.category.slots, label: v.ecosystem.nodes[0], pos: "object-center" },
-    { src: VISUAL_IMAGES.category["live-casino"], label: v.ecosystem.nodes[1], pos: "object-top" },
-    { src: VISUAL_IMAGES.category.sports, label: v.ecosystem.nodes[2], pos: "object-[center_35%]" },
-    { src: VISUAL_IMAGES.agent, label: v.ecosystem.nodes[3], pos: "object-center" },
+    { src: VISUAL_IMAGES.category.slots, label: getGameCategoryName("slots", locale), pos: "object-center" },
+    { src: VISUAL_IMAGES.category["live-casino"], label: getGameCategoryName("live-casino", locale), pos: "object-top" },
+    { src: VISUAL_IMAGES.category.sports, label: getGameCategoryName("sports", locale), pos: "object-[center_35%]" },
+    { src: VISUAL_IMAGES.category["4d"], label: getGameCategoryName("4d", locale), pos: "object-left" },
   ] as const;
 
   return (
@@ -98,26 +302,28 @@ export function PartnerFlowComposition({ locale }: { locale: Locale }) {
   );
 }
 
-/** Cinematic promo panel using promo artwork + large typography. */
+/** Typographic offer composition — no slots twin imagery. */
 export function PromoHeroComposition({ locale }: { locale: Locale }) {
   const v = getVisual(locale);
   return (
-    <div className="relative min-h-[320px] overflow-hidden rounded-2xl border border-iwin-yellow/25 sm:min-h-[380px]">
-      <Image
-        src={VISUAL_IMAGES.promotion}
-        alt=""
-        fill
-        sizes="(max-width:1024px) 100vw, 560px"
-        className="object-cover object-center"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-black/35" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(245,197,24,0.22),transparent_50%)]" />
+    <div className="relative min-h-[320px] overflow-hidden rounded-2xl border border-iwin-yellow/30 sm:min-h-[380px]">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_70%_at_20%_0%,rgba(245,197,24,0.22),transparent_55%),radial-gradient(ellipse_60%_50%_at_100%_100%,rgba(245,197,24,0.1),transparent_50%),linear-gradient(160deg,#12100a_0%,#0a0a0c_45%,#050505_100%)]" />
+      <div className="pointer-events-none absolute -right-10 top-8 h-40 w-40 rounded-full border border-iwin-yellow/15" aria-hidden="true" />
+      <div className="pointer-events-none absolute bottom-10 left-8 h-24 w-24 rounded-full border border-iwin-yellow/10" aria-hidden="true" />
+      <div className="pointer-events-none absolute inset-x-8 top-1/3 h-px bg-gradient-to-r from-transparent via-iwin-yellow/25 to-transparent" aria-hidden="true" />
+      <svg className="pointer-events-none absolute right-6 top-6 h-28 w-28 opacity-30" viewBox="0 0 100 100" aria-hidden="true">
+        <rect x="8" y="18" width="84" height="64" rx="8" fill="none" stroke="#f5c518" strokeWidth="1.5" />
+        <path d="M8 38h84" stroke="#f5c518" strokeWidth="1" opacity="0.5" />
+        <circle cx="28" cy="58" r="8" fill="none" stroke="#f5c518" strokeWidth="1.2" />
+        <circle cx="50" cy="58" r="8" fill="none" stroke="#f5c518" strokeWidth="1.2" />
+        <circle cx="72" cy="58" r="8" fill="none" stroke="#f5c518" strokeWidth="1.2" />
+      </svg>
       <div className="relative flex h-full min-h-[320px] flex-col justify-end p-6 sm:min-h-[380px] sm:p-8">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-iwin-yellow">{v.promo.freeCredit}</p>
-        <p className="font-display mt-2 text-5xl font-semibold text-white sm:text-6xl lg:text-7xl">
+        <p className="font-display mt-2 text-6xl font-semibold tracking-tight text-white sm:text-7xl lg:text-8xl">
           {v.promo.amount}
         </p>
-        <div className="mt-6 grid grid-cols-3 gap-2 border-t border-white/15 pt-5">
+        <div className="mt-6 grid grid-cols-3 gap-2 border-t border-iwin-yellow/20 pt-5">
           <div>
             <p className="font-display text-xl font-semibold text-iwin-yellow sm:text-2xl">{v.promo.turnoverValue}</p>
             <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-zinc-400">{v.promo.turnoverLabel}</p>
@@ -137,7 +343,7 @@ export function PromoHeroComposition({ locale }: { locale: Locale }) {
   );
 }
 
-/** Editorial user-journey ribbon over hero imagery. */
+/** Editorial user-journey ribbon — each step links to the relevant guide. */
 export function JourneyComposition({ locale }: { locale: Locale }) {
   const v = getVisual(locale);
   return (
@@ -155,23 +361,33 @@ export function JourneyComposition({ locale }: { locale: Locale }) {
       <div className="relative px-5 py-8 sm:px-8 sm:py-10">
         <p className="eyebrow">{v.journey.title}</p>
         <ol className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-          {v.journey.steps.map((step, index) => (
-            <li key={step.label} className="relative">
-              <p className="font-display text-4xl font-bold text-iwin-yellow/25 sm:text-5xl">
-                {String(index + 1).padStart(2, "0")}
-              </p>
-              <p className="font-display mt-2 text-lg font-semibold text-white">{step.label}</p>
-              <p className="mt-1 text-sm text-zinc-400">{step.hint}</p>
-              {index < v.journey.steps.length - 1 ? (
-                <span
-                  className="absolute -right-2 top-6 hidden text-iwin-yellow/40 xl:block"
-                  aria-hidden="true"
+          {v.journey.steps.map((step, index) => {
+            const href = routePath(JOURNEY_STEP_ROUTES[index] ?? "guides", locale);
+            return (
+              <li key={step.label} className="relative">
+                <Link
+                  href={href}
+                  className="group block rounded-xl p-1 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iwin-yellow/50"
                 >
-                  →
-                </span>
-              ) : null}
-            </li>
-          ))}
+                  <p className="font-display text-4xl font-bold text-iwin-yellow/25 transition group-hover:text-iwin-yellow/40 sm:text-5xl">
+                    {String(index + 1).padStart(2, "0")}
+                  </p>
+                  <p className="font-display mt-2 text-lg font-semibold text-white group-hover:text-iwin-yellow">
+                    {step.label}
+                  </p>
+                  <p className="mt-1 text-sm text-zinc-400">{step.hint}</p>
+                </Link>
+                {index < v.journey.steps.length - 1 ? (
+                  <span
+                    className="absolute -right-2 top-6 hidden text-iwin-yellow/40 xl:block"
+                    aria-hidden="true"
+                  >
+                    →
+                  </span>
+                ) : null}
+              </li>
+            );
+          })}
         </ol>
       </div>
     </div>
@@ -276,22 +492,22 @@ export function MasonryCategoryGrid({
 export function ResponsibleEditorial({ locale }: { locale: Locale }) {
   const v = getVisual(locale);
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(145deg,#0c0c0e_0%,#151518_55%,#0a0a0c_100%)]">
-      <div className="pointer-events-none absolute -left-20 top-0 h-64 w-64 rounded-full bg-iwin-yellow/8 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-0 right-0 h-48 w-48 rounded-full border border-iwin-yellow/15" />
-      <div className="pointer-events-none absolute bottom-8 right-8 h-28 w-28 rounded-full border border-iwin-yellow/10" />
-      <div className="relative grid gap-8 p-6 sm:p-10 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(145deg,#101214_0%,#15181c_55%,#0c0e10_100%)]">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_10%_0%,rgba(148,163,184,0.08),transparent_55%)]" />
+      <div className="relative grid gap-8 p-6 sm:p-10 lg:grid-cols-[1fr_1.2fr] lg:items-center">
         <div>
-          <p className="eyebrow">{v.playResponsibly}</p>
-          <h2 className="font-display mt-4 text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-500">{v.playResponsibly}</p>
+          <h2 className="font-display mt-4 text-3xl font-semibold leading-tight text-white sm:text-4xl lg:text-5xl">
             {v.responsible.headline}
           </h2>
-          <div className="mt-6 h-px w-24 bg-gradient-to-r from-iwin-yellow to-transparent" aria-hidden="true" />
+          <div className="mt-6 h-px w-24 bg-gradient-to-r from-zinc-400/50 to-transparent" aria-hidden="true" />
         </div>
-        <ul className="grid gap-4 sm:grid-cols-2">
+        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {v.responsible.items.map((item) => (
-            <li key={item.title} className="border-l-2 border-iwin-yellow/40 pl-4">
-              <h3 className="font-display text-lg font-semibold text-white">{item.title}</h3>
+            <li key={item.title} className="border-l border-zinc-500/40 pl-4">
+              <h3 className="font-display text-base font-semibold uppercase tracking-[0.08em] text-zinc-100">
+                {item.title}
+              </h3>
               <p className="mt-2 text-sm leading-relaxed text-zinc-400">{item.description}</p>
             </li>
           ))}
@@ -469,35 +685,24 @@ export function AgentHeroSplit({
   points: string[];
   children: React.ReactNode;
 }) {
-  const v = getVisual(locale);
   return (
-    <div className="grid overflow-hidden rounded-2xl border border-white/10 lg:grid-cols-2">
-      <div className="relative min-h-[320px] lg:min-h-[480px]">
-        <Image
-          src={VISUAL_IMAGES.agent}
-          alt={title}
-          fill
-          sizes="(max-width:1024px) 100vw, 50vw"
-          className="object-cover object-center"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-black/40" />
-        <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
-          <ProcessFlow steps={v.agentProcess} className="border-iwin-yellow/20 bg-black/60 backdrop-blur-sm" />
+    <div className="space-y-8">
+      <AgentPartnerVisual locale={locale} title={title} className="w-full" />
+      <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+        <div>
+          <p className="eyebrow">{eyebrow}</p>
+          <h2 className="font-display mt-3 text-2xl font-semibold text-white sm:text-3xl lg:text-4xl">{title}</h2>
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-zinc-300">{description}</p>
+          <ul className="mt-6 space-y-3">
+            {points.map((point) => (
+              <li key={point} className="border-l-2 border-iwin-yellow/35 pl-4 text-sm text-zinc-300">
+                {point}
+              </li>
+            ))}
+          </ul>
+          <div className="mt-8 flex flex-wrap gap-3">{children}</div>
         </div>
-      </div>
-      <div className="flex flex-col justify-center bg-surface-900/40 p-6 sm:p-8 lg:p-10">
-        <p className="eyebrow">{eyebrow}</p>
-        <h2 className="font-display mt-3 text-2xl font-semibold text-white sm:text-3xl lg:text-4xl">{title}</h2>
-        <p className="mt-4 text-base leading-relaxed text-zinc-300">{description}</p>
-        <ul className="mt-6 space-y-3">
-          {points.map((point) => (
-            <li key={point} className="border-l-2 border-iwin-yellow/35 pl-4 text-sm text-zinc-300">
-              {point}
-            </li>
-          ))}
-        </ul>
-        <div className="mt-8 flex flex-wrap gap-3">{children}</div>
+        <ProcessTimeline steps={getVisual(locale).agentTimeline} />
       </div>
     </div>
   );
@@ -625,17 +830,17 @@ export function ClusterImageCard({
   );
 }
 
-/** Helper: map homepage cluster route keys to imagery. */
+/** Helper: map homepage cluster route keys to imagery (no twin webps). */
 export function clusterImageForRoute(routeKey: string): string {
   switch (routeKey) {
     case "games":
       return VISUAL_IMAGES.category.slots;
     case "promotions":
-      return VISUAL_IMAGES.promotion;
+      return VISUAL_IMAGES.promotionAtmosphere;
     case "guides":
       return VISUAL_IMAGES.hero.banner2;
     case "agent":
-      return VISUAL_IMAGES.agent;
+      return VISUAL_IMAGES.partnerAtmosphere;
     case "faqs":
       return VISUAL_IMAGES.hero.banner3;
     case "about-iwin":
