@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { ExternalLinkNotice } from "@/components/content/ExternalLinkNotice";
 import { RichSections } from "@/components/content/RichSections";
 import { Accordion } from "@/components/ui/Accordion";
@@ -7,11 +6,13 @@ import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { RelatedContentRail } from "@/components/visual/PageCompositions";
 import { getCommon } from "@/content/i18n/common";
 import type { RichPageContent } from "@/content/i18n/rich/types";
 import { SITE_CONFIG, hasExternalUrl } from "@/lib/constants/site";
 import type { Locale, RouteKey } from "@/lib/i18n/config";
 import { routePath } from "@/lib/i18n/paths";
+import { cn } from "@/lib/utils/cn";
 import { breadcrumbJsonLd, faqPageJsonLd, webPageJsonLd } from "@/lib/seo/json-ld";
 
 function externalUrl(kind: RichPageContent["cta"]["primaryExternalUrl"]): string | undefined {
@@ -47,16 +48,48 @@ export function CompactPageHero({
   primaryUrl,
   secondaryLabel,
   secondaryUrl,
+  variant = "editorial",
 }: {
   content: Pick<RichPageContent, "eyebrow" | "h1" | "intro" | "heroImage">;
   primaryLabel: string;
   primaryUrl: string;
   secondaryLabel?: string;
   secondaryUrl?: string;
+  variant?: "editorial" | "immersive" | "quiet" | "guide";
 }) {
   const isExternal = primaryUrl.startsWith("http");
+  const introLimit = variant === "quiet" ? 1 : variant === "guide" ? 1 : 2;
+  const intros = content.intro.slice(0, introLimit);
+
+  if (variant === "quiet") {
+    return (
+      <section className="border-b border-white/5 bg-[linear-gradient(180deg,rgba(14,14,16,0.9),rgba(5,5,5,1))]">
+        <Container className="py-10 sm:py-12 lg:py-14">
+          <p className="eyebrow">{content.eyebrow}</p>
+          <h1 className="font-display mt-4 max-w-3xl text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+            {content.h1}
+          </h1>
+          <div className="mt-5 max-w-2xl space-y-3">
+            {intros.map((p) => (
+              <p key={p.slice(0, 48)} className="text-base leading-relaxed text-zinc-400">
+                {p}
+              </p>
+            ))}
+          </div>
+        </Container>
+      </section>
+    );
+  }
+
+  const minH =
+    variant === "immersive"
+      ? "min-h-[340px] sm:min-h-[400px]"
+      : variant === "guide"
+        ? "min-h-[260px] sm:min-h-[300px]"
+        : "min-h-[280px] sm:min-h-[320px]";
+
   return (
-    <section className="relative min-h-[280px] overflow-hidden border-b border-white/5 sm:min-h-[320px]">
+    <section className={cn("relative overflow-hidden border-b border-white/5", minH)}>
       {content.heroImage ? (
         <div className="absolute inset-0">
           <Image
@@ -65,7 +98,10 @@ export function CompactPageHero({
             fill
             priority
             sizes="100vw"
-            className="object-cover object-[center_28%] opacity-50"
+            className={cn(
+              "object-cover object-[center_28%]",
+              variant === "immersive" ? "opacity-60" : "opacity-45",
+            )}
           />
           <div className="absolute inset-0 hero-glow" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-black/45" />
@@ -76,11 +112,18 @@ export function CompactPageHero({
       )}
       <Container className="relative py-10 sm:py-12 lg:py-14">
         <p className="eyebrow">{content.eyebrow}</p>
-        <h1 className="font-display mt-4 max-w-3xl text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl">
+        <h1
+          className={cn(
+            "font-display mt-4 max-w-3xl font-semibold tracking-tight text-white",
+            variant === "immersive"
+              ? "text-3xl sm:text-5xl lg:text-6xl"
+              : "text-3xl sm:text-4xl lg:text-5xl",
+          )}
+        >
           {content.h1}
         </h1>
         <div className="mt-5 max-w-2xl space-y-3">
-          {content.intro.map((p) => (
+          {intros.map((p) => (
             <p key={p.slice(0, 48)} className="text-base leading-relaxed text-zinc-300 sm:text-lg">
               {p}
             </p>
@@ -150,23 +193,11 @@ export function RelatedInformation({
   const common = getCommon(locale);
   if (!links.length) return null;
   return (
-    <section className="mt-10 border-t border-white/10 pt-8">
-      <h2 className="font-display text-xl font-semibold text-white sm:text-2xl">
-        {common.relatedLinks}
-      </h2>
-      <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {links.map((link) => (
-          <li key={link.key}>
-            <Link
-              href={routePath(link.key, locale)}
-              className="block rounded-xl border border-white/10 bg-surface-900/50 px-4 py-3 text-sm text-zinc-200 transition hover:border-iwin-yellow/40 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
-            >
-              {link.label}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </section>
+    <RelatedContentRail
+      locale={locale}
+      title={common.relatedLinks}
+      links={links.map((link) => ({ key: link.key, label: link.label }))}
+    />
   );
 }
 
@@ -176,12 +207,14 @@ export function RichPageLayout({
   crumbs,
   beforeBlocks,
   afterBlocks,
+  heroVariant = "editorial",
 }: {
   locale: Locale;
   content: RichPageContent;
   crumbs: { name: string; path: string }[];
   beforeBlocks?: React.ReactNode;
   afterBlocks?: React.ReactNode;
+  heroVariant?: "editorial" | "immersive" | "quiet" | "guide";
 }) {
   const common = getCommon(locale);
   const primary = primaryHref(locale, content.cta);
@@ -219,20 +252,26 @@ export function RichPageLayout({
         primaryUrl={primary}
         secondaryLabel={content.cta.secondaryLabel}
         secondaryUrl={secondary}
+        variant={heroVariant}
       />
 
       <Container className="py-8 sm:py-10">
         {beforeBlocks}
-        <RichSections blocks={content.blocks} locale={locale} />
+        <div className="rich-chapter-stack">
+          <RichSections blocks={content.blocks} locale={locale} />
+        </div>
         {afterBlocks}
 
         {content.faqs?.length ? (
-          <section className="mt-10">
-            <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">
-              {common.faqHeading}
-            </h2>
-            <div className="mt-6">
-              <Accordion items={content.faqs} />
+          <section className="mt-12">
+            <div className="mb-6 flex items-end gap-4">
+              <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">
+                {common.faqHeading}
+              </h2>
+              <div className="editorial-divider mb-2 hidden sm:block" aria-hidden="true" />
+            </div>
+            <div className="mt-2">
+              <Accordion items={content.faqs} defaultOpen={null} />
             </div>
           </section>
         ) : null}

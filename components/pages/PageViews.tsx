@@ -52,6 +52,13 @@ import {
   WarningPanel,
 } from "@/components/visual/EditorialPrimitives";
 import { AgentPartnerVisual } from "@/components/visual/AgentPartnerVisual";
+import {
+  CategoryImmersion,
+  EcosystemBoundaryPanel,
+  GuideProcessPanel,
+  PromoFlowPanel,
+} from "@/components/visual/PageCompositions";
+import { getVisualFlows } from "@/content/i18n/visual-flows";
 import { SITE_CONFIG, getActiveContactChannels, hasExternalUrl } from "@/lib/constants/site";
 import type { Locale, RouteKey } from "@/lib/i18n/config";
 import { routePath } from "@/lib/i18n/paths";
@@ -438,7 +445,13 @@ export function AboutPageView({ locale }: { locale: Locale }) {
     <RichPageLayout
       locale={locale}
       content={content}
+      heroVariant="editorial"
       crumbs={richCrumbs(locale, [{ key: "about-iwin", label: content.h1 }])}
+      beforeBlocks={
+        <section className="mb-10">
+          <EcosystemBoundaryPanel locale={locale} />
+        </section>
+      }
       afterBlocks={
         <section className="mt-12">
           <PartnerFlowComposition locale={locale} />
@@ -454,7 +467,13 @@ export function OfficialPartnerPageView({ locale }: { locale: Locale }) {
     <RichPageLayout
       locale={locale}
       content={content}
+      heroVariant="immersive"
       crumbs={richCrumbs(locale, [{ key: "official-partner", label: content.h1 }])}
+      beforeBlocks={
+        <section className="mb-10">
+          <EcosystemBoundaryPanel locale={locale} />
+        </section>
+      }
       afterBlocks={
         <section className="mt-12 grid gap-8 lg:grid-cols-2">
           <PartnerFlowComposition locale={locale} />
@@ -484,6 +503,7 @@ export function GamesHubPageView({ locale }: { locale: Locale }) {
     <RichPageLayout
       locale={locale}
       content={content}
+      heroVariant="immersive"
       crumbs={richCrumbs(locale, [
         { key: "games", label: locale === "ms" ? "Permainan" : locale === "zh" ? "游戏" : "Games" },
       ])}
@@ -613,28 +633,32 @@ function GameCategoryPage({
   const content = getRichPageContent(locale, pageId);
   const catId = CATEGORY_PAGE_IDS[pageId];
   const category = GAME_CATEGORIES.find((c) => c.id === catId);
+  const checkpoints = category
+    ? getVisualFlows(locale).categoryCheckpoints[category.id]
+    : [];
+  const imageFirst = pageId === "games-slots" || pageId === "games-sports";
 
   return (
     <RichPageLayout
       locale={locale}
       content={content}
+      heroVariant="immersive"
       crumbs={richCrumbs(locale, [
         { key: "games", label: parentLabel },
         { key: pageId, label: content.h1 },
       ])}
       beforeBlocks={
         category ? (
-          <section className="mb-10">
-            <SplitCategorySection
-              title={content.h1}
-              intro={content.intro[0] ?? ""}
-              bullets={[]}
-              image={category.image}
-              alt={category.alt[locale]}
-              objectPosition={category.objectPosition}
-              imageFirst
-            />
-          </section>
+          <CategoryImmersion
+            locale={locale}
+            title={getGameCategoryName(category.id, locale)}
+            intro={content.intro[0] ?? ""}
+            image={category.image}
+            alt={category.alt[locale]}
+            objectPosition={category.objectPosition}
+            imageFirst={imageFirst}
+            checkpoints={checkpoints}
+          />
         ) : null
       }
     />
@@ -739,15 +763,19 @@ function GuidePage({
     <RichPageLayout
       locale={locale}
       content={content}
+      heroVariant="guide"
       crumbs={richCrumbs(locale, trail)}
       beforeBlocks={
-        isSecurityGuide ? (
-          <MarqueeTicker
-            items={getMarqueeItems(locale, "security")}
-            variant="subtle"
-            className="mb-8 rounded-xl"
-          />
-        ) : null
+        <>
+          {isSecurityGuide ? (
+            <MarqueeTicker
+              items={getMarqueeItems(locale, "security")}
+              variant="subtle"
+              className="mb-8 rounded-xl"
+            />
+          ) : null}
+          <GuideProcessPanel locale={locale} pageId={pageId} />
+        </>
       }
       afterBlocks={
         isSecurityGuide ? (
@@ -811,6 +839,7 @@ export function GuidesHubPageView({ locale }: { locale: Locale }) {
     <RichPageLayout
       locale={locale}
       content={content}
+      heroVariant="guide"
       crumbs={richCrumbs(locale, [
         { key: "guides", label: locale === "ms" ? "Panduan" : locale === "zh" ? "指南" : "Guides" },
       ])}
@@ -940,23 +969,34 @@ function PromoPage({
   const content = getRichPageContent(locale, pageId);
   const promoLabel =
     locale === "ms" ? "Promosi" : locale === "zh" ? "优惠" : "Promotions";
+  const variant =
+    pageId === "promotions-free-credit"
+      ? "free-credit"
+      : pageId === "promotions-welcome"
+        ? "welcome"
+        : "bonus-guide";
+
   return (
     <RichPageLayout
       locale={locale}
       content={content}
+      heroVariant={variant === "free-credit" ? "immersive" : "editorial"}
       crumbs={richCrumbs(locale, [
         { key: "promotions", label: promoLabel },
         { key: pageId, label: content.h1 },
       ])}
       beforeBlocks={
-        pageId === "promotions-free-credit" ? (
-          <section className="mb-10 grid items-start gap-8 lg:grid-cols-2">
-            <PromoHeroComposition locale={locale} />
-            <div className="visual-panel rounded-2xl p-6">
-              <p className="text-sm leading-relaxed text-zinc-300">{content.intro[0]}</p>
-            </div>
-          </section>
-        ) : null
+        <>
+          {variant === "free-credit" ? (
+            <section className="mb-10 grid items-start gap-8 lg:grid-cols-2">
+              <PromoHeroComposition locale={locale} />
+              <div className="visual-panel rounded-2xl p-6">
+                <p className="text-sm leading-relaxed text-zinc-300">{content.intro[0]}</p>
+              </div>
+            </section>
+          ) : null}
+          <PromoFlowPanel locale={locale} variant={variant} />
+        </>
       }
     />
   );
@@ -1017,12 +1057,14 @@ export function PartnerProgramPageView({ locale }: { locale: Locale }) {
     <RichPageLayout
       locale={locale}
       content={content}
+      heroVariant="editorial"
       crumbs={richCrumbs(locale, [
         { key: "agent", label: agentLabel },
         { key: "partner-program", label: content.h1 },
       ])}
       beforeBlocks={
-        <section className="mb-10">
+        <section className="mb-10 space-y-6">
+          <EcosystemBoundaryPanel locale={locale} />
           <PartnerFlowComposition locale={locale} />
         </section>
       }
@@ -1294,9 +1336,10 @@ export function ResponsibleGamingPageView({ locale }: { locale: Locale }) {
     <RichPageLayout
       locale={locale}
       content={content}
+      heroVariant="quiet"
       crumbs={richCrumbs(locale, [{ key: "responsible-gaming", label: content.h1 }])}
-      afterBlocks={
-        <section className="mt-12">
+      beforeBlocks={
+        <section className="mb-10">
           <ResponsibleEditorial locale={locale} />
         </section>
       }
@@ -1309,7 +1352,8 @@ export function TermsPageView({ locale }: { locale: Locale }) {
   return (
     <RichPageLayout
       locale={locale}
-      content={content}
+      content={{ ...content, heroImage: undefined }}
+      heroVariant="quiet"
       crumbs={richCrumbs(locale, [{ key: "terms", label: content.h1 }])}
       beforeBlocks={
         sections.length > 0 ? (
@@ -1327,7 +1371,8 @@ export function PrivacyPageView({ locale }: { locale: Locale }) {
   return (
     <RichPageLayout
       locale={locale}
-      content={content}
+      content={{ ...content, heroImage: undefined }}
+      heroVariant="quiet"
       crumbs={richCrumbs(locale, [{ key: "privacy-policy", label: content.h1 }])}
       beforeBlocks={
         sections.length > 0 ? (
@@ -1345,7 +1390,8 @@ export function DisclaimerPageView({ locale }: { locale: Locale }) {
   return (
     <RichPageLayout
       locale={locale}
-      content={content}
+      content={{ ...content, heroImage: undefined }}
+      heroVariant="quiet"
       crumbs={richCrumbs(locale, [{ key: "disclaimer", label: content.h1 }])}
       beforeBlocks={
         sections.length > 0 ? (
