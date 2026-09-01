@@ -15,8 +15,8 @@ export type GamesHubExtra = {
   exploreLabel: string;
   chooseTitle: string;
   chooseIntro: string;
-  chooseHeaders: [string, string, string];
-  chooseRows: [string, string, string][];
+  chooseHeaders: [string, string, string, string];
+  chooseRows: [string, string, string, string][];
   providersTitle: string;
   providersIntro: string;
   relatedGuidesTitle: string;
@@ -29,12 +29,12 @@ const en: GamesHubExtra = {
   chooseTitle: "How to choose a game category",
   chooseIntro:
     "Each IWIN game category has different rules, pace and checks. Use this comparison before opening the live lobby — individual titles still depend on what is available after login.",
-  chooseHeaders: ["Category", "Best for", "Check first"],
+  chooseHeaders: ["Format", "Style", "What to check", "Beginner note"],
   chooseRows: [
-    ["Slots", "Feature-led play with paytables and bonus rounds", "Volatility, stake limits and in-game rules"],
-    ["Live casino", "Timed table formats with streamed dealers", "Table limits, connection quality and betting windows"],
-    ["Sports", "Pre-match and in-play markets", "Odds format, market rules and settlement timing"],
-    ["4D", "Scheduled number draws", "Draw schedule, entry types and result verification"],
+    ["Slots", "Digital reels and features", "Paytable, volatility, stake limits", "Start with low stakes and read rules"],
+    ["Live casino", "Streamed timed tables", "Limits, connection, betting windows", "Join only when you can follow the pace"],
+    ["Sports", "Pre-match and in-play markets", "Odds, settlement, market rules", "Confirm market type before submitting"],
+    ["4D", "Scheduled number draws", "Draw schedule, entry types, results", "Treat selections as entertainment"],
   ],
   providersTitle: "Game provider references",
   providersIntro:
@@ -102,12 +102,12 @@ const ms: GamesHubExtra = {
   chooseTitle: "Cara memilih kategori permainan",
   chooseIntro:
     "Setiap kategori permainan IWIN mempunyai peraturan, tempo dan semakan berbeza. Gunakan perbandingan ini sebelum membuka lobi langsung — tajuk individu masih bergantung pada ketersediaan selepas log masuk.",
-  chooseHeaders: ["Kategori", "Sesuai untuk", "Semak dahulu"],
+  chooseHeaders: ["Format", "Gaya", "Semak dahulu", "Nota pemula"],
   chooseRows: [
-    ["Slot", "Permainan berasaskan ciri dengan jadual bayaran dan pusingan bonus", "Volatiliti, had pertaruhan dan peraturan dalam permainan"],
-    ["Kasino langsung", "Format meja berjadual dengan peniaga distrim", "Had meja, kualiti sambungan dan tetingkap pertaruhan"],
-    ["Sukan", "Pasaran pra-perlawanan dan langsung", "Format odds, peraturan pasaran dan masa penyelesaian"],
-    ["4D", "Cabutan nombor berjadual", "Jadual cabutan, jenis kemasukan dan pengesahan keputusan"],
+    ["Slot", "Gulung digital & ciri", "Jadual bayaran, volatiliti, had", "Mulakan dengan pertaruhan rendah"],
+    ["Kasino langsung", "Meja langsung bertempoh", "Had, sambungan, tetingkap", "Sertai jika boleh ikut tempo"],
+    ["Sukan", "Pra-perlawanan & langsung", "Odds, penyelesaian, peraturan", "Sahkan jenis pasaran dahulu"],
+    ["4D", "Cabutan berjadual", "Jadual, jenis entri, keputusan", "Anggap sebagai hiburan"],
   ],
   providersTitle: "Rujukan penyedia permainan",
   providersIntro:
@@ -175,12 +175,12 @@ const zh: GamesHubExtra = {
   chooseTitle: "如何选择游戏类别",
   chooseIntro:
     "每个 IWIN 游戏类别的规则、节奏与核对要点不同。打开实时大厅前可参考下表——具体游戏仍以登录后可用内容为准。",
-  chooseHeaders: ["类别", "适合人群", "先核对"],
+  chooseHeaders: ["形式", "风格", "先核对", "新手提示"],
   chooseRows: [
-    ["老虎机", "以功能与赔付表为主的转轴游戏", "波动性、投注限额与游戏规则"],
-    ["真人娱乐场", "荷官直播的限时桌台", "桌台限额、网络质量与投注窗口"],
-    ["体育", "赛前与滚球盘口", "赔率格式、盘口规则与结算时间"],
-    ["4D", "定期数字开奖", "开奖时间、投注方式与结果核对"],
+    ["老虎机", "数字转轮与特色", "赔付表、波动、投注限额", "先用低注并阅读规则"],
+    ["真人娱乐场", "限时直播牌桌", "限额、网络、下注窗口", "跟得上节奏再加入"],
+    ["体育", "赛前与滚球市场", "赔率、结算、市场规则", "提交前确认市场类型"],
+    ["4D", "定时开奖", "开奖时间、投注类型、结果", "将选号视为娱乐"],
   ],
   providersTitle: "游戏提供商参考",
   providersIntro:

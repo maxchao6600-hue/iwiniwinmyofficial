@@ -18,8 +18,6 @@ const groups: Record<Locale, FaqGroup[]> = {
       { question: "Does this website operate the games?", answer: "No. Game rounds, lobbies and outcomes are handled on the external platform after login. This site provides educational category and provider information only." },
       { question: "Does this website hold player funds?", answer: "No. Deposits, balances and withdrawals belong to the external platform. This partner information website does not receive, store or process player money." },
       { question: "Where should I verify current terms?", answer: "On the authenticated external platform for account rules, promotions, payments and support. Use this website first for orientation, then confirm live terms before acting." },
-      { question: "What are game categories?", answer: "The referenced categories are slots, live casino, sports and 4D. Each has different rules, pace and checks. Category guides on this site explain the format; individual titles depend on the live lobby after login." },
-      { question: "How do promotion conditions work?", answer: "Promotions may include eligibility rules, turnover requirements, time limits and game restrictions. Source information on this site describes verified examples such as the RM10 free-credit conditions — always confirm the live promotion page before registering or claiming." },
       { question: "What should I check before using an external platform?", answer: "Verify the destination URL, read current terms, understand payment and withdrawal rules, check promotion conditions and set personal spending limits. This information website does not replace the platform's own disclosures." },
     ] },
     { id: "account", title: "Account", items: [
@@ -54,6 +52,7 @@ const groups: Record<Locale, FaqGroup[]> = {
       { question: "Where should I start if I am new to the formats?", answer: "Read the games hub, then open the category guide that matches how you want to play. Continue with registration, payment and responsible-gaming pages before spending." },
     ] },
     { id: "promotions", title: "Promotions", items: [
+      { question: "How do promotion conditions work?", answer: "Promotions may include eligibility rules, turnover requirements, time limits and game restrictions. Source information on this site describes verified examples such as the RM10 free-credit conditions — always confirm the live promotion page before registering or claiming." },
       { question: "How does the RM10 free-credit offer work?", answer: "Source information describes RM10 for eligible new registrations through the official partner site, subject to a daily quota, 5x turnover, one claim per mobile number and non-transferability. It is not guaranteed; confirm availability and full terms before registering." },
       { question: "What does 5x turnover mean for RM10?", answer: "A 5x requirement means RM50 of qualifying turnover (RM10 × 5), not a promise of winnings or withdrawal. Eligible games, timing and settlement rules must be checked on the platform." },
       { question: "Are expired promotions shown as active here?", answer: "No. This site explains verified source conditions and how to read terms. Live availability must be checked on the external promotion page." },

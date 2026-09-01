@@ -139,7 +139,7 @@ export function HomePageView({ locale }: { locale: Locale }) {
         <div className="absolute inset-0">
           <Image
             src={VISUAL_IMAGES.hero.home}
-            alt=""
+            alt="IWIN Malaysia information and partner website"
             fill
             priority
             sizes="100vw"
@@ -151,7 +151,7 @@ export function HomePageView({ locale }: { locale: Locale }) {
         </div>
         <Container className="relative flex min-h-[70vh] flex-col justify-end py-14 sm:min-h-[75vh] sm:py-16 lg:py-20">
           <div className="relative mb-5 h-10 w-[148px]">
-            <Image src={VISUAL_IMAGES.brand.logo} alt="" fill sizes="148px" className="object-contain object-left" priority />
+            <Image src={VISUAL_IMAGES.brand.logo} alt={SITE_CONFIG.brandLogoAlt} fill sizes="148px" className="object-contain object-left" priority />
           </div>
           <p className="eyebrow">{home.hero.eyebrow}</p>
           <h1 className="font-display mt-4 max-w-3xl text-3xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
@@ -493,8 +493,13 @@ export function GamesHubPageView({ locale }: { locale: Locale }) {
         <>
           <MarqueeTicker
             items={getMarqueeItems(locale, "games")}
+            links={GAME_CATEGORIES.map((cat) => ({
+              label: getGameCategoryName(cat.id, locale),
+              href: routePath(cat.routeKey, locale),
+            }))}
             variant="subtle"
             className="mb-8 rounded-xl"
+            ariaLabel={hub.categoryNavTitle}
           />
           <section className="mb-10">
             <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">
@@ -833,8 +838,16 @@ export function GuidesHubPageView({ locale }: { locale: Locale }) {
         <>
           <MarqueeTicker
             items={getMarqueeItems(locale, "guides")}
+            links={[
+              { label: locale === "ms" ? "Daftar" : locale === "zh" ? "注册" : "Register", href: routePath("guides-how-to-register", locale) },
+              { label: locale === "ms" ? "Log masuk" : locale === "zh" ? "登录" : "Login", href: routePath("guides-how-to-login", locale) },
+              { label: locale === "ms" ? "Deposit" : locale === "zh" ? "存款" : "Deposit", href: routePath("guides-how-to-deposit", locale) },
+              { label: locale === "ms" ? "Pengeluaran" : locale === "zh" ? "提款" : "Withdraw", href: routePath("guides-how-to-withdraw", locale) },
+              { label: locale === "ms" ? "Keselamatan" : locale === "zh" ? "安全" : "Security", href: routePath("guides-account-security", locale) },
+            ]}
             variant="subtle"
             className="mb-8 rounded-xl"
+            ariaLabel={content.h1}
           />
           <section className="mb-10">
             <JourneyComposition locale={locale} />
@@ -1301,7 +1314,14 @@ export function ContactPageView({ locale }: { locale: Locale }) {
             description={visual.contactSupport.subheading}
           />
           <div className="mt-8">
-            <SupportTopicGrid topics={visual.contactSupport.topics} />
+            <SupportTopicGrid
+              coversLabel={visual.contactSupport.coversLabel}
+              prepareLabel={visual.contactSupport.prepareLabel}
+              topics={visual.contactSupport.topics.map((topic) => ({
+                ...topic,
+                href: routePath(topic.routeKey, locale),
+              }))}
+            />
           </div>
         </section>
       }

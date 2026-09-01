@@ -5,18 +5,53 @@ import { Button } from "@/components/ui/Button";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { cn } from "@/lib/utils/cn";
 
-/** CSS-only horizontal marquee — editorial navigation device. */
+/** CSS-only horizontal marquee — pause on hover; optional linked chips for utility. */
 export function MarqueeTicker({
   items,
+  links,
   variant = "default",
   ariaLabel,
   className,
 }: {
   items: readonly string[];
+  links?: readonly { label: string; href: string }[];
   variant?: "default" | "gold" | "subtle";
   ariaLabel?: string;
   className?: string;
 }) {
+  if (links?.length) {
+    return (
+      <nav
+        aria-label={ariaLabel}
+        className={cn(
+          "category-rail -mx-1 overflow-x-auto border-y border-white/6 px-1",
+          variant === "gold" && "border-iwin-yellow/15 bg-iwin-yellow/[0.03]",
+          variant === "subtle" && "border-white/5 bg-black/40",
+          variant === "default" && "bg-iwin-charcoal/50",
+          className,
+        )}
+      >
+        <ul className="flex w-max min-w-full items-center gap-2 py-3">
+          {links.map((link) => (
+            <li key={link.href}>
+              <Link
+                href={link.href}
+                className={cn(
+                  "inline-flex min-h-10 shrink-0 items-center rounded-full border border-white/10 px-4 text-xs font-semibold uppercase tracking-[0.16em] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iwin-yellow/50",
+                  variant === "gold"
+                    ? "text-iwin-yellow/85 hover:border-iwin-yellow/40 hover:text-iwin-yellow"
+                    : "text-zinc-400 hover:border-iwin-yellow/35 hover:text-white",
+                )}
+              >
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    );
+  }
+
   const track = [...items, ...items];
   return (
     <div
@@ -357,22 +392,52 @@ export function WarningPanel({
 /** Support routing blocks for contact page. */
 export function SupportTopicGrid({
   topics,
+  coversLabel,
+  prepareLabel,
 }: {
-  topics: readonly { id: string; title: string; description: string; prepare: readonly string[] }[];
+  topics: readonly {
+    id: string;
+    title: string;
+    description: string;
+    prepare: readonly string[];
+    nextAction?: string;
+    href?: string;
+  }[];
+  coversLabel: string;
+  prepareLabel: string;
 }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {topics.map((topic) => (
         <article key={topic.id} className="visual-panel flex flex-col rounded-2xl p-5">
-          <h3 className="font-display text-lg font-semibold text-white">{topic.title}</h3>
-          <p className="mt-2 flex-1 text-sm leading-relaxed text-zinc-400">{topic.description}</p>
-          <ul className="mt-4 space-y-1.5 border-t border-white/10 pt-4">
-            {topic.prepare.map((item) => (
-              <li key={item} className="text-xs text-zinc-500">
-                · {item}
-              </li>
-            ))}
-          </ul>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-iwin-yellow/70">
+            {topic.id}
+          </p>
+          <h3 className="font-display mt-2 text-lg font-semibold text-white">{topic.title}</h3>
+          <p className="mt-2 text-sm leading-relaxed text-zinc-400">
+            <span className="font-medium text-zinc-300">{coversLabel}: </span>
+            {topic.description}
+          </p>
+          <div className="mt-4 flex-1 border-t border-white/10 pt-4">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-zinc-500">
+              {prepareLabel}
+            </p>
+            <ul className="mt-2 space-y-1.5">
+              {topic.prepare.map((item) => (
+                <li key={item} className="text-xs leading-relaxed text-zinc-500">
+                  · {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+          {topic.href && topic.nextAction ? (
+            <Link
+              href={topic.href}
+              className="mt-5 inline-flex min-h-11 items-center text-xs font-semibold uppercase tracking-[0.14em] text-iwin-yellow transition hover:text-iwin-yellow-bright focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-iwin-yellow/50"
+            >
+              {topic.nextAction} →
+            </Link>
+          ) : null}
         </article>
       ))}
     </div>

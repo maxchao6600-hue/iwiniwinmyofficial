@@ -39,11 +39,15 @@ export type VisualContent = {
   contactSupport: {
     heading: string;
     subheading: string;
+    coversLabel: string;
+    prepareLabel: string;
     topics: readonly {
       id: string;
       title: string;
       description: string;
       prepare: readonly string[];
+      nextAction: string;
+      routeKey: "guides-how-to-login" | "guides-how-to-deposit" | "promotions" | "games" | "agent" | "contact";
     }[];
   };
   securityCenter: {
@@ -164,43 +168,57 @@ const copy: Record<Locale, VisualContent> = {
     faqQuestionCount: "questions",
     contactSupport: {
       heading: "How can we help?",
-      subheading: "Choose the topic closest to your question and prepare the listed information before contacting support.",
+      subheading: "Choose the topic closest to your question — then prepare the listed details before you continue.",
+      coversLabel: "Covers",
+      prepareLabel: "Prepare",
       topics: [
         {
           id: "account",
           title: "Account",
           description: "Login issues, registration problems or account recovery on the external platform.",
           prepare: ["Registered mobile number", "Approximate registration date", "Screenshot of the error (if any)"],
+          nextAction: "Open login guide",
+          routeKey: "guides-how-to-login",
         },
         {
           id: "payment",
           title: "Payment",
           description: "Deposits, withdrawals or payment method questions requiring platform records.",
           prepare: ["Transaction reference", "Amount and date", "Payment method used"],
+          nextAction: "Open deposit guide",
+          routeKey: "guides-how-to-deposit",
         },
         {
           id: "promotion",
           title: "Promotion",
           description: "Offer eligibility, turnover or bonus conditions on the external platform.",
           prepare: ["Promotion name", "Registration date", "Screenshots of live terms"],
+          nextAction: "Browse promotions",
+          routeKey: "promotions",
         },
         {
           id: "games",
           title: "Games",
           description: "Category navigation, provider references or game access questions.",
           prepare: ["Game category", "Provider name (if known)", "Device and browser used"],
+          nextAction: "Explore games",
+          routeKey: "games",
         },
         {
           id: "partner",
           title: "Partner",
           description: "Agent programme, referral tracking or partner dashboard queries.",
           prepare: ["Partner ID or referral link", "Reporting period", "Specific dashboard screen"],
+          nextAction: "Open agent guide",
+          routeKey: "agent",
         },
         {
           id: "website",
           title: "Website",
           description: "Corrections to information published on this partner website.",
           prepare: ["Page URL", "Incorrect text or link", "Suggested correction"],
+          nextAction: "Stay on this page",
+          routeKey: "contact",
         },
       ],
     },
@@ -337,43 +355,57 @@ const copy: Record<Locale, VisualContent> = {
     faqQuestionCount: "soalan",
     contactSupport: {
       heading: "Bagaimana kami boleh membantu?",
-      subheading: "Pilih topik yang paling hampir dengan soalan anda dan sediakan maklumat yang disenaraikan sebelum menghubungi sokongan.",
+      subheading: "Pilih topik yang paling hampir dengan soalan anda — kemudian sediakan butiran disenaraikan sebelum meneruskan.",
+      coversLabel: "Liputan",
+      prepareLabel: "Sediakan",
       topics: [
         {
           id: "account",
           title: "Akaun",
           description: "Masalah log masuk, pendaftaran atau pemulihan akaun di platform luar.",
           prepare: ["Nombor mudah alih berdaftar", "Anggaran tarikh pendaftaran", "Tangkapan skrin ralat (jika ada)"],
+          nextAction: "Buka panduan log masuk",
+          routeKey: "guides-how-to-login",
         },
         {
           id: "payment",
           title: "Bayaran",
           description: "Deposit, pengeluaran atau soalan kaedah bayaran yang memerlukan rekod platform.",
           prepare: ["Rujukan transaksi", "Jumlah dan tarikh", "Kaedah bayaran digunakan"],
+          nextAction: "Buka panduan deposit",
+          routeKey: "guides-how-to-deposit",
         },
         {
           id: "promotion",
           title: "Promosi",
           description: "Kelayakan tawaran, pusing ganti atau syarat bonus di platform luar.",
           prepare: ["Nama promosi", "Tarikh pendaftaran", "Tangkapan skrin terma langsung"],
+          nextAction: "Lihat promosi",
+          routeKey: "promotions",
         },
         {
           id: "games",
           title: "Permainan",
           description: "Navigasi kategori, rujukan penyedia atau soalan akses permainan.",
           prepare: ["Kategori permainan", "Nama penyedia (jika diketahui)", "Peranti dan pelayar digunakan"],
+          nextAction: "Terokai permainan",
+          routeKey: "games",
         },
         {
           id: "partner",
           title: "Rakan",
           description: "Program ejen, penjejakan rujukan atau pertanyaan papan pemuka rakan.",
           prepare: ["ID rakan atau pautan rujukan", "Tempoh laporan", "Skrin papan pemuka tertentu"],
+          nextAction: "Buka panduan ejen",
+          routeKey: "agent",
         },
         {
           id: "website",
           title: "Laman Web",
           description: "Pembetulan maklumat yang diterbitkan di laman rakan ini.",
           prepare: ["URL halaman", "Teks atau pautan yang salah", "Pembetulan dicadangkan"],
+          nextAction: "Kekal di halaman ini",
+          routeKey: "contact",
         },
       ],
     },
@@ -504,43 +536,57 @@ const copy: Record<Locale, VisualContent> = {
     faqQuestionCount: "个问题",
     contactSupport: {
       heading: "我们能如何帮助？",
-      subheading: "选择最接近您问题的主题，并在联系支持前准备好所列信息。",
+      subheading: "选择最接近您问题的主题——然后在继续前准备所列信息。",
+      coversLabel: "涵盖",
+      prepareLabel: "请准备",
       topics: [
         {
           id: "account",
           title: "账户",
           description: "外部平台的登录问题、注册问题或账户恢复。",
           prepare: ["注册手机号", "大致注册日期", "错误截图（如有）"],
+          nextAction: "打开登录指南",
+          routeKey: "guides-how-to-login",
         },
         {
           id: "payment",
           title: "支付",
           description: "存款、提款或需要平台记录的支付方式问题。",
           prepare: ["交易参考号", "金额与日期", "使用的支付方式"],
+          nextAction: "打开存款指南",
+          routeKey: "guides-how-to-deposit",
         },
         {
           id: "promotion",
           title: "优惠",
           description: "外部平台的优惠资格、流水或奖金条件。",
           prepare: ["优惠名称", "注册日期", "实时条款截图"],
+          nextAction: "浏览优惠",
+          routeKey: "promotions",
         },
         {
           id: "games",
           title: "游戏",
           description: "类别导航、提供商参考或游戏访问问题。",
           prepare: ["游戏类别", "提供商名称（如已知）", "使用的设备与浏览器"],
+          nextAction: "探索游戏",
+          routeKey: "games",
         },
         {
           id: "partner",
           title: "合作伙伴",
           description: "代理计划、推荐追踪或合作伙伴面板查询。",
           prepare: ["合作伙伴 ID 或推荐链接", "报告周期", "具体面板页面"],
+          nextAction: "打开代理指南",
+          routeKey: "agent",
         },
         {
           id: "website",
           title: "网站",
           description: "对本合作伙伴网站发布信息的勘误。",
           prepare: ["页面 URL", "错误文字或链接", "建议修正"],
+          nextAction: "留在本页",
+          routeKey: "contact",
         },
       ],
     },

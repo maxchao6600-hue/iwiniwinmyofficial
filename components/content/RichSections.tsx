@@ -11,16 +11,41 @@ function BlockHeading({ title, id }: { title: string; id?: string }) {
 }
 
 function ProseBlock({ block, sectionId }: { block: Extract<RichBlock, { type: "prose" }>; sectionId?: string }) {
+  const paragraphs = block.paragraphs;
+  const useKeyPoints = paragraphs.length >= 3;
+
   return (
     <section className="scroll-mt-28">
       {block.title ? <BlockHeading title={block.title} id={sectionId} /> : null}
-      <div className={block.title ? "mt-4 space-y-4" : "space-y-4"}>
-        {block.paragraphs.map((p) => (
-          <p key={p.slice(0, 48)} className="max-w-3xl text-base leading-relaxed text-zinc-300">
-            {p}
-          </p>
-        ))}
-      </div>
+      {useKeyPoints ? (
+        <div className={block.title ? "mt-4 space-y-5" : "space-y-5"}>
+          <p className="max-w-3xl text-base leading-relaxed text-zinc-300">{paragraphs[0]}</p>
+          <ol className="grid gap-3 sm:grid-cols-2">
+            {paragraphs.slice(1, -1).map((p, index) => (
+              <li
+                key={p.slice(0, 48)}
+                className="rounded-xl border border-white/10 bg-black/35 px-4 py-4"
+              >
+                <p className="font-display text-sm font-semibold text-iwin-yellow/70">
+                  {String(index + 1).padStart(2, "0")}
+                </p>
+                <p className="mt-2 text-sm leading-relaxed text-zinc-300">{p}</p>
+              </li>
+            ))}
+          </ol>
+          {paragraphs.length > 1 ? (
+            <p className="max-w-3xl text-base leading-relaxed text-zinc-400">{paragraphs[paragraphs.length - 1]}</p>
+          ) : null}
+        </div>
+      ) : (
+        <div className={block.title ? "mt-4 space-y-4" : "space-y-4"}>
+          {paragraphs.map((p) => (
+            <p key={p.slice(0, 48)} className="max-w-3xl text-base leading-relaxed text-zinc-300">
+              {p}
+            </p>
+          ))}
+        </div>
+      )}
     </section>
   );
 }
@@ -86,7 +111,7 @@ function CardsBlock({
                 <div className="relative mb-4 aspect-[16/10] overflow-hidden rounded-xl">
                   <Image
                     src={item.image}
-                    alt=""
+                    alt={item.title}
                     fill
                     sizes="(max-width:768px) 100vw, 400px"
                     className="object-cover"
@@ -130,10 +155,16 @@ function GridBlock({ block, sectionId }: { block: Extract<RichBlock, { type: "gr
       {block.intro ? (
         <p className="mt-3 max-w-3xl text-base leading-relaxed text-zinc-300">{block.intro}</p>
       ) : null}
-      <div className="mt-6 grid gap-4 md:grid-cols-2">
-        {block.items.map((item) => (
-          <article key={item.title} className="card-surface rounded-2xl p-5">
-            <h3 className="font-display text-lg font-semibold text-white">{item.title}</h3>
+      <div className="mt-6 grid gap-3 sm:grid-cols-2">
+        {block.items.map((item, index) => (
+          <article
+            key={item.title}
+            className="border-l-2 border-iwin-yellow/35 bg-[linear-gradient(145deg,rgba(28,28,33,0.55),rgba(8,8,10,0.4))] px-4 py-4 sm:px-5"
+          >
+            <p className="font-display text-xs font-semibold tracking-[0.14em] text-iwin-yellow/50">
+              {String(index + 1).padStart(2, "0")}
+            </p>
+            <h3 className="font-display mt-1 text-base font-semibold text-white sm:text-lg">{item.title}</h3>
             <p className="mt-2 text-sm leading-relaxed text-zinc-300">{item.description}</p>
           </article>
         ))}

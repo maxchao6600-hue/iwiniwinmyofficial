@@ -41,6 +41,7 @@ export type RichPageContent = {
   h1: string;
   intro: string[];
   heroImage?: string;
+  heroImageAlt?: string;
   blocks: RichBlock[];
   faqs?: { question: string; answer: string }[];
   related: { key: RouteKey; label: string }[];

@@ -2,6 +2,7 @@ import { getRelatedLinkLabel } from "./related-labels";
 import type { Locale, RouteKey } from "@/lib/i18n/config";
 import type { PageId, RichBlock, RichPageContent, RichPageCta } from "./types";
 import { resolveHeroImage } from "./hero-images";
+import { getHeroImageAlt } from "@/lib/visual/alt";
 import { getBlockLabels } from "./labels";
 import { getPageExtras, type ExtraPack } from "./extras";
 import { getPageDepth, type DepthPack } from "./depth";
@@ -42,12 +43,16 @@ function packToBlocks(pack: ExtraPack | DepthPack): RichBlock[] {
   return blocks;
 }
 
-function detailsAsProse(details: PageSpec["details"]): RichBlock[] {
-  return details.map(([title, description]) => ({
-    type: "prose" as const,
+function detailsAsGrid(details: PageSpec["details"], title: string, intro?: string): RichBlock {
+  return {
+    type: "grid",
     title,
-    paragraphs: [description],
-  }));
+    intro,
+    items: details.map(([itemTitle, description]) => ({
+      title: itemTitle,
+      description,
+    })),
+  };
 }
 
 function pagePacks(locale: Locale, pageId: PageId): { extras: ExtraPack; depth: DepthPack } {
@@ -257,10 +262,12 @@ function guidesHubBlocks(locale: Locale, spec: PageSpec, extras: ExtraPack, dept
 function promotionsHubBlocks(locale: Locale, spec: PageSpec, extras: ExtraPack, depth: DepthPack): RichBlock[] {
   const d = spec.details;
   const L = getBlockLabels(locale);
+  const matrixTitle =
+    locale === "ms" ? "Matriks terma promosi" : locale === "zh" ? "优惠条款矩阵" : "Promotion terms matrix";
   return [
     ...packToBlocks(extras),
     ...packToBlocks(depth),
-    ...detailsAsProse(d),
+    detailsAsGrid(d, matrixTitle),
     {
       type: "callout",
       title: L.promoResponsibleTitle,
@@ -273,19 +280,23 @@ function promotionsHubBlocks(locale: Locale, spec: PageSpec, extras: ExtraPack, 
 
 function providersPageBlocks(locale: Locale, spec: PageSpec, extras: ExtraPack, depth: DepthPack): RichBlock[] {
   const d = spec.details;
+  const title =
+    locale === "ms" ? "Fakta penyedia" : locale === "zh" ? "提供商要点" : "Provider facts";
   return [
     ...packToBlocks(extras),
     ...packToBlocks(depth),
-    ...detailsAsProse(d),
+    detailsAsGrid(d, title),
     callout(spec, locale, "game-providers"),
   ];
 }
 
 function categoryGameBlocks(locale: Locale, pageId: PageId, spec: PageSpec, extras: ExtraPack, depth: DepthPack): RichBlock[] {
+  const factsTitle =
+    locale === "ms" ? "Fakta kategori" : locale === "zh" ? "类别要点" : "Category facts";
   return [
     ...packToBlocks(extras),
     ...packToBlocks(depth),
-    ...detailsAsProse(spec.details),
+    detailsAsGrid(spec.details, factsTitle),
     splitPlatform(locale, spec),
     callout(spec, locale, pageId),
   ];
@@ -298,9 +309,21 @@ function howToBlocks(locale: Locale, pageId: PageId, spec: PageSpec, extras: Ext
     ...packToBlocks(extras),
     ...packToBlocks(depth),
     {
-      type: "steps",
+      type: "grid",
       title: L.reviewSequence,
-      steps: d.map(([title, description]) => `${title} — ${description}`),
+      intro:
+        locale === "ms"
+          ? "Ikuti setiap titik semak sebelum meneruskan di platform luar."
+          : locale === "zh"
+            ? "在外部平台继续前，请核对以下检查点。"
+            : "Work through each checkpoint before continuing on the external platform.",
+      items: d.map(([title, description]) => ({ title, description })),
+    },
+    {
+      type: "steps",
+      title:
+        locale === "ms" ? "Urutan ringkas" : locale === "zh" ? "简要顺序" : "Quick sequence",
+      steps: d.map(([title]) => title),
     },
     splitPlatform(locale, spec),
     callout(spec, locale, pageId),
@@ -308,10 +331,23 @@ function howToBlocks(locale: Locale, pageId: PageId, spec: PageSpec, extras: Ext
 }
 
 function editorialBlocks(locale: Locale, pageId: PageId, spec: PageSpec, extras: ExtraPack, depth: DepthPack): RichBlock[] {
+  const L = getBlockLabels(locale);
+  const factsTitle =
+    pageId === "agent"
+      ? locale === "ms"
+        ? "Model operasi rakan"
+        : locale === "zh"
+          ? "合作伙伴运营要点"
+          : "Partner operating facts"
+      : locale === "ms"
+        ? "Perkara utama"
+        : locale === "zh"
+          ? "关键要点"
+          : "Key points";
   return [
     ...packToBlocks(extras),
     ...packToBlocks(depth),
-    ...detailsAsProse(spec.details),
+    detailsAsGrid(spec.details, factsTitle),
     splitPlatform(locale, spec),
     callout(spec, locale, pageId),
   ];
@@ -402,6 +438,7 @@ export function buildRichPageContent(
     h1: spec.h1,
     intro: [...spec.intro],
     heroImage: resolveHeroImage(pageId),
+    heroImageAlt: getHeroImageAlt(locale, pageId, spec.h1),
     blocks: buildBlocks(locale, pageId, spec),
     faqs: buildFaqs(locale, pageId, spec),
     related: uniqueRelated(locale, pageId, spec),

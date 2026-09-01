@@ -4,6 +4,7 @@ import { GAME_CATEGORIES, PROVIDERS, getGameCategoryName } from "@/content/games
 import { getVisual } from "@/content/i18n/visual";
 import { AgentPartnerVisual } from "@/components/visual/AgentPartnerVisual";
 import { ProcessTimeline } from "@/components/visual/EditorialPrimitives";
+import { SITE_CONFIG } from "@/lib/constants/site";
 import { VISUAL_IMAGES } from "@/lib/visual/images";
 import type { Locale, RouteKey } from "@/lib/i18n/config";
 import { routePath } from "@/lib/i18n/paths";
@@ -29,7 +30,7 @@ export function EcosystemMapComposition({ locale }: { locale: Locale }) {
     >
       <div className="mx-auto flex max-w-lg flex-col items-center text-center">
         <div className="relative mb-3 h-9 w-[120px]">
-          <Image src={VISUAL_IMAGES.brand.logo} alt="" fill sizes="120px" className="object-contain" />
+          <Image src={VISUAL_IMAGES.brand.logo} alt={SITE_CONFIG.brandLogoAlt} fill sizes="120px" className="object-contain" />
         </div>
         <p className="font-display text-3xl font-semibold text-iwin-yellow sm:text-4xl">{v.ecosystem.hub}</p>
         <p className="mt-1 text-[11px] uppercase tracking-[0.16em] text-zinc-500">{v.ecosystem.subtitle}</p>
@@ -228,7 +229,7 @@ export function EcosystemComposition({ locale }: { locale: Locale }) {
           <div key={tile.label} className="relative aspect-[5/4] overflow-hidden">
             <Image
               src={tile.src}
-              alt=""
+              alt={tile.label}
               fill
               sizes="(max-width:1024px) 50vw, 280px"
               className={cn("object-cover opacity-70", tile.pos)}
@@ -243,7 +244,7 @@ export function EcosystemComposition({ locale }: { locale: Locale }) {
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <div className="rounded-2xl border border-iwin-yellow/45 bg-black/80 px-6 py-5 text-center shadow-[0_0_60px_rgba(245,197,24,0.18)] backdrop-blur-sm sm:px-8 sm:py-6">
           <div className="relative mx-auto mb-3 h-10 w-[120px]">
-            <Image src={VISUAL_IMAGES.brand.logo} alt="" fill sizes="120px" className="object-contain" />
+            <Image src={VISUAL_IMAGES.brand.logo} alt={SITE_CONFIG.brandLogoAlt} fill sizes="120px" className="object-contain" />
           </div>
           <p className="font-display text-2xl font-semibold text-iwin-yellow sm:text-3xl">{v.ecosystem.hub}</p>
           <p className="mt-1 max-w-[14rem] text-[11px] uppercase tracking-[0.14em] text-zinc-400">
@@ -732,7 +733,7 @@ export function BrandEditorialPanel({
       <div className="relative grid gap-8 p-6 sm:p-10 lg:grid-cols-2 lg:items-center">
         <div>
           <div className="relative mb-5 h-12 w-[160px]">
-            <Image src={VISUAL_IMAGES.brand.logo} alt="" fill sizes="160px" className="object-contain object-left" />
+            <Image src={VISUAL_IMAGES.brand.logo} alt={SITE_CONFIG.brandLogoAlt} fill sizes="160px" className="object-contain object-left" />
           </div>
           <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">{title}</h2>
           <p className="mt-4 max-w-xl text-base leading-relaxed text-zinc-300">{body}</p>
@@ -764,7 +765,7 @@ export function ContactVisualPanel({
       </div>
       <div className="relative px-6 py-12 text-center sm:px-10 sm:py-16">
         <div className="relative mx-auto mb-6 h-12 w-[160px]">
-          <Image src={VISUAL_IMAGES.brand.logo} alt="" fill sizes="160px" className="object-contain" />
+          <Image src={VISUAL_IMAGES.brand.logo} alt={SITE_CONFIG.brandLogoAlt} fill sizes="160px" className="object-contain" />
         </div>
         <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">{title}</h2>
         <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-zinc-300">{description}</p>

@@ -79,6 +79,38 @@ export function PromoFlowPanel({
 }) {
   const v = getVisual(locale);
   const flow = getVisualFlows(locale).promoFlows[variant];
+  const matrix = [
+    { label: v.promo.eligibilityLabel, value: v.promo.eligibilityValue },
+    { label: v.promo.claimLabel, value: v.promo.claimValue },
+    { label: v.promo.turnoverLabel, value: v.promo.turnoverValue },
+    {
+      label: locale === "ms" ? "Had" : locale === "zh" ? "限制" : "Limitations",
+      value:
+        locale === "ms"
+          ? "Kuota harian; tidak dijamin"
+          : locale === "zh"
+            ? "每日配额；不保证"
+            : "Daily quota; not guaranteed",
+    },
+    {
+      label: locale === "ms" ? "Pengeluaran" : locale === "zh" ? "提款" : "Withdrawal",
+      value:
+        locale === "ms"
+          ? "Sahkan pusing ganti terlebih dahulu"
+          : locale === "zh"
+            ? "先确认流水要求"
+            : "Confirm turnover first",
+    },
+    {
+      label: locale === "ms" ? "Tamat" : locale === "zh" ? "有效期" : "Expiry",
+      value:
+        locale === "ms"
+          ? "Ikuti terma platform langsung"
+          : locale === "zh"
+            ? "以实时平台条款为准"
+            : "Follow live platform terms",
+    },
+  ] as const;
 
   return (
     <section className="mb-10 space-y-6">
@@ -89,6 +121,19 @@ export function PromoFlowPanel({
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-zinc-300">{flow.intro}</p>
         </div>
       )}
+      <div>
+        <h2 className="font-display text-xl font-semibold text-white sm:text-2xl">
+          {locale === "ms" ? "Matriks terma promosi" : locale === "zh" ? "优惠条款矩阵" : "Promotion terms matrix"}
+        </h2>
+        <dl className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {matrix.map((row) => (
+            <div key={row.label} className="rounded-xl border border-white/10 bg-black/40 px-4 py-4">
+              <dt className="text-[10px] font-semibold uppercase tracking-[0.14em] text-zinc-500">{row.label}</dt>
+              <dd className="mt-2 text-sm font-medium leading-snug text-white">{row.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
       <ol className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
         {flow.steps.map((step, index) => (
           <li key={step.label} className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-4">

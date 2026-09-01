@@ -40,9 +40,8 @@ const localized = {
       "What is IWIN?",
       "IWIN in the Malaysia context",
       [
-        "IWIN is a gaming ecosystem that Malaysian users may encounter when researching slots, live casino, sports, 4D, account access, promotions and partner opportunities. This website explains those topics in plain language.",
-        "IWIN Malaysia Official Partner describes this site’s information and referral role. We publish guides and may link to an external platform, but we do not operate game accounts, hold player funds, approve withdrawals or make licensing claims.",
-        "Use this resource to compare formats, prepare for registration or payments, read promotion conditions carefully, and understand agent concepts — then verify every live term on the external destination before acting.",
+        "IWIN is a gaming ecosystem Malaysian users may research for slots, live casino, sports, 4D, accounts, promotions and partner topics — explained here in plain language.",
+        "This Official Partner site publishes guides and may link externally. It does not operate accounts, hold funds, approve withdrawals or claim licensing authority.",
       ],
       [
         "Independent information in English, Bahasa Malaysia and Simplified Chinese",
@@ -185,9 +184,8 @@ const localized = {
       "Apakah IWIN?",
       "IWIN dalam konteks Malaysia",
       [
-        "IWIN ialah ekosistem permainan yang mungkin dicari pengguna Malaysia apabila meneliti slot, kasino langsung, sukan, 4D, akses akaun, promosi dan peluang rakan. Laman ini menerangkan topik tersebut dalam bahasa mudah.",
-        "Rakan Rasmi IWIN Malaysia menerangkan peranan maklumat dan rujukan laman ini. Kami menerbitkan panduan dan mungkin memaut ke platform luar, tetapi tidak mengendalikan akaun permainan, menyimpan dana pemain, meluluskan pengeluaran atau mendakwa lesen.",
-        "Gunakan sumber ini untuk membandingkan format, bersedia untuk pendaftaran atau bayaran, membaca syarat promosi dengan teliti, dan memahami konsep ejen — kemudian sahkan setiap terma langsung di destinasi luar sebelum bertindak.",
+        "IWIN ialah ekosistem permainan yang pengguna Malaysia mungkin teliti untuk slot, kasino langsung, sukan, 4D, akaun, promosi dan topik rakan — diterangkan di sini dalam bahasa mudah.",
+        "Laman Rakan Rasmi ini menerbitkan panduan dan mungkin memaut ke luar. Ia tidak mengendalikan akaun, menyimpan dana, meluluskan pengeluaran atau mendakwa kuasa lesen.",
       ],
       [
         "Maklumat bebas dalam English, Bahasa Malaysia dan 中文 Ringkas",
@@ -330,9 +328,8 @@ const localized = {
       "什么是 IWIN？",
       "马来西亚语境下的 IWIN",
       [
-        "IWIN 是马来西亚用户在研究老虎机、真人娱乐场、体育、4D、账户访问、优惠及合作机会时可能接触的游戏生态。本网站以清晰语言解释这些主题。",
-        "IWIN Malaysia 官方合作伙伴说明本站的信息与引荐角色。我们发布指南并可能链接外部平台，但不运营游戏账户、不持有玩家资金、不批准提款，也不作牌照声明。",
-        "请用本站比较玩法形式、准备注册或支付、仔细阅读优惠条件并理解代理概念 — 采取任何行动前，务必在外部平台核实实时条款。",
+        "IWIN 是马来西亚用户可能研究的游戏生态，涵盖老虎机、真人娱乐场、体育、4D、账户、优惠与合作主题——本站以清晰语言说明。",
+        "本官方合作伙伴网站发布指南并可能外链。它不运营账户、不持有资金、不批准提款，也不宣称牌照权限。",
       ],
       [
         "提供 English、Bahasa Malaysia 与简体中文独立内容",

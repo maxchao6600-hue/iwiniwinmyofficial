@@ -50,7 +50,7 @@ export function CompactPageHero({
   secondaryUrl,
   variant = "editorial",
 }: {
-  content: Pick<RichPageContent, "eyebrow" | "h1" | "intro" | "heroImage">;
+  content: Pick<RichPageContent, "eyebrow" | "h1" | "intro" | "heroImage" | "heroImageAlt">;
   primaryLabel: string;
   primaryUrl: string;
   secondaryLabel?: string;
@@ -94,7 +94,7 @@ export function CompactPageHero({
         <div className="absolute inset-0">
           <Image
             src={content.heroImage}
-            alt=""
+            alt={content.heroImageAlt ?? content.h1}
             fill
             priority
             sizes="100vw"
