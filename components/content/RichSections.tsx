@@ -4,16 +4,16 @@ import type { RichBlock } from "@/content/i18n/rich/types";
 import type { Locale } from "@/lib/i18n/config";
 import { routePath } from "@/lib/i18n/paths";
 
-function BlockHeading({ title }: { title: string }) {
+function BlockHeading({ title, id }: { title: string; id?: string }) {
   return (
-    <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">{title}</h2>
+    <h2 id={id} className="font-display scroll-mt-28 text-2xl font-semibold text-white sm:text-3xl">{title}</h2>
   );
 }
 
-function ProseBlock({ block }: { block: Extract<RichBlock, { type: "prose" }> }) {
+function ProseBlock({ block, sectionId }: { block: Extract<RichBlock, { type: "prose" }>; sectionId?: string }) {
   return (
     <section className="scroll-mt-28">
-      {block.title ? <BlockHeading title={block.title} /> : null}
+      {block.title ? <BlockHeading title={block.title} id={sectionId} /> : null}
       <div className={block.title ? "mt-4 space-y-4" : "space-y-4"}>
         {block.paragraphs.map((p) => (
           <p key={p.slice(0, 48)} className="max-w-3xl text-base leading-relaxed text-zinc-300">
@@ -25,10 +25,10 @@ function ProseBlock({ block }: { block: Extract<RichBlock, { type: "prose" }> })
   );
 }
 
-function BulletsBlock({ block }: { block: Extract<RichBlock, { type: "bullets" }> }) {
+function BulletsBlock({ block, sectionId }: { block: Extract<RichBlock, { type: "bullets" }>; sectionId?: string }) {
   return (
     <section className="scroll-mt-28">
-      <BlockHeading title={block.title} />
+      <BlockHeading title={block.title} id={sectionId} />
       <ul className="mt-5 max-w-3xl space-y-3">
         {block.items.map((item) => (
           <li key={item.slice(0, 48)} className="border-l-2 border-iwin-yellow/35 pl-4 leading-relaxed text-zinc-300">
@@ -40,10 +40,10 @@ function BulletsBlock({ block }: { block: Extract<RichBlock, { type: "bullets" }
   );
 }
 
-function StepsBlock({ block }: { block: Extract<RichBlock, { type: "steps" }> }) {
+function StepsBlock({ block, sectionId }: { block: Extract<RichBlock, { type: "steps" }>; sectionId?: string }) {
   return (
     <section className="scroll-mt-28">
-      <BlockHeading title={block.title} />
+      <BlockHeading title={block.title} id={sectionId} />
       <ol className="mt-8 grid gap-5 sm:grid-cols-2">
         {block.steps.map((step, index) => (
           <li
@@ -65,13 +65,15 @@ function StepsBlock({ block }: { block: Extract<RichBlock, { type: "steps" }> })
 function CardsBlock({
   block,
   locale,
+  sectionId,
 }: {
   block: Extract<RichBlock, { type: "cards" }>;
   locale: Locale;
+  sectionId?: string;
 }) {
   return (
     <section className="scroll-mt-28">
-      <BlockHeading title={block.title} />
+      <BlockHeading title={block.title} id={sectionId} />
       {block.intro ? (
         <p className="mt-3 max-w-3xl text-base leading-relaxed text-zinc-300">{block.intro}</p>
       ) : null}
@@ -121,10 +123,10 @@ function CardsBlock({
   );
 }
 
-function GridBlock({ block }: { block: Extract<RichBlock, { type: "grid" }> }) {
+function GridBlock({ block, sectionId }: { block: Extract<RichBlock, { type: "grid" }>; sectionId?: string }) {
   return (
     <section className="scroll-mt-28">
-      <BlockHeading title={block.title} />
+      <BlockHeading title={block.title} id={sectionId} />
       {block.intro ? (
         <p className="mt-3 max-w-3xl text-base leading-relaxed text-zinc-300">{block.intro}</p>
       ) : null}
@@ -140,10 +142,10 @@ function GridBlock({ block }: { block: Extract<RichBlock, { type: "grid" }> }) {
   );
 }
 
-function TableBlock({ block }: { block: Extract<RichBlock, { type: "table" }> }) {
+function TableBlock({ block, sectionId }: { block: Extract<RichBlock, { type: "table" }>; sectionId?: string }) {
   return (
     <section className="scroll-mt-28">
-      <BlockHeading title={block.title} />
+      <BlockHeading title={block.title} id={sectionId} />
       <div className="premium-table-wrap mt-5 overflow-x-auto rounded-2xl">
         <table className="premium-table min-w-full text-left text-sm">
           <tbody>
@@ -162,23 +164,23 @@ function TableBlock({ block }: { block: Extract<RichBlock, { type: "table" }> })
   );
 }
 
-function CalloutBlock({ block }: { block: Extract<RichBlock, { type: "callout" }> }) {
+function CalloutBlock({ block, sectionId }: { block: Extract<RichBlock, { type: "callout" }>; sectionId?: string }) {
   const tone =
     block.variant === "warning"
       ? "border-amber-500/30 bg-amber-500/10"
       : "border-iwin-yellow/20 bg-iwin-yellow/5";
   return (
     <section className={`scroll-mt-28 rounded-2xl border p-6 ${tone}`}>
-      <h2 className="font-display text-xl font-semibold text-white">{block.title}</h2>
+      <h2 id={sectionId} className="font-display scroll-mt-28 text-xl font-semibold text-white">{block.title}</h2>
       <p className="mt-3 text-sm leading-relaxed text-zinc-300">{block.body}</p>
     </section>
   );
 }
 
-function SplitBlock({ block }: { block: Extract<RichBlock, { type: "split" }> }) {
+function SplitBlock({ block, sectionId }: { block: Extract<RichBlock, { type: "split" }>; sectionId?: string }) {
   return (
     <section className="scroll-mt-28">
-      <BlockHeading title={block.title} />
+      <BlockHeading title={block.title} id={sectionId} />
       <div className="mt-6 grid gap-4 lg:grid-cols-2">
         <div className="card-surface rounded-2xl p-5">
           {block.leftTitle ? (
@@ -211,10 +213,10 @@ function SplitBlock({ block }: { block: Extract<RichBlock, { type: "split" }> })
   );
 }
 
-function SubsectionsBlock({ block }: { block: Extract<RichBlock, { type: "subsections" }> }) {
+function SubsectionsBlock({ block, sectionId }: { block: Extract<RichBlock, { type: "subsections" }>; sectionId?: string }) {
   return (
     <section className="scroll-mt-28">
-      <BlockHeading title={block.title} />
+      <BlockHeading title={block.title} id={sectionId} />
       {block.intro ? (
         <p className="mt-3 max-w-3xl text-base leading-relaxed text-zinc-300">{block.intro}</p>
       ) : null}
@@ -239,26 +241,27 @@ function SubsectionsBlock({ block }: { block: Extract<RichBlock, { type: "subsec
 export function RichSections({ blocks, locale }: { blocks: RichBlock[]; locale: Locale }) {
   return (
     <div className="space-y-10">
-      {blocks.map((block) => {
+      {blocks.map((block, index) => {
+        const sectionId = "title" in block && block.title ? `section-${index}` : undefined;
         switch (block.type) {
           case "prose":
-            return <ProseBlock key={block.title ?? block.paragraphs[0]?.slice(0, 40)} block={block} />;
+            return <ProseBlock key={block.title ?? block.paragraphs[0]?.slice(0, 40)} block={block} sectionId={sectionId} />;
           case "bullets":
-            return <BulletsBlock key={block.title} block={block} />;
+            return <BulletsBlock key={block.title} block={block} sectionId={sectionId} />;
           case "steps":
-            return <StepsBlock key={block.title} block={block} />;
+            return <StepsBlock key={block.title} block={block} sectionId={sectionId} />;
           case "cards":
-            return <CardsBlock key={block.title} block={block} locale={locale} />;
+            return <CardsBlock key={block.title} block={block} locale={locale} sectionId={sectionId} />;
           case "grid":
-            return <GridBlock key={block.title} block={block} />;
+            return <GridBlock key={block.title} block={block} sectionId={sectionId} />;
           case "table":
-            return <TableBlock key={block.title} block={block} />;
+            return <TableBlock key={block.title} block={block} sectionId={sectionId} />;
           case "callout":
-            return <CalloutBlock key={block.title} block={block} />;
+            return <CalloutBlock key={block.title} block={block} sectionId={sectionId} />;
           case "split":
-            return <SplitBlock key={block.title} block={block} />;
+            return <SplitBlock key={block.title} block={block} sectionId={sectionId} />;
           case "subsections":
-            return <SubsectionsBlock key={block.title} block={block} />;
+            return <SubsectionsBlock key={block.title} block={block} sectionId={sectionId} />;
           default:
             return null;
         }

@@ -18,7 +18,7 @@ import { getCommon } from "@/content/i18n/common";
 import { getGamesHubExtra } from "@/content/i18n/games-hub";
 import { flattenFaqs, getFaqGroups, getHomeFaqs } from "@/content/i18n/faq";
 import { getHomeContent } from "@/content/i18n/home";
-import { getVisual } from "@/content/i18n/visual";
+import { getVisual, getMarqueeItems } from "@/content/i18n/visual";
 import { getRichPageContent, type PageId } from "@/content/i18n/rich";
 import { getRelatedLinkLabel } from "@/content/i18n/rich/related-labels";
 import { GUIDE_META } from "@/content/i18n/rich/related";
@@ -41,10 +41,37 @@ import {
   ResponsibleEditorial,
   SplitCategorySection,
 } from "@/components/visual/VisualPanels";
+import {
+  FAQPreview,
+  FeatureGrid,
+  LegalSectionNav,
+  MarqueeTicker,
+  ProcessTimeline,
+  SupportTopicGrid,
+  TopicNavigation,
+  WarningPanel,
+} from "@/components/visual/EditorialPrimitives";
 import { SITE_CONFIG, getActiveContactChannels, hasExternalUrl } from "@/lib/constants/site";
 import type { Locale, RouteKey } from "@/lib/i18n/config";
 import { routePath } from "@/lib/i18n/paths";
+import type { RichBlock } from "@/content/i18n/rich/types";
 import { breadcrumbJsonLd, faqPageJsonLd, webPageJsonLd } from "@/lib/seo/json-ld";
+
+function sectionNavFromBlocks(blocks: readonly RichBlock[]) {
+  return blocks
+    .filter((b) => "title" in b && typeof b.title === "string" && b.title.length > 0)
+    .map((b, index) => ({
+      id: `section-${index}`,
+      label: (b as { title: string }).title,
+    }));
+}
+
+const CATEGORY_PAGE_IDS = {
+  "games-slots": "slots",
+  "games-live-casino": "live-casino",
+  "games-sports": "sports",
+  "games-4d": "4d",
+} as const;
 
 function RichStandardPage({
   locale,
@@ -137,6 +164,12 @@ export function HomePageView({ locale }: { locale: Locale }) {
           <p className="mt-4 max-w-2xl text-xs leading-relaxed text-zinc-400">{home.hero.note}</p>
         </Container>
       </section>
+
+      <MarqueeTicker
+        items={getMarqueeItems(locale, "brand")}
+        variant="gold"
+        ariaLabel={visual.ecosystem.subtitle}
+      />
 
       <section className="section-media">
         <Container className="py-12 sm:py-14">
@@ -455,6 +488,11 @@ export function GamesHubPageView({ locale }: { locale: Locale }) {
       ])}
       beforeBlocks={
         <>
+          <MarqueeTicker
+            items={getMarqueeItems(locale, "games")}
+            variant="subtle"
+            className="mb-8 rounded-xl"
+          />
           <section className="mb-10">
             <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">
               {hub.exploreLabel}
@@ -572,6 +610,8 @@ function GameCategoryPage({
   parentLabel: string;
 }) {
   const content = getRichPageContent(locale, pageId);
+  const catId = CATEGORY_PAGE_IDS[pageId];
+  const category = GAME_CATEGORIES.find((c) => c.id === catId);
 
   return (
     <RichPageLayout
@@ -581,6 +621,21 @@ function GameCategoryPage({
         { key: "games", label: parentLabel },
         { key: pageId, label: content.h1 },
       ])}
+      beforeBlocks={
+        category ? (
+          <section className="mb-10">
+            <SplitCategorySection
+              title={content.h1}
+              intro={content.intro[0] ?? ""}
+              bullets={[]}
+              image={category.image}
+              alt={category.alt[locale]}
+              objectPosition={category.objectPosition}
+              imageFirst
+            />
+          </section>
+        ) : null
+      }
     />
   );
 }
@@ -612,6 +667,13 @@ export function ProvidersPageView({ locale }: { locale: Locale }) {
       locale={locale}
       content={content}
       crumbs={richCrumbs(locale, [{ key: "game-providers", label: content.h1 }])}
+      beforeBlocks={
+        <MarqueeTicker
+          items={getMarqueeItems(locale, "games")}
+          variant="subtle"
+          className="mb-8 rounded-xl"
+        />
+      }
       afterBlocks={
         <section className="mt-12">
           <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">{providerTitle}</h2>
@@ -660,6 +722,7 @@ function GuidePage({
   >;
 }) {
   const content = getRichPageContent(locale, pageId);
+  const visual = getVisual(locale);
   const guidesLabel =
     locale === "ms" ? "Panduan" : locale === "zh" ? "指南" : "Guides";
   const trail =
@@ -669,7 +732,41 @@ function GuidePage({
           { key: "guides" as const, label: guidesLabel },
           { key: pageId, label: content.h1 },
         ];
-  return <RichStandardPage locale={locale} pageId={pageId} trail={trail} />;
+  const isSecurityGuide = pageId === "guides-account-security";
+
+  return (
+    <RichPageLayout
+      locale={locale}
+      content={content}
+      crumbs={richCrumbs(locale, trail)}
+      beforeBlocks={
+        isSecurityGuide ? (
+          <MarqueeTicker
+            items={getMarqueeItems(locale, "security")}
+            variant="subtle"
+            className="mb-8 rounded-xl"
+          />
+        ) : null
+      }
+      afterBlocks={
+        isSecurityGuide ? (
+          <section className="mt-12">
+            <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">
+              {visual.securityCenter.heading}
+            </h2>
+            <div className="mt-6">
+              <FeatureGrid items={visual.securityCenter.panels} />
+            </div>
+            <div className="mt-6">
+              <WarningPanel title={visual.playResponsibly}>
+                {visual.responsible.items.map((item) => item.description).join(" ")}
+              </WarningPanel>
+            </div>
+          </section>
+        ) : null
+      }
+    />
+  );
 }
 
 export function GuidesHubPageView({ locale }: { locale: Locale }) {
@@ -718,6 +815,11 @@ export function GuidesHubPageView({ locale }: { locale: Locale }) {
       ])}
       beforeBlocks={
         <>
+          <MarqueeTicker
+            items={getMarqueeItems(locale, "guides")}
+            variant="subtle"
+            className="mb-8 rounded-xl"
+          />
           <section className="mb-10">
             <JourneyComposition locale={locale} />
           </section>
@@ -878,22 +980,35 @@ export function AgentPageView({ locale }: { locale: Locale }) {
       content={content}
       crumbs={richCrumbs(locale, [{ key: "agent", label: content.h1 }])}
       beforeBlocks={
-        <section className="mb-10">
-          <div className="relative min-h-[280px] overflow-hidden rounded-2xl border border-white/10 sm:min-h-[360px]">
-            <Image
-              src={VISUAL_IMAGES.agent}
-              alt={content.h1}
-              fill
-              sizes="100vw"
-              className="object-cover object-center"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 p-5 sm:p-8">
-              <ProcessFlow steps={visual.agentProcess} className="border-iwin-yellow/20 bg-black/55 backdrop-blur-sm" />
+        <>
+          <MarqueeTicker
+            items={getMarqueeItems(locale, "partner")}
+            variant="subtle"
+            className="mb-8 rounded-xl"
+          />
+          <section className="mb-10 grid items-start gap-8 lg:grid-cols-2">
+            <div className="relative min-h-[280px] overflow-hidden rounded-2xl border border-white/10 sm:min-h-[360px]">
+              <Image
+                src={VISUAL_IMAGES.agent}
+                alt={content.h1}
+                fill
+                sizes="(max-width:1024px) 100vw, 50vw"
+                className="object-cover object-center"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
             </div>
-          </div>
-        </section>
+            <div className="visual-panel rounded-2xl p-6 sm:p-8">
+              <p className="eyebrow">{content.eyebrow}</p>
+              <h2 className="font-display mt-3 text-xl font-semibold text-white sm:text-2xl">
+                {content.h1}
+              </h2>
+              <div className="mt-6">
+                <ProcessTimeline steps={visual.agentTimeline} />
+              </div>
+            </div>
+          </section>
+        </>
       }
     />
   );
@@ -902,41 +1017,61 @@ export function PartnerProgramPageView({ locale }: { locale: Locale }) {
   const content = getRichPageContent(locale, "partner-program");
   const agentLabel = locale === "ms" ? "Ejen" : locale === "zh" ? "代理" : "Agent";
   return (
-    <RichStandardPage
+    <RichPageLayout
       locale={locale}
-      pageId="partner-program"
-      trail={[
+      content={content}
+      crumbs={richCrumbs(locale, [
         { key: "agent", label: agentLabel },
         { key: "partner-program", label: content.h1 },
-      ]}
+      ])}
+      beforeBlocks={
+        <section className="mb-10">
+          <PartnerFlowComposition locale={locale} />
+        </section>
+      }
     />
   );
 }
 export function AffiliateGuidePageView({ locale }: { locale: Locale }) {
   const content = getRichPageContent(locale, "affiliate-guide");
   const agentLabel = locale === "ms" ? "Ejen" : locale === "zh" ? "代理" : "Agent";
+  const disclosureTitle =
+    locale === "ms" ? "Pendedahan & pematuhan" : locale === "zh" ? "披露与合规" : "Disclosure & compliance";
   return (
-    <RichStandardPage
+    <RichPageLayout
       locale={locale}
-      pageId="affiliate-guide"
-      trail={[
+      content={content}
+      crumbs={richCrumbs(locale, [
         { key: "agent", label: agentLabel },
         { key: "affiliate-guide", label: content.h1 },
-      ]}
+      ])}
+      beforeBlocks={
+        <section className="mb-10">
+          <WarningPanel title={disclosureTitle}>
+            {content.intro[0]}
+          </WarningPanel>
+        </section>
+      }
     />
   );
 }
 export function ReferralGuidePageView({ locale }: { locale: Locale }) {
   const content = getRichPageContent(locale, "referral-guide");
   const agentLabel = locale === "ms" ? "Ejen" : locale === "zh" ? "代理" : "Agent";
+  const visual = getVisual(locale);
   return (
-    <RichStandardPage
+    <RichPageLayout
       locale={locale}
-      pageId="referral-guide"
-      trail={[
+      content={content}
+      crumbs={richCrumbs(locale, [
         { key: "agent", label: agentLabel },
         { key: "referral-guide", label: content.h1 },
-      ]}
+      ])}
+      beforeBlocks={
+        <section className="mb-10">
+          <ProcessFlow steps={visual.agentProcess} />
+        </section>
+      }
     />
   );
 }
@@ -1038,7 +1173,29 @@ export function FaqsPageView({ locale }: { locale: Locale }) {
         </Container>
       </section>
       <Container className="py-12 sm:py-14">
-        <nav aria-label={titles.eyebrow} className="mb-10 flex flex-wrap gap-2">
+        <h2 className="font-display text-xl font-semibold text-white sm:text-2xl">{visual.helpBrowseTopics}</h2>
+        <div className="mt-6">
+          <TopicNavigation
+            items={groups.map((group) => ({
+              id: group.id,
+              label: visual.faqCategoryLabels[group.id],
+              description: visual.faqCategoryDescriptions[group.id],
+              count: group.items.length,
+              countLabel: visual.faqQuestionCount,
+            }))}
+          />
+        </div>
+
+        <section className="mt-14">
+          <h2 className="font-display text-xl font-semibold text-white sm:text-2xl">{visual.helpQuickAnswers}</h2>
+          <div className="mt-6">
+            <FAQPreview
+              items={groups.flatMap((g) => g.items.slice(0, 1)).slice(0, 4)}
+            />
+          </div>
+        </section>
+
+        <nav aria-label={titles.eyebrow} className="my-10 flex flex-wrap gap-2 lg:hidden">
           {groups.map((group) => (
             <a
               key={group.id}
@@ -1078,6 +1235,7 @@ export function FaqsPageView({ locale }: { locale: Locale }) {
 
 export function ContactPageView({ locale }: { locale: Locale }) {
   const content = getRichPageContent(locale, "contact");
+  const visual = getVisual(locale);
   const channels = getActiveContactChannels();
   const channelTitle =
     locale === "ms" ? "Saluran yang disahkan" : locale === "zh" ? "已核实的联系方式" : "Verified contact options";
@@ -1093,6 +1251,17 @@ export function ContactPageView({ locale }: { locale: Locale }) {
       locale={locale}
       content={content}
       crumbs={richCrumbs(locale, [{ key: "contact", label: content.h1 }])}
+      beforeBlocks={
+        <section className="mb-10">
+          <SectionHeading
+            title={visual.contactSupport.heading}
+            description={visual.contactSupport.subheading}
+          />
+          <div className="mt-8">
+            <SupportTopicGrid topics={visual.contactSupport.topics} />
+          </div>
+        </section>
+      }
       afterBlocks={
         <>
           <section className="mt-10">
@@ -1139,27 +1308,55 @@ export function ResponsibleGamingPageView({ locale }: { locale: Locale }) {
 }
 export function TermsPageView({ locale }: { locale: Locale }) {
   const content = getRichPageContent(locale, "terms");
+  const sections = sectionNavFromBlocks(content.blocks);
   return (
-    <RichStandardPage locale={locale} pageId="terms" trail={[{ key: "terms", label: content.h1 }]} />
+    <RichPageLayout
+      locale={locale}
+      content={content}
+      crumbs={richCrumbs(locale, [{ key: "terms", label: content.h1 }])}
+      beforeBlocks={
+        sections.length > 0 ? (
+          <aside className="mb-10 lg:float-right lg:ml-8 lg:w-56">
+            <LegalSectionNav sections={sections} />
+          </aside>
+        ) : null
+      }
+    />
   );
 }
 export function PrivacyPageView({ locale }: { locale: Locale }) {
   const content = getRichPageContent(locale, "privacy-policy");
+  const sections = sectionNavFromBlocks(content.blocks);
   return (
-    <RichStandardPage
+    <RichPageLayout
       locale={locale}
-      pageId="privacy-policy"
-      trail={[{ key: "privacy-policy", label: content.h1 }]}
+      content={content}
+      crumbs={richCrumbs(locale, [{ key: "privacy-policy", label: content.h1 }])}
+      beforeBlocks={
+        sections.length > 0 ? (
+          <aside className="mb-10 lg:float-right lg:ml-8 lg:w-56">
+            <LegalSectionNav sections={sections} />
+          </aside>
+        ) : null
+      }
     />
   );
 }
 export function DisclaimerPageView({ locale }: { locale: Locale }) {
   const content = getRichPageContent(locale, "disclaimer");
+  const sections = sectionNavFromBlocks(content.blocks);
   return (
-    <RichStandardPage
+    <RichPageLayout
       locale={locale}
-      pageId="disclaimer"
-      trail={[{ key: "disclaimer", label: content.h1 }]}
+      content={content}
+      crumbs={richCrumbs(locale, [{ key: "disclaimer", label: content.h1 }])}
+      beforeBlocks={
+        sections.length > 0 ? (
+          <aside className="mb-10 lg:float-right lg:ml-8 lg:w-56">
+            <LegalSectionNav sections={sections} />
+          </aside>
+        ) : null
+      }
     />
   );
 }

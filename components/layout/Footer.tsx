@@ -45,6 +45,7 @@ export function Footer() {
 
   return (
     <footer className="mt-auto border-t border-[color:var(--iwin-border)]/40 bg-[linear-gradient(180deg,#050505_0%,#0e0e10_100%)]">
+      <div className="footer-gold-divider mx-auto max-w-6xl" aria-hidden="true" />
       <Container className="py-10 sm:py-12">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-6">
           <div className="visual-panel lg:col-span-2 rounded-2xl p-6">

@@ -388,13 +388,15 @@ export function SplitCategorySection({
     <div>
       <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl lg:text-4xl">{title}</h2>
       <p className="mt-4 max-w-xl text-base leading-relaxed text-zinc-300">{intro}</p>
-      <ul className="mt-6 space-y-3">
-        {bullets.map((bullet) => (
-          <li key={bullet} className="border-l-2 border-iwin-yellow/35 pl-4 text-sm leading-relaxed text-zinc-300">
-            {bullet}
-          </li>
-        ))}
-      </ul>
+      {bullets.length > 0 ? (
+        <ul className="mt-6 space-y-3">
+          {bullets.map((bullet) => (
+            <li key={bullet} className="border-l-2 border-iwin-yellow/35 pl-4 text-sm leading-relaxed text-zinc-300">
+              {bullet}
+            </li>
+          ))}
+        </ul>
+      ) : null}
       {children ? <div className="mt-6 flex flex-wrap gap-3">{children}</div> : null}
     </div>
   );
