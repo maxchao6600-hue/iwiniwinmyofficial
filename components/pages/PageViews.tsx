@@ -1317,12 +1317,18 @@ export function ContactPageView({ locale }: { locale: Locale }) {
   const channels = getActiveContactChannels();
   const channelTitle =
     locale === "ms" ? "Saluran yang disahkan" : locale === "zh" ? "已核实的联系方式" : "Verified contact options";
-  const noneLabel =
-    locale === "ms"
-      ? "Tiada nombor WhatsApp, Telegram atau e-mel yang direka. Gunakan sokongan platform yang disahkan untuk akaun, atau halaman ini untuk pembetulan maklumat."
-      : locale === "zh"
-        ? "本站不编造 WhatsApp、Telegram 或电子邮件。账户问题请使用已核实的平台支持；信息勘误请使用本页说明。"
-        : "No invented WhatsApp, Telegram or email addresses are published. Use verified platform support for accounts, or this page for information corrections.";
+  const channelDescription =
+    channels.length > 0
+      ? locale === "ms"
+        ? "Gunakan saluran WhatsApp atau Telegram rasmi di bawah untuk sokongan IWIN. Jangan kongsi kata laluan atau OTP."
+        : locale === "zh"
+          ? "请使用下方官方 WhatsApp 或 Telegram 联系 IWIN 客服。请勿分享密码或 OTP。"
+          : "Use the official WhatsApp or Telegram channels below for IWIN customer support. Never share passwords or OTPs."
+      : locale === "ms"
+        ? "Tiada nombor WhatsApp, Telegram atau e-mel yang direka. Gunakan sokongan platform yang disahkan untuk akaun, atau halaman ini untuk pembetulan maklumat."
+        : locale === "zh"
+          ? "本站不编造 WhatsApp、Telegram 或电子邮件。账户问题请使用已核实的平台支持；信息勘误请使用本页说明。"
+          : "No invented WhatsApp, Telegram or email addresses are published. Use verified platform support for accounts, or this page for information corrections.";
 
   return (
     <RichPageLayout
@@ -1354,7 +1360,7 @@ export function ContactPageView({ locale }: { locale: Locale }) {
       afterBlocks={
         <>
           <section className="mt-10">
-            <ContactVisualPanel title={channelTitle} description={noneLabel} />
+            <ContactVisualPanel title={channelTitle} description={channelDescription} />
           </section>
           <section className="mt-12">
             {channels.length ? (

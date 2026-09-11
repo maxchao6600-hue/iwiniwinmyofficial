@@ -16,11 +16,12 @@ export const SITE_CONFIG = {
   registerUrl: "https://myiwin88.live/?referral=rcaa89538#register",
   loginUrl: "https://myiwin88.live/?referral=rcaa89538#login",
   agentUrl: "https://myiwin88.club/r/rcaa89538",
-  supportUrl: "https://myiwin88.club/r/rcaa89538",
+  /** Primary IWIN customer-service destination (Telegram). */
+  supportUrl: "http://t.me/Customerservice3179",
 
   contact: {
-    whatsapp: "",
-    telegram: "",
+    whatsapp: "https://iwincs1.wasap.my",
+    telegram: "http://t.me/Customerservice3179",
     email: "",
     liveChat: "",
   },
